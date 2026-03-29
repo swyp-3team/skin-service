@@ -29,10 +29,11 @@ logs/
 *.log
 
 ### Spring Boot ###
-/application.yml
-/application-*.yml
-/application.properties
-/application-*.properties
+# 기본 설정은 추적, 시크릿/로컬 설정만 무시
+application-local.yml
+application-local.properties
+application-secret.yml
+application-secret.properties
 
 ### Environment ###
 .env
@@ -44,17 +45,7 @@ logs/
 *.sqlite
 
 ### Test ###
-/test-output/
-
-### QueryDSL ###
-/generated/
-/build/generated/
-
-### Swagger ###
-/swagger-ui/
-
-### Node (혹시 프론트 붙을 경우 대비) ###
-node_modules/
+test-output/
 
 ### Git ###
 *.orig
@@ -63,7 +54,7 @@ node_modules/
 *.swp
 *~
 
-### Docker (사용 시) ###
+### Docker ###
 docker-compose.override.yml
 
 ### Secrets ###
@@ -71,5 +62,3 @@ docker-compose.override.yml
 *.pem
 *.p12
 
-### GitHub ###
-.github/*.local
