@@ -21,7 +21,10 @@ public class SecurityConfig {
                                 "/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
-                );
+                )
+                .oauth2Login(oauth2 -> oauth2
+                .defaultSuccessUrl("/")
+        );
 
         return http.build();
     }

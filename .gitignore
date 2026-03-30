@@ -61,4 +61,3 @@ docker-compose.override.yml
 *.key
 *.pem
 *.p12
-
