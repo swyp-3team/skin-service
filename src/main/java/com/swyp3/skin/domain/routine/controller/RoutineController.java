@@ -1,5 +1,6 @@
 package com.swyp3.skin.domain.routine.controller;
 
+import com.swyp3.skin.global.auth.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
