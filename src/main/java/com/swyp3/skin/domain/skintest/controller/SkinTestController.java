@@ -24,7 +24,7 @@ public class SkinTestController {
         session.removeAttribute("SKIN_SURVEY");
         session.removeAttribute("SKIN_RESULT");
 
-        session.setAttribute("SKIN_SURVEY", new HashMap<>()); // 해당코드가 추후 스탭별로 답변 세션저장
+        session.setAttribute("SKIN_SURVEY", new HashMap<Integer, Integer>()); // 해당코드가 추후 스탭별로 답변 세션저장
         return "redirect:/skin-test/step/1";
     }
 
@@ -33,8 +33,7 @@ public class SkinTestController {
     public String skinTestStepPage(@PathVariable int step,
                                    HttpSession session,
                                    Model model) {
-        Map<String, Object> survey = (Map<String, Object>) session.getAttribute("SKIN_SURVEY");
-
+        Map<Integer, Integer> survey = (Map<Integer, Integer>) session.getAttribute("SKIN_SURVEY");
         // 세션 없으면 처음부터 (세션이 없다 => 사용자가 URL에 직접입력)
         if (survey == null) {
             return "redirect:/skin-test/start";
@@ -50,17 +49,18 @@ public class SkinTestController {
     public String skinTestStepSave(@PathVariable int step,
                                    @RequestParam int answer,
                                    HttpSession session) {
-        Map<String, Object> survey = (Map<String, Object>) session.getAttribute("SKIN_SURVEY");
+        Map<Integer, Integer> survey = (Map<Integer, Integer>) session.getAttribute("SKIN_SURVEY");
 
         // 세션 없으면 처음부터 (세션이 없다 => 사용자가 URL에 직접입력)
         if (survey == null) {
             return "redirect:/skin-test/start";
         }
 
-        survey.put("q" + step, answer); // ex) q1=2, q2=1 ...
+        survey.put(step, answer); // ex) 1=2, 2=1 ...
         session.setAttribute("SKIN_SURVEY", survey);
 
         if (step >= LAST_STEP) {
+            //TODO SKIN_RESULT 생성로직 결정시 이부분 추가 예정
             return "redirect:/skin-test/result";
         }
         return "redirect:/skin-test/step/" + (step + 1);
@@ -69,7 +69,7 @@ public class SkinTestController {
     @Operation(summary = "진단 결과 페이지", description = "세션의 결과 데이터 렌더 · 비로그인 포함 · 로그인 유도 CTA")
     @GetMapping("/result")
     public String skinTestResult(HttpSession session, Model model) {
-        Map<String, Object> survey = (Map<String, Object>) session.getAttribute("SKIN_SURVEY");
+        Map<Integer, Integer> survey = (Map<Integer, Integer>) session.getAttribute("SKIN_SURVEY");
         Object result = session.getAttribute("SKIN_RESULT");
 
         // 세션 없으면 처음부터 (세션이 없다 => 사용자가 URL에 직접입력)
@@ -77,6 +77,7 @@ public class SkinTestController {
             return "redirect:/skin-test/start";
         }
 
+        //TODO result 값을 어떻게 활용할지 결정되면 이부분 추가 예정
         model.addAttribute("result", result);
         return "skin-test/result";
     }
