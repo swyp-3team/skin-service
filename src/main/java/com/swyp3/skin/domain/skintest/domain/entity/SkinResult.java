@@ -1,0 +1,33 @@
+package com.swyp3.skin.domain.skintest.domain.entity;
+
+import com.swyp3.skin.domain.skintest.domain.enums.SkinType;
+import com.swyp3.skin.domain.user.domain.entity.User;
+import com.swyp3.skin.global.entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class SkinResult extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
+    private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SkinType skinType;
+
+    @Column(nullable = false)
+    private String summary;
+
+    @Column(nullable = false)
+    private LocalDateTime diagnosedAt;
+}

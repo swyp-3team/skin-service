@@ -1,0 +1,23 @@
+package com.swyp3.skin.domain.routine.domain.entity;
+
+import com.swyp3.skin.domain.product.domain.entity.Product;
+import com.swyp3.skin.global.entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+class RoutineProduct extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
+    private Routine routine;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
+    private Product product;
+    private Integer sortOrder;
+    private String note;
+}
