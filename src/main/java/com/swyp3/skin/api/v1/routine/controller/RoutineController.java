@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class RoutineController {
 
     @Operation(
-            summary = "루틴 추천 제품 조회",
-            description = "로그인한 사용자의 피부 진단 결과를 바탕으로 추천 제품 목록을 조회합니다."
+            summary = "루틴용 추천 제품 조회",
+            description = "루틴 타입(AM/PM)에 따라 루틴 구성에 사용할 추천 제품 목록을 조회"
     )
     @GetMapping("/recommend-products")
     public Object getRecommendProducts(@RequestParam String routineType) {
