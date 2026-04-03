@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
+// 해당 파일은 로직결정및 응답구조 결정됨에 따라 유기적 변경 예정
 @Schema(description = "피부 진단 결과 응답")
 public record SkinTestResultResponse(
 

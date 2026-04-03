@@ -66,6 +66,8 @@ public class SkinTestController {
                            @Valid @RequestBody SaveSkinTestAnswerRequest request,
                            HttpSession httpSession) {
         //TODO : 세션에 저장(SKIN_SURVEY)
+        // 저장시에는 필드명이 아닌 SaveSkinTestAnswerRequest 에서 Integer형태로 오기떄문에
+        // Integer로 저장하여야함
         // 세션(SKIN_SURVEY)에 step -> answer형태 저장
         // 이미 저장되었으면 (재선택) 하면 덮어쓰기
         return ApiResponse.ok();

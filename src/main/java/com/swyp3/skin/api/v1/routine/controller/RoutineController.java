@@ -1,4 +1,4 @@
-package com.swyp3.skin.api.routine;
+package com.swyp3.skin.api.v1.routine.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RoutineController {
 
-    @Operation(summary = "루틴 추천 제품 조회")
+    @Operation(
+            summary = "루틴 추천 제품 조회",
+            description = "로그인한 사용자의 피부 진단 결과를 바탕으로 추천 제품 목록을 조회합니다."
+    )
     @GetMapping("/recommend-products")
     public Object getRecommendProducts(@RequestParam String routineType) {
         // TODO: 피부타입 기반 추천 제품 조회
