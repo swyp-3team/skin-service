@@ -35,7 +35,7 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + accessTokenExpiration);
 
         return Jwts.builder()
-                .setSubject(String.valueOf(userId)) // 유저 ID 저장
+                .setSubject(String.valueOf(userId))
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -44,11 +44,11 @@ public class JwtTokenProvider {
 
     // 2. 토큰에서 유저 ID 추출
     public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser() // parserBuilder() 대신 parser()
-                .verifyWith((javax.crypto.SecretKey) key) // setSigningKey() 대신 verifyWith()
+        Claims claims = Jwts.parser()
+                .verifyWith((javax.crypto.SecretKey) key)
                 .build()
-                .parseSignedClaims(token) // parseClaimsJws() 대신 parseSignedClaims()
-                .getPayload(); // getBody() 대신 getPayload()
+                .parseSignedClaims(token)
+                .getPayload();
 
         return Long.parseLong(claims.getSubject());
     }
