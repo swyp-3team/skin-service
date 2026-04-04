@@ -1,7 +1,12 @@
 package com.swyp3.skin.api.v1.auth.controller;
 
+import com.swyp3.skin.api.v1.auth.dto.request.RefreshTokenRequest;
+import com.swyp3.skin.api.v1.auth.dto.response.CurrentUserResponse;
+import com.swyp3.skin.api.v1.auth.dto.response.TokenRefreshResponse;
+import com.swyp3.skin.global.response.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,21 +18,24 @@ public class AuthController {
 
     @Operation(summary = "현재 사용자 조회")
     @GetMapping("/me")
-    public Object getCurrentUser() {
+    public ApiResponse<CurrentUserResponse> getCurrentUser() {
         // TODO : SecurityContext에서 사용자 조회
         return null;
     }
 
     @Operation(summary = "AccessToken 재발급")
     @PostMapping("/refresh")
-    public Object refreshToken(@RequestBody Object request) {
+    public ApiResponse<TokenRefreshResponse> refreshToken(
+            @Valid @RequestBody RefreshTokenRequest request
+    ) {
         // TODO : refreshToken 검증후 accessToken 재발급
         return null;
     }
 
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
-    public void logout() {
+    public ApiResponse<Void> logout() {
         // TODO : RefreshToken 무효화
+        return ApiResponse.ok();
     }
 }
