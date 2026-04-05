@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.routine.domain.entity;
 
 import com.swyp3.skin.domain.routine.domain.enums.RoutineType;
+import com.swyp3.skin.domain.skintest.domain.entity.SkinResult;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -17,8 +18,10 @@ public class Routine extends BaseEntity {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
+    private SkinResult skinResult;
+    private String title;
     @Enumerated(EnumType.STRING) @Column(nullable = false)
     private RoutineType routineType;
-    private String title;
     private String memo;
 }
