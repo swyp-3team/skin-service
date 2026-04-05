@@ -9,13 +9,16 @@ import java.util.List;
 @Schema(description = "피부 진단 결과 응답")
 public record SkinTestResultResponse(
 
-        @Schema(description = "진단된 피부 타입", example = "DRY")
+        @Schema(description = "사용자가 선택한 피부 타입", example = "SENSITIVE")
         String skinType,
 
-        @Schema(description = "결과 요약 문구", example = "수분 공급과 장벽 케어가 필요한 피부입니다.")
+        @Schema(description = "결과 요약 문구", example = "진정과 트러블 케어를 우선으로 두는 루틴이 적합합니다.")
         String summary,
 
-        @ArraySchema(schema = @Schema(implementation = RecommendedIngredientResponse.class))
+        @ArraySchema(
+                schema = @Schema(implementation = RecommendedIngredientResponse.class),
+                arraySchema = @Schema(description = "상위 성분군 기준 추천 성분 목록")
+        )
         List<RecommendedIngredientResponse> ingredients
 ) {
 }

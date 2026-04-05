@@ -1,6 +1,5 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
-import com.swyp3.skin.api.v1.skintest.dto.request.CompleteSkinTestRequest;
 import com.swyp3.skin.api.v1.skintest.dto.request.SaveSkinTestAnswerRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.MySkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestResultResponse;
@@ -89,9 +88,7 @@ public class SkinTestController {
             description = "세션에 저장된 설문 답변을 기반으로 피부 타입과 추천 성분 결과를 계산합니다."
     )
     @PostMapping("/complete")
-    public ApiResponse<Void> complete(
-            @Valid @RequestBody CompleteSkinTestRequest request,
-            HttpSession httpSession){
+    public ApiResponse<Void> complete(HttpSession httpSession){
         //TODO : 세션 답변 읽고
         // 세션 설문 답변 조회
         // 상태 점수 계산
