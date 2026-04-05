@@ -31,39 +31,46 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        // 1. 소셜 유저 정보 가져오기
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        // 2. 서비스 제공자(GOOGLE/KAKAO) 및 이메일 추출 로직 추가
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String provider = registrationId.toUpperCase();
-        String providerUserId = oAuth2User.getName();
+        String providerUserId = oAuth2User.getName(); // 고유 식별자
 
-        String email = "";
+        String email = "no-email@temporary.com"; // email NULL 값 방지
+        String profileImageUrl = "";
+
+        //데이터 추출 분기 처리
         if ("google".equals(registrationId)) {
-            email = (String) attributes.get("email");
+            email = (String) attributes.getOrDefault("email", email);
+            profileImageUrl = (String) attributes.get("picture");
         } else if ("kakao".equals(registrationId)) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+
             if (kakaoAccount != null) {
-                email = (String) kakaoAccount.get("email");
+                String kakaoEmail = (String) kakaoAccount.get("email");
+                if(kakaoEmail != null) email = kakaoEmail;
+            }
+            if (properties != null) {
+                profileImageUrl = (String) properties.get("profile_image");
             }
         }
-        log.info("[{}] 로그인 시도 - 이메일: {}, 아이디: {}", provider, email, providerUserId);
 
-        // 3. 기존 소셜 가입 여부 확인 (email 파라미터 추가)
+        log.info("[{}] 로그인 시도 - providerId: {}, email: {}", provider, providerUserId, email);
+
         final String finalEmail = email;
+        final String finalProfileImageUrl = profileImageUrl;
+
         return userOauthRepository.findByProviderAndProviderUserId(AuthProvider.valueOf(provider), providerUserId)
                 .map(oauth -> new CustomUserDetails(oauth.getUser(), finalEmail, attributes))
                 .orElseGet(() -> {
-                    // 4. 신규 유저 가입 처리
-
-                    // (1) User 엔티티 생성
+                    // 신규 가입 로직
                     User user = userRepository.save(User.builder()
                             .role(UserRole.USER)
                             .build());
 
-                    // (2) 소셜 연동 정보 저장
                     userOauthRepository.save(UserOauth.builder()
                             .user(user)
                             .provider(AuthProvider.valueOf(provider))
@@ -71,14 +78,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             .email(finalEmail)
                             .build());
 
-                    // (3) 프로필 정보 저장
                     userProfileRepository.save(UserProfile.builder()
                             .user(user)
                             .nickname("SkinUser_" + user.getId())
-                            .profileImageUrl((String) attributes.get("picture")) // 카카오는 'properties.profile_image' 등 경로가 다를 수 있음
+                            .profileImageUrl(finalProfileImageUrl) // 분기 처리된 이미지 경로 사용
                             .build());
 
                     return new CustomUserDetails(user, finalEmail, attributes);
                 });
     }
-}
+    }

@@ -6,9 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class UserProfile extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +19,11 @@ public class UserProfile extends BaseEntity {
     private String nickname;
 
     private String profileImageUrl;
+
+    @Builder
+    public UserProfile(User user, String nickname, String profileImageUrl) {
+        this.user = user;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+    }
 }
