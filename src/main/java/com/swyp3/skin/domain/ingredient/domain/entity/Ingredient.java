@@ -1,7 +1,7 @@
 package com.swyp3.skin.domain.ingredient.domain.entity;
 
 
-import com.swyp3.skin.domain.ingredient.domain.enums.IngredientType;
+import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ public class Ingredient extends BaseEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private IngredientType ingredientType;
+    @Column(nullable = false , length = 30)
+    private IngredientGroup ingredientGroup;
 
 }
