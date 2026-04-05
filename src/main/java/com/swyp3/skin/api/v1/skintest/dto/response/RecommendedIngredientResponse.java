@@ -13,8 +13,8 @@ public record RecommendedIngredientResponse(
         @Schema(description = "성분명", example = "히알루론산")
         String name,
 
-        @Schema(description = "성분 타입", example = "MOISTURIZING")
-        String ingredientType,
+        @Schema(description = "성분군", example = "MOISTURIZING")
+        String ingredientGroup,
 
         @Schema(description = "추천 우선순위", example = "1")
         Integer priority,

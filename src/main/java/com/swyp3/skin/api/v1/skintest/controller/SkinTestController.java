@@ -90,8 +90,15 @@ public class SkinTestController {
     @PostMapping("/complete")
     public ApiResponse<Void> complete(HttpSession httpSession){
         //TODO : 세션 답변 읽고
-        // 피부타입 , 추천성분등 계산
-        // 세션 결과로 저장한 뒤 성공적으로 계산되었으면 ok
+        // 세션 설문 답변 조회
+        // 상태 점수 계산
+        // 성분군 원점수 계산
+        // 정규화
+        // 고민 가중치 적용
+        // 피부타입 보정
+        // 최종 성분군 점수 및 우선순위 계산
+        // 상위 성분군 기준 대표 성분 추출
+        // 세션에 결과 저장
         return ApiResponse.ok();
     }
 
@@ -109,7 +116,10 @@ public class SkinTestController {
             description = "세션 결과를 로그인한 사용자의 진단 이력으로 저장합니다.")
     @PostMapping("/result/save")
     public ApiResponse<Void> saveResult() {
-        // TODO: 세션 → DB 저장
+        // TODO: 세션 결과조회
+        // SkinResult 저장
+        // SkinResultScore 저장
+        // SkinResultIngredient 저장
         return ApiResponse.ok();
     }
 

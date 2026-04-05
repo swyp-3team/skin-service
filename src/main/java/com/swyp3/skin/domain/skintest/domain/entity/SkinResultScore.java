@@ -1,5 +1,4 @@
-package com.swyp3.skin.domain.ingredient.domain.entity;
-
+package com.swyp3.skin.domain.skintest.domain.entity;
 
 import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
 import com.swyp3.skin.global.entity.BaseEntity;
@@ -11,20 +10,26 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Ingredient extends BaseEntity {
+public class SkinResultScore extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private SkinResult skinResult;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false , length = 30)
+    @Column(nullable = false, length = 30)
     private IngredientGroup ingredientGroup;
 
+    @Column(nullable = false)
+    private Double score;
+
+    @Column(nullable = false)
+    private Integer priority;
+
+    @Column(nullable = false)
+    private String reason;
 }
