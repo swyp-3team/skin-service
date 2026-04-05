@@ -1,5 +1,9 @@
 package com.swyp3.skin.api.v1.routine.controller;
 
+import com.swyp3.skin.api.v1.routine.dto.response.RoutineDetailResponse;
+import com.swyp3.skin.api.v1.routine.dto.response.RoutineListResponse;
+import com.swyp3.skin.api.v1.routine.dto.response.RoutineRecommendationResponse;
+import com.swyp3.skin.api.v1.routine.dto.response.SaveRoutineResponse;
 import com.swyp3.skin.global.response.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,9 +43,10 @@ public class RoutineController {
         // TODO :
         // 직전 생성된 루틴 추천 결과 조회
         // 추천 결과 없으면 예외처리(ex.생성된 루틴이 없습니다)
-        // 추천 결과의 AM/PM을 타입따라서 루틴 저장
-        // 추천 결과의 제품 목록을 RoutineProduct로 저장
-        // 저장 완료 DTO로 반환
+        // 루틴 그룹 생성
+        // 생성 루틴 그룹 기준으로 각 타입별 루틴 저장
+        // 각 루틴 하위 루틴 프로덕트 저장
+        // 저장 완료 응답 DTO반환
         return null;
     }
 

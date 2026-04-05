@@ -16,12 +16,15 @@ public class Routine extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
-    private User user;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
-    private SkinResult skinResult;
-    private String title;
-    @Enumerated(EnumType.STRING) @Column(nullable = false)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private RoutineGroup routineGroup;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RoutineType routineType;
+
+    @Column(length = 500)
     private String memo;
 }
