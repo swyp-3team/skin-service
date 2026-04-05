@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.skintest.domain.entity;
 
 import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SkinResultScore {
+public class SkinResultScore extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
