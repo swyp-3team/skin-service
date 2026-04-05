@@ -20,4 +20,5 @@ class RoutineProduct extends BaseEntity {
     private Product product;
     private Integer sortOrder;
     private String note;
+    private String reason;
 }
