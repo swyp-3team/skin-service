@@ -1,6 +1,7 @@
 package com.swyp3.skin.recommendation.core;
 
 import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.recommendation.calculator.Normalizer;
 import com.swyp3.skin.recommendation.calculator.ScoreCalculator;
 import com.swyp3.skin.recommendation.model.SkinInput;
 
@@ -21,6 +22,8 @@ public class RecommendationEngine {
         ScoreCalculator calculator = new ScoreCalculator();
         Map<IngredientGroup, Double> rawScores = calculator.calculate(input.getStateVector());
 
+        Normalizer normalizer = new Normalizer();
+        Map<IngredientGroup, Double> normalized = normalizer.normalize(rawScores);
 
         return null;
     }
