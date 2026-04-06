@@ -1,10 +1,7 @@
 package com.swyp3.skin.recommendation.core;
 
 import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
-import com.swyp3.skin.recommendation.calculator.ConcernWeightApplier;
-import com.swyp3.skin.recommendation.calculator.Normalizer;
-import com.swyp3.skin.recommendation.calculator.ScoreCalculator;
-import com.swyp3.skin.recommendation.calculator.SkinTypeAdjuster;
+import com.swyp3.skin.recommendation.calculator.*;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
 
@@ -17,6 +14,7 @@ public class RecommendationEngine {
     private final Normalizer normalizer = new Normalizer();
     private final ConcernWeightApplier concernWeightApplier = new ConcernWeightApplier();
     private final SkinTypeAdjuster skinTypeAdjuster = new SkinTypeAdjuster();
+    private final RankingCalculator rankingCalculator = new RankingCalculator();
 
     public RecommendationResult calculate(SkinInput input) {
 
@@ -36,7 +34,9 @@ public class RecommendationEngine {
         Map<IngredientGroup, Double> adjusted =
                 skinTypeAdjuster.adjust(weighted, input.getSkinType());
 
-        // 지금은 ranking 없이 scores만 반환 (STEP6에서 정렬 예정)
-        return new RecommendationResult(weighted, List.of());
+        // step6 정렬
+        List<IngredientGroup> ranking = rankingCalculator.rank(adjusted);
+
+        return new RecommendationResult(adjusted, ranking);
     }
 }
