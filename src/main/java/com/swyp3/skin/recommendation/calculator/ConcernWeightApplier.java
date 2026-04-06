@@ -37,10 +37,10 @@ public class ConcernWeightApplier {
 
         // 🔥 추가 (핵심)
         result.computeIfPresent(IngredientGroup.BARRIER,
-                (k, v) -> v * 0.85);
+                (k, v) -> v * 0.75);
 
         result.computeIfPresent(IngredientGroup.SOOTHING,
-                (k, v) -> v * 0.9);
+                (k, v) -> v * 0.8);
 
         return result;
     }
