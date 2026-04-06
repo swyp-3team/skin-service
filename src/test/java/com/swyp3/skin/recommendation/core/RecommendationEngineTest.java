@@ -72,7 +72,7 @@ public class RecommendationEngineTest {
             // 핵심만 찍기 (중요)
             System.out.println("INPUT: " + tc.concerns + " / " + tc.skinType);
             System.out.println("STATE: " + tc.stateVector);
-
+            System.out.println("SCORES = " + result.getScores());
             System.out.println("TOP3 : " + top3);
 
             index++;
