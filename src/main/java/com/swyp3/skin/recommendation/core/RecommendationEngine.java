@@ -1,30 +1,42 @@
 package com.swyp3.skin.recommendation.core;
 
 import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.recommendation.calculator.ConcernWeightApplier;
 import com.swyp3.skin.recommendation.calculator.Normalizer;
 import com.swyp3.skin.recommendation.calculator.ScoreCalculator;
+import com.swyp3.skin.recommendation.calculator.SkinTypeAdjuster;
+import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
 
+import java.util.List;
 import java.util.Map;
 
 public class RecommendationEngine {
 
-    public RecommendationEngine calculate(SkinInput input) {
-        /*
-         * 1. 상태 벡터 사용
-         * 2. 성분군 원점수 계산
-         * 3. 정규화
-         * 4. 고민 가중치 적용
-         * 5. 피부 타입 보정
-         * 6. 정렬 및 랭킹
-         */
+    private final ScoreCalculator scoreCalculator = new ScoreCalculator();
+    private final Normalizer normalizer = new Normalizer();
+    private final ConcernWeightApplier concernWeightApplier = new ConcernWeightApplier();
+    private final SkinTypeAdjuster skinTypeAdjuster = new SkinTypeAdjuster();
 
-        ScoreCalculator calculator = new ScoreCalculator();
-        Map<IngredientGroup, Double> rawScores = calculator.calculate(input.getStateVector());
+    public RecommendationResult calculate(SkinInput input) {
 
-        Normalizer normalizer = new Normalizer();
-        Map<IngredientGroup, Double> normalized = normalizer.normalize(rawScores);
+        // Step2 상태 → 성분군 원점수
+        Map<IngredientGroup, Double> rawScores =
+                scoreCalculator.calculate(input.getStateVector());
 
-        return null;
+        // step3 정규화
+        Map<IngredientGroup, Double> normalized =
+                normalizer.normalize(rawScores);
+
+        // step4 고민 가중치 적용
+        Map<IngredientGroup, Double> weighted =
+                concernWeightApplier.apply(normalized, input.getConcerns());
+
+        // step5 피부타입 보정
+        Map<IngredientGroup, Double> adjusted =
+                skinTypeAdjuster.adjust(weighted, input.getSkinType());
+
+        // 지금은 ranking 없이 scores만 반환 (STEP6에서 정렬 예정)
+        return new RecommendationResult(weighted, List.of());
     }
 }
