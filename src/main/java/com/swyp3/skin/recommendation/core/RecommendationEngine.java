@@ -4,6 +4,7 @@ import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
 import com.swyp3.skin.recommendation.calculator.*;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
+import com.swyp3.skin.recommendation.model.enums.SkinState;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,15 @@ public class RecommendationEngine {
         // step4 고민 가중치 적용
         Map<IngredientGroup, Double> weighted =
                 concernWeightApplier.apply(normalized, input.getConcerns());
+
+        // BARRIER 보정을 위한
+        double dryness = input.getStateVector().getOrDefault(SkinState.DRYNESS, 0);
+        double sensitivity = input.getStateVector().getOrDefault(SkinState.SENSITIVITY, 0);
+
+        if (dryness < 60 && sensitivity < 60) {
+            weighted.computeIfPresent(IngredientGroup.BARRIER,
+                    (k, v) -> v * 0.7);
+        }
 
         // step5 피부타입 보정
         Map<IngredientGroup, Double> adjusted =
