@@ -20,10 +20,14 @@ public class UserProfile extends BaseEntity {
 
     private String profileImageUrl;
 
-    @Builder
-    public UserProfile(User user, String nickname, String profileImageUrl) {
+
+    private UserProfile(User user, String nickname, String profileImageUrl) {
         this.user = user;
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public static UserProfile create(User user, String nickname, String profileImageUrl) {
+        return new UserProfile(user, nickname, profileImageUrl);
     }
 }

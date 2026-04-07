@@ -17,8 +17,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserRole role;
 
-    @Builder
     public User(UserRole role){
         this.role = role;
+    }
+
+    public static User create(UserRole role) {
+        return new User(role); //정적 팩토리 메서드 사용
     }
 }

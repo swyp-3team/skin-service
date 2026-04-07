@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class  CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final UserOauthRepository userOauthRepository;
@@ -36,22 +36,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String provider = registrationId.toUpperCase();
-        String providerUserId = oAuth2User.getName(); // 고유 식별자
 
-        String email = "no-email@temporary.com"; // email NULL 값 방지
-        String profileImageUrl = "";
+        String providerUserId = ""; // 고유 식별자
+        String email = null;
+        String profileImageUrl = null;
 
         //데이터 추출 분기 처리
         if ("google".equals(registrationId)) {
-            email = (String) attributes.getOrDefault("email", email);
+            providerUserId = String.valueOf(attributes.get("sub"));
+            email = (String) attributes.get("email");
             profileImageUrl = (String) attributes.get("picture");
         } else if ("kakao".equals(registrationId)) {
+            providerUserId = String.valueOf(attributes.get("id"));
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
 
             if (kakaoAccount != null) {
-                String kakaoEmail = (String) kakaoAccount.get("email");
-                if(kakaoEmail != null) email = kakaoEmail;
+                email = (String) kakaoAccount.get("email");
             }
             if (properties != null) {
                 profileImageUrl = (String) properties.get("profile_image");
@@ -62,29 +63,34 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         final String finalEmail = email;
         final String finalProfileImageUrl = profileImageUrl;
+        final String finalProviderUserId = providerUserId;
 
-        return userOauthRepository.findByProviderAndProviderUserId(AuthProvider.valueOf(provider), providerUserId)
-                .map(oauth -> new CustomUserDetails(oauth.getUser(), finalEmail, attributes))
+        return userOauthRepository.findByProviderAndProviderUserId(AuthProvider.valueOf(provider), finalProviderUserId)
+                // 기존 유저인 경우 (CustomUserDetails의 생성자도 간소화했다고 가정)
+                .map(oauth -> new CustomUserDetails(oauth.getUser(), attributes))
                 .orElseGet(() -> {
-                    // 신규 가입 로직
-                    User user = userRepository.save(User.builder()
-                            .role(UserRole.USER)
-                            .build());
+                    // 1. User 신규 생성 (Builder 대신 정적 팩토리 메서드)
+                    User user = userRepository.save(User.create(UserRole.USER));
 
-                    userOauthRepository.save(UserOauth.builder()
-                            .user(user)
-                            .provider(AuthProvider.valueOf(provider))
-                            .providerUserId(providerUserId)
-                            .email(finalEmail)
-                            .build());
+                    // 2. UserOauth 연동 정보 저장 (Builder 대신 정적 팩토리 메서드)
+                    userOauthRepository.save(UserOauth.create(
+                            user,
+                            AuthProvider.valueOf(provider),
+                            finalProviderUserId,
+                            finalEmail
+                    ));
 
-                    userProfileRepository.save(UserProfile.builder()
-                            .user(user)
-                            .nickname("SkinUser_" + user.getId())
-                            .profileImageUrl(finalProfileImageUrl) // 분기 처리된 이미지 경로 사용
-                            .build());
+                    // 3. UserProfile 정보 저장 (UserProfile 엔티티도 create 메서드를 만들었다고 가정)
+                    userProfileRepository.save(UserProfile.create(
+                            user,
+                            "SkinUser_" + user.getId(),
+                            finalProfileImageUrl
+                    ));
 
-                    return new CustomUserDetails(user, finalEmail, attributes);
+                    return new CustomUserDetails(user, attributes);
+
                 });
     }
-    }
+}
+
+
