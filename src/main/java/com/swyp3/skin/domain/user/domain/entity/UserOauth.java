@@ -1,6 +1,6 @@
 package com.swyp3.skin.domain.user.domain.entity;
 
-import com.swyp3.skin.domain.user.domain.enums.AuthProvider;
+import com.swyp3.skin.global.auth.enums.AuthProvider;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

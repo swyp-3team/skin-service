@@ -17,7 +17,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserRole role;
 
-    public User(UserRole role){
+    private User(UserRole role){
         this.role = role;
     }
 
