@@ -8,6 +8,8 @@ import com.swyp3.skin.domain.user.domain.enums.UserRole;
 import com.swyp3.skin.domain.user.domain.repository.UserOauthRepository;
 import com.swyp3.skin.domain.user.domain.repository.UserProfileRepository;
 import com.swyp3.skin.domain.user.domain.repository.UserRepository;
+import com.swyp3.skin.global.auth.exception.AuthErrorCode;
+import com.swyp3.skin.global.auth.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -58,13 +60,19 @@ public class  CustomOAuth2UserService extends DefaultOAuth2UserService {
             }
         }
 
+        // null처리
+        if (providerUserId == null || providerUserId.isBlank()) {
+            throw new AuthException(AuthErrorCode.INVALID_PROVIDER);
+        }
+
         log.info("[{}] 로그인 시도 - providerId: {}, email: {}", registrationId, providerUserId, email);
 
         final String finalEmail = email;
         final String finalProfileImageUrl = profileImageUrl;
         final String finalProviderUserId = providerUserId;
 
-        return userOauthRepository.findByProviderAndProviderUserId(AuthProvider.from(registrationId), finalProviderUserId)
+        AuthProvider authProvider = AuthProvider.from(registrationId);
+        return userOauthRepository.findByProviderAndProviderUserId(authProvider, finalProviderUserId)
                 // 기존 유저인 경우 (CustomUserDetails의 생성자도 간소화했다고 가정)
                 .map(oauth -> new CustomUserDetails(oauth.getUser(), attributes))
                 .orElseGet(() -> {
@@ -74,7 +82,7 @@ public class  CustomOAuth2UserService extends DefaultOAuth2UserService {
                     // 2. UserOauth 연동 정보 저장 (Builder 대신 정적 팩토리 메서드)
                     userOauthRepository.save(UserOauth.create(
                             user,
-                            AuthProvider.from(registrationId),
+                            authProvider,
                             finalProviderUserId,
                             finalEmail
                     ));
