@@ -1,7 +1,7 @@
 package com.swyp3.skin.domain.user.domain.repository;
 
 import com.swyp3.skin.domain.user.domain.entity.UserOauth;
-import com.swyp3.skin.domain.user.domain.enums.AuthProvider;
+import com.swyp3.skin.global.auth.enums.AuthProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
