@@ -1,17 +1,17 @@
 services:
   mysql-db:
     image: mysql:8.0
-    container_name: ${CONTAINER_NAME}
+    container_name: skinRoutine-mysql
     restart: always
     ports:
-      - "${DB_PORT:-3306}:3306"
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: tngkr5696@#@
+      MYSQL_DATABASE: skin
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: app1234
     volumes:
       - mysql_data:/var/lib/mysql
 
 volumes:
-  mysql_data:
+  mysqlD_data:

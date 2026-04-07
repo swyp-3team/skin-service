@@ -1,3 +1,8 @@
+jwt:
+  secret: "your-very-long-and-secure-random-secret-key-32chars-for-jwt"
+  access-token-expiration: 3600000
+
+
 spring:
   application:
     name: skin-service
@@ -7,13 +12,13 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/skin
-    username: appuser
-    password: ${DB_PASSWORD}
+    username: appuser #appuser
+    password: "tngkr5696@#@"     #${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: none # Flyway가 관리하면 끄라고 하네요
+      ddl-auto: update # update: test용 #none: Flyway가 관리하면 끄라고 하네요
     show-sql: true
     properties:
       hibernate:
@@ -21,7 +26,7 @@ spring:
         default_batch_fetch_size: 100  # n+1 방지
 
   flyway:
-    enabled: true
+    enabled: false # test를 위해 Flyway는 잠시 꺼뒀습니다.
     locations: classpath:db/migration
 
   security:

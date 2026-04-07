@@ -3,9 +3,7 @@ package com.swyp3.skin.domain.user.domain.entity;
 import com.swyp3.skin.domain.user.domain.enums.UserRole;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -18,4 +16,12 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
+
+    public User(UserRole role){
+        this.role = role;
+    }
+
+    public static User create(UserRole role) {
+        return new User(role); //정적 팩토리 메서드 사용
+    }
 }

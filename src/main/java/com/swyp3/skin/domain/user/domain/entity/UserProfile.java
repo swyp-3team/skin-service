@@ -2,9 +2,7 @@ package com.swyp3.skin.domain.user.domain.entity;
 
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -21,4 +19,15 @@ public class UserProfile extends BaseEntity {
     private String nickname;
 
     private String profileImageUrl;
+
+
+    private UserProfile(User user, String nickname, String profileImageUrl) {
+        this.user = user;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public static UserProfile create(User user, String nickname, String profileImageUrl) {
+        return new UserProfile(user, nickname, profileImageUrl);
+    }
 }
