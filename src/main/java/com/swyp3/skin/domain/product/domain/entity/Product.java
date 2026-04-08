@@ -13,14 +13,22 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
     private String brand;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProductCategory category;
 
+    @Column(length = 1000)
     private String description;
+
     private String imageUrl;
     private String purchaseUrl;
+
+    @Column(nullable = false)
     private Boolean active;
 }
