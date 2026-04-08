@@ -1,18 +1,16 @@
-package com.swyp3.skin.domain.refreshToken.domain.entity;
+package com.swyp3.skin.domain.skinresult.domain.entity;
 
-import com.swyp3.skin.domain.user.domain.entity.User;
+import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RefreshToken extends BaseEntity {
+public class SkinResultGroupScore extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +18,18 @@ public class RefreshToken extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private User user;
+    private SkinResult skinResult;
 
-    @Column(nullable = false, unique = true, length = 500)
-    private String token;
-
-    @Column(nullable = false)
-    private LocalDateTime expiryDate;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private IngredientGroup ingredientGroup;
 
     @Column(nullable = false)
-    private boolean revoked;
+    private Double score;
+
+    @Column(nullable = false)
+    private Integer priority;
+
+    @Column(nullable = false)
+    private String reason;
 }

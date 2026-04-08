@@ -23,7 +23,7 @@ public class UserOauth extends BaseEntity {
     @Column(nullable = false)
     private AuthProvider provider;
 
-    @Column(nullable = false)
+    @Column(nullable = false , unique = true)
     private String providerUserId;
 
     private String email;

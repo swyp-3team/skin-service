@@ -1,6 +1,6 @@
-package com.swyp3.skin.domain.skintest.domain.entity;
+package com.swyp3.skin.domain.product.domain.entity;
 
-import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,15 +10,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SkinResultScore extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+class ProductGroupScore extends BaseEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private SkinResult skinResult;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
+    private Product product;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
@@ -28,8 +25,5 @@ public class SkinResultScore extends BaseEntity {
     private Double score;
 
     @Column(nullable = false)
-    private Integer priority;
-
-    @Column(nullable = false)
-    private String reason;
+    private Integer rank;
 }

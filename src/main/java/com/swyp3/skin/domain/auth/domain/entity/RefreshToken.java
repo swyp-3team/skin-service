@@ -1,6 +1,5 @@
-package com.swyp3.skin.domain.routine.domain.entity;
+package com.swyp3.skin.domain.auth.domain.entity;
 
-import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -8,10 +7,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoutineGroup extends BaseEntity {
+public class RefreshToken extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,16 +22,12 @@ public class RoutineGroup extends BaseEntity {
     @JoinColumn(nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private SkinResult skinResult;
+    @Column(nullable = false, unique = true, length = 500)
+    private String token;
 
-    @Column(nullable = false, length = 100)
-    private String title;
+    @Column(nullable = false)
+    private LocalDateTime expiryDate;
 
-    @Column(length = 500)
-    private String summary;
-
-    @Column(length = 500)
-    private String caution;
+    @Column(nullable = false)
+    private boolean revoked;
 }

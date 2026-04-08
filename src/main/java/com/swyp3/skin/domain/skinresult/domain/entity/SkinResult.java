@@ -1,6 +1,6 @@
-package com.swyp3.skin.domain.skintest.domain.entity;
+package com.swyp3.skin.domain.skinresult.domain.entity;
 
-import com.swyp3.skin.domain.skintest.domain.enums.SkinType;
+import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;

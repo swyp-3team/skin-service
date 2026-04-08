@@ -1,6 +1,6 @@
 package com.swyp3.skin.recommendation.core;
 
-import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.recommendation.calculator.*;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;

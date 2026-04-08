@@ -1,6 +1,5 @@
 package com.swyp3.skin.recommendation.testdata;
 
-import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
 import com.swyp3.skin.recommendation.model.enums.Concern;
 import com.swyp3.skin.recommendation.model.enums.SkinState;
 import com.swyp3.skin.recommendation.model.enums.SkinType;
