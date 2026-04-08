@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.ingredient.domain.enums;
+package com.swyp3.skin.domain.common.enums;
 
 // 추후 변경 여지있음
 // V1

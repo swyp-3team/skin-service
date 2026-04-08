@@ -69,7 +69,7 @@ public class RoutineController {
             summary = "루틴 상세 조회",
             description = "선택한 루틴의 AM/PM 구성, 사용 순서, 추천 이유, 주의사항을 함께 조회"
     )
-    @GetMapping("/{routineId}")
+    @GetMapping("/{routineGroupId}")
     public ApiResponse<RoutineDetailResponse> getRoutine(@PathVariable Long routineGroupId) {
         // TODO :
         // 루틴그룹 아이디 기준 루틴 그룹 조회
@@ -82,7 +82,7 @@ public class RoutineController {
             summary = "루틴 삭제",
             description = "선택한 루틴 기준으로 동일 그룹의 AM/PM 루틴과 하위 데이터를 함께 삭제"
     )
-    @DeleteMapping("/{routineId}")
+    @DeleteMapping("/{routineGroupId}")
     public ApiResponse<Void> deleteRoutine(
             @Parameter(description = "삭제할 루틴 대표 ID", example = "1")
             @PathVariable Long routineGroupId

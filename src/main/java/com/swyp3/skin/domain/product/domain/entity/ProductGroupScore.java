@@ -1,7 +1,6 @@
 package com.swyp3.skin.domain.product.domain.entity;
 
-import com.swyp3.skin.domain.ingredient.domain.entity.Ingredient;
-import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

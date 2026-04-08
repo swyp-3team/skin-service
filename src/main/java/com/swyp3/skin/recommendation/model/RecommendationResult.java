@@ -1,6 +1,6 @@
 package com.swyp3.skin.recommendation.model;
 
-import com.swyp3.skin.domain.ingredient.domain.enums.IngredientGroup;
+import com.swyp3.skin.domain.common.enums.IngredientGroup;
 
 import java.util.List;
 import java.util.Map;
