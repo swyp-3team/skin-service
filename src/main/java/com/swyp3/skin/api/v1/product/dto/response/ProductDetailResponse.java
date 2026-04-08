@@ -30,9 +30,9 @@ public record ProductDetailResponse(
         String purchaseUrl,
 
         @ArraySchema(
-                schema = @Schema(implementation = ProductIngredientResponse.class),
-                arraySchema = @Schema(description = "제품에 포함된 성분 목록")
+                schema = @Schema(implementation = ProductGroupScoreResponse.class),
+                arraySchema = @Schema(description = "제품 성분군 점수 목록")
         )
-        List<ProductIngredientResponse> ingredients
+        List<ProductGroupScoreResponse> groupScores
 ) {
 }
