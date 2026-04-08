@@ -1,6 +1,5 @@
-package com.swyp3.skin.domain.skintest.domain.entity;
+package com.swyp3.skin.domain.auth.domain.entity;
 
-import com.swyp3.skin.domain.skintest.domain.enums.SkinType;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -13,21 +12,22 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SkinResult extends BaseEntity {
+public class RefreshToken extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SkinType skinType;
+    @Column(nullable = false, unique = true, length = 500)
+    private String token;
 
     @Column(nullable = false)
-    private String summary;
+    private LocalDateTime expiryDate;
 
     @Column(nullable = false)
-    private LocalDateTime diagnosedAt;
+    private boolean revoked;
 }
