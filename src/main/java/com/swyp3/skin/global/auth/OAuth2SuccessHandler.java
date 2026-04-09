@@ -36,7 +36,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         //2. JWT 토큰 발급
         String accessToken = jwtTokenProvider.createAccessToken(userId);
 
-        String targetUrl = "http://localhost:8080/swagger-ui/index.html";
+        String targetUrl = "https://api.layerd.co.kr/";
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
@@ -53,6 +53,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 .queryParam("accessToken", accessToken)
                 .build().toUriString();
 
-        response.sendRedirect(targetUrl);
+        response.sendRedirect(redirectUrl);
     }
 }
