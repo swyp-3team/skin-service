@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.product.domain.entity;
 
 import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
+import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
