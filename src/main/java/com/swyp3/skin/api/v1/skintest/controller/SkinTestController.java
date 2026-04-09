@@ -1,12 +1,12 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
-import com.swyp3.skin.api.v1.skintest.dto.request.PreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.MySkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestPreviewResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
+import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
@@ -66,7 +66,7 @@ public class SkinTestController {
 
         SkinInput skinInput = skinInputMapper.toSkinInput(request);
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
-        SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(),result)
+        SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(), result);
         return ApiResponse.ok(response);
     }
 
