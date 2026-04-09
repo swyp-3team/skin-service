@@ -40,6 +40,10 @@ public class SkinTypeAdjuster {
             case COMBINATION:
                 // 복합성: 보정 없음
                 break;
+
+            case UNKNOWN:
+                // 모름: 보정 없음 (중립 유지)
+                break;
         }
 
         return result;
