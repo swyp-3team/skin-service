@@ -86,7 +86,7 @@ CREATE TABLE product_group_score
     product_id       BIGINT      NOT NULL,
     ingredient_group VARCHAR(50) NOT NULL,
     score            DOUBLE      NOT NULL,
-    rank             INT         NOT NULL,
+    `rank`           INT         NOT NULL,
     created_at       DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
