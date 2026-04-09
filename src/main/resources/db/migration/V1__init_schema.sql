@@ -4,8 +4,8 @@ CREATE TABLE users
     id             BIGINT AUTO_INCREMENT PRIMARY KEY,
     email          VARCHAR(200) NOT NULL UNIQUE,
     email_verified BOOLEAN               DEFAULT FALSE,
-    password       VARCHAR(255),                              -- 소셜 전용 유저일 경우 NULL 허용
-    role           VARCHAR(20)  NOT NULL DEFAULT 'ROLE_USER', -- 'USER', 'ADMIN'
+    password       VARCHAR(255),                         -- 소셜 전용 유저일 경우 NULL 허용
+    role           VARCHAR(20)  NOT NULL DEFAULT 'USER', -- 'USER', 'ADMIN'
     created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
