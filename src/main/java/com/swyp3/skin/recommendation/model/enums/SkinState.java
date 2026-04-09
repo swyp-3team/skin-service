@@ -6,5 +6,6 @@ public enum SkinState {
     SEBUM,         // 피지
     ACNE,          // 트러블/염증
     SENSITIVITY,   // 민감/홍조
-    PIGMENTATION   // 색소/톤
-}
+    PIGMENTATION,  // 색소/톤
+    AGING         // 노화
+    }

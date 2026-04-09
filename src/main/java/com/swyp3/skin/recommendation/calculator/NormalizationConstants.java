@@ -8,17 +8,13 @@ public class NormalizationConstants {
 
     public static final Map<IngredientGroup, Double> MAX_SCORES = Map.of(
 
-            IngredientGroup.HYDRATION, 110.5,
-            IngredientGroup.BARRIER, 120.0,
-
-            IngredientGroup.ACNE, 170.0,
-            IngredientGroup.SEBUM_CONTROL, 130.0,
-
-            IngredientGroup.SOOTHING, 136.0,
-
-            IngredientGroup.BRIGHTENING, 110.0,
-            IngredientGroup.TURNOVER, 60.0,
-
-            IngredientGroup.ANTI_AGING, 100.0
+            IngredientGroup.HYDRATION,     85.0,
+            IngredientGroup.BARRIER,       102.0,
+            IngredientGroup.ACNE,          161.5,
+            IngredientGroup.SEBUM_CONTROL, 102.0,
+            IngredientGroup.SOOTHING,      131.75,
+            IngredientGroup.BRIGHTENING,   130.0,
+            IngredientGroup.TURNOVER,      89.25,
+            IngredientGroup.ANTI_AGING,    119.0
     );
 }
