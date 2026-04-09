@@ -1,15 +1,5 @@
 package com.swyp3.skin.domain.common.enums;
 
-// 추후 변경 여지있음
-// V1
-//public enum IngredientGroup {
-//    HYDRATION,
-//    ACNE,
-//    SOOTHING,
-//    PIGMENTATION,
-//    TURNOVER
-//}
-
 public enum IngredientGroup {
 
     ACNE,           // 여드름 케어
