@@ -51,7 +51,7 @@ public class ConcernMapping {
         // 모공
         mapping.put(Concern.PORE, new IngredientGroup[]{
                 IngredientGroup.SEBUM_CONTROL, // 피지 조절 (핵심)
-                IngredientGroup.TURNOVER       // 각질/재생 (모공 정리 핵심)
+//                IngredientGroup.TURNOVER       // 각질/재생 (모공 정리 핵심)
         });
 
         return mapping;

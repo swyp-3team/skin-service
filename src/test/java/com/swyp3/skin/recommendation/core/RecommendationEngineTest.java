@@ -24,7 +24,8 @@ public class RecommendationEngineTest {
                 SkinState.SEBUM, 70,
                 SkinState.ACNE, 85,
                 SkinState.SENSITIVITY, 55,
-                SkinState.PIGMENTATION, 40
+                SkinState.PIGMENTATION, 40,
+                SkinState.AGING ,30
         );
 
         SkinInput input = new SkinInput(
@@ -79,95 +80,6 @@ public class RecommendationEngineTest {
         }
     }
 
-    @Test
-    void 상세_테스트() {
-
-        RecommendationEngine engine = new RecommendationEngine();
-
-        List<TestCase> cases = List.of(
-
-                // 극단 건조형
-                new TestCase(
-                        Map.of(
-                                SkinState.DRYNESS, 85,
-                                SkinState.SEBUM, 25,
-                                SkinState.ACNE, 25,
-                                SkinState.SENSITIVITY, 50,
-                                SkinState.PIGMENTATION, 25
-                        ),
-                        List.of(Concern.DRY),
-                        SkinType.DRY
-                ),
-
-                // 트러블 지성 폭발형
-                new TestCase(
-                        Map.of(
-                                SkinState.DRYNESS, 25,
-                                SkinState.SEBUM, 85,
-                                SkinState.ACNE, 90,
-                                SkinState.SENSITIVITY, 40,
-                                SkinState.PIGMENTATION, 25
-                        ),
-                        List.of(Concern.ACNE),
-                        SkinType.OILY
-                ),
-
-                // 민감 폭발형
-                new TestCase(
-                        Map.of(
-                                SkinState.DRYNESS, 50,
-                                SkinState.SEBUM, 25,
-                                SkinState.ACNE, 25,
-                                SkinState.SENSITIVITY, 90,
-                                SkinState.PIGMENTATION, 25
-                        ),
-                        List.of(Concern.SENSITIVE),
-                        SkinType.SENSITIVE
-                ),
-
-                // 애매한 인간형
-                new TestCase(
-                        Map.of(
-                                SkinState.DRYNESS, 55,
-                                SkinState.SEBUM, 55,
-                                SkinState.ACNE, 55,
-                                SkinState.SENSITIVITY, 55,
-                                SkinState.PIGMENTATION, 55
-                        ),
-                        List.of(Concern.SENSITIVE),
-                        SkinType.COMBINATION
-                )
-        );
-
-        int idx = 1;
-
-        for (TestCase tc : cases) {
-
-            RecommendationResult result = engine.calculate(
-                    new SkinInput(
-                            tc.stateVector,
-                            tc.concerns,
-                            tc.skinType
-                    )
-            );
-
-            System.out.println("====================================");
-            System.out.println("CASE #" + idx++);
-            System.out.println("INPUT: " + tc.concerns + " / " + tc.skinType);
-            System.out.println("STATE: " + tc.stateVector);
-
-            // 핵심 로그
-            System.out.println("SCORES: " + result.getScores());
-
-            // Top3 추출
-            List<IngredientGroup> top3 = result.getRanking().stream()
-                    .limit(3)
-                    .toList();
-
-            System.out.println("TOP3 : " + top3);
-            System.out.println("====================================");
-        }
-    }
 
     @Test
     void 템플릿() {
@@ -180,7 +92,8 @@ public class RecommendationEngineTest {
                         SkinState.SEBUM, 00,
                         SkinState.ACNE, 00,
                         SkinState.SENSITIVITY, 00,
-                        SkinState.PIGMENTATION, 00
+                        SkinState.PIGMENTATION, 00,
+                        SkinState.AGING, 00
                 ),
                 List.of(Concern.DRY),
                 SkinType.DRY

@@ -20,20 +20,20 @@ public class SkinTypeAdjuster {
 
             case DRY:
                 // 건성: 보습/진정 강화
-                multiply(result, IngredientGroup.HYDRATION, 1.2);
+                multiply(result, IngredientGroup.HYDRATION, 1.1);
                 multiply(result, IngredientGroup.SOOTHING, 1.1);
+                multiply(result, IngredientGroup.ANTI_AGING, 1.15);
                 break;
 
             case OILY:
                 // 지성: 피지/트러블 중심
-                multiply(result, IngredientGroup.HYDRATION, 0.8);
                 multiply(result, IngredientGroup.ACNE, 1.1);
                 break;
 
             case SENSITIVE:
                 // 민감성: 진정 강화 + 자극 요소 약화
                 multiply(result, IngredientGroup.SOOTHING, 1.2);
-                multiply(result, IngredientGroup.TURNOVER, 0.8);
+                multiply(result, IngredientGroup.TURNOVER, 0.9);
                 multiply(result, IngredientGroup.ACNE, 0.9);
                 break;
 
