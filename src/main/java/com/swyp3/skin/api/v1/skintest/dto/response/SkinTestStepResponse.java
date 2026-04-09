@@ -24,13 +24,6 @@ public record SkinTestStepResponse(
                 schema = @Schema(implementation = SkinTestQuestionOptionResponse.class),
                 arraySchema = @Schema(description = "현재 단계에서 선택 가능한 선택지 목록")
         )
-        List<SkinTestQuestionOptionResponse> options,
-
-        @Schema(
-                description = "해당 단계에서 사용자가 기존에 선택했던 선택지 번호. 아직 응답하지 않았으면 null입니다.",
-                example = "3",
-                nullable = true
-        )
-        Integer selectedAnswer
+        List<SkinTestQuestionOptionResponse> options
 ) {
 }

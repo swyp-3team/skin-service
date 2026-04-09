@@ -4,6 +4,9 @@ import com.swyp3.skin.api.v1.skintest.dto.request.SaveSkinTestAnswerRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.MySkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
+import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
+import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
+import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
 import com.swyp3.skin.global.response.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,42 +17,24 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Skin Test", description = "피부진단 / 온보딩")
 @RestController
-@RequestMapping("/api/v1/skin-test")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class SkinTestController {
 
-    @Operation(
-            summary = "설문 시작",
-            description = "피부 진단 설문 세션을 초기화하고 첫 설문 단계 정보를 반환합니다."
-    )
-    @PostMapping("/start")
-    public ApiResponse<SkinTestStepResponse> start(HttpSession session) {
-        // TODO : 세션 초기화 (이전 정보 지우고 깨끗하게 시작)
-        // selectedAnswer는 null로 내려준다
-        return null;
-    }
 
     @Operation(
             summary = "설문 단계 조회",
-            description = "특정 단계의 질문, 선택지, 그리고 이미 저장된 선택값을 함께 조회합니다."
+            description = "특정 단계의 질문, 선택지 를 반환합니다."
     )
-    @GetMapping("/step/{step}")
+    @GetMapping("/surveys")
     public ApiResponse<SkinTestStepResponse> getStep(
-            @PathVariable int step,
-            HttpSession session
+            @RequestParam int step
     ) {
-        // TODO:
-        // 1. step 번호에 맞는 질문/선택지를 조회
-        // 2. 세션(SKIN_SURVEY)에서 현재 step의 기존 답변을 조회
-        // 3. selectedAnswer에 담아 프론트가 체크 상태를 표시
 
-        // SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
-        // Integer selectedOption = getSelectedOptionFromSession(session, step);
+        SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
+        SkinTestStepResponse response = SkinTestStepMapper.toResponse(question);
 
-        // SkinTestStepResponse response = SkinTestStepMapper.toResponse(question, selectedOption);
-        // return ApiResponse.ok(response)
-
-        return null;
+        return ApiResponse.ok(response);
     }
 
     @Operation(
