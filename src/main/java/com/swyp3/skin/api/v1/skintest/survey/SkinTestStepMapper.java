@@ -11,12 +11,10 @@ public final class SkinTestStepMapper {
 
     /* 실제 사용시 아래와 같이 사용
      * SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
-     * Integer selectedOption = getSelectedOptionFromSession(session, step);
-
-     * SkinTestStepResponse response = SkinTestStepMapper.toResponse(question, selectedOption);
+     * SkinTestStepResponse response = SkinTestStepMapper.toResponse(question);
      * return ApiResponse.ok(response)
      */
-    public static SkinTestStepResponse toResponse(SkinTestSurveyQuestion question, Integer selectedOption) {
+    public static SkinTestStepResponse toResponse(SkinTestSurveyQuestion question) {
         return new SkinTestStepResponse(
                 question.step(),
                 question.question(),
@@ -28,9 +26,7 @@ public final class SkinTestStepMapper {
                                 option.optionNumber(),
                                 option.content()
                         ))
-                        .toList(),
-                // 프론트 체크 상태복원용(매개변수로 받을 예정)
-                selectedOption
+                        .toList()
         );
     }
 }
