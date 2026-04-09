@@ -7,5 +7,6 @@ public enum Concern {
     PIGMENTATION,  // 색소/잡티
     AGING,         // 주름/노화
     SENSITIVE,     // 민감
-    SEBUM          // 피지
+    SEBUM,          // 피지
+    PORE           // 모공
 }

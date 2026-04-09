@@ -79,6 +79,12 @@ public class ScoreMapping {
         pigmentation.put(IngredientGroup.TURNOVER, 0.7);    // 각질/재생 보조
         mapping.put(SkinState.PIGMENTATION, pigmentation);
 
+        // AGING (노화)
+        Map<IngredientGroup, Double> aging = new HashMap<>();
+        aging.put(IngredientGroup.ANTI_AGING, 1.3);  // 핵심 (탄력/주름 개선)
+        aging.put(IngredientGroup.TURNOVER, 0.6);    // 보조 (재생)
+        mapping.put(SkinState.AGING, aging);
+
         return mapping;
     }
 }
