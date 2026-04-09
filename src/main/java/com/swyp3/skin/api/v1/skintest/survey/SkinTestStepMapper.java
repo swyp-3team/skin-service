@@ -11,7 +11,6 @@ public final class SkinTestStepMapper {
 
     /* 실제 사용시 아래와 같이 사용
      * SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
-
      * SkinTestStepResponse response = SkinTestStepMapper.toResponse(question);
      * return ApiResponse.ok(response)
      */

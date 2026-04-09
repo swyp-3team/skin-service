@@ -7,11 +7,14 @@ import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
+import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
+import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
 import com.swyp3.skin.global.response.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +30,16 @@ public class SkinTestController {
             description = "특정 단계의 질문, 선택지 를 반환합니다."
     )
     @GetMapping("/surveys")
-    public ApiResponse<SkinTestStepResponse> getStep(
-            @RequestParam int step
-    ) {
-
+    public ApiResponse<SkinTestStepResponse> getSurvey(
+            @RequestParam @Min(1) int step
+            ) {
         SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
-        SkinTestStepResponse response = SkinTestStepMapper.toResponse(question);
 
+        if (question == null) {
+            throw new SkinTestException(SkinTestErrorCode.INVALID_SURVEY_STEP);
+        }
+
+        SkinTestStepResponse response = SkinTestStepMapper.toResponse(question);
         return ApiResponse.ok(response);
     }
 
