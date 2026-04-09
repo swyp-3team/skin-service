@@ -57,7 +57,7 @@ public class ScoreMapping {
 
         // SEBUM (피지)
         Map<IngredientGroup, Double> sebum = new HashMap<>();
-        sebum.put(IngredientGroup.SEBUM_CONTROL, 1.2); // 피지 조절 (핵심)
+        sebum.put(IngredientGroup.SEBUM_CONTROL, 1.3); // 피지 조절 (핵심)
         sebum.put(IngredientGroup.ACNE, 0.4);          // 트러블 예방 (약하게)
         mapping.put(SkinState.SEBUM, sebum);
 
