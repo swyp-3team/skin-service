@@ -18,6 +18,7 @@ class RoutineProduct extends BaseEntity {
     private Routine routine;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false)
     private Product product;
+    @Column(nullable = false)
     private Integer sortOrder;
     private String note;
     private String reason;
