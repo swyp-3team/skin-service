@@ -6,12 +6,16 @@ import com.swyp3.skin.api.v1.skintest.dto.response.MySkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestPreviewResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestResultResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
+import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
 import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
 import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
+import com.swyp3.skin.domain.skinttest.service.SkinTestApplicationService;
 import com.swyp3.skin.global.response.dto.ApiResponse;
+import com.swyp3.skin.recommendation.model.RecommendationResult;
+import com.swyp3.skin.recommendation.model.SkinInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +32,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SkinTestController {
 
+    private final SkinTestApplicationService skinTestApplicationService;
+    private final SkinInputMapper skinInputMapper;
+    private final SkinTestPreviewResponseMapper previewResponseMapper;
 
     @Operation(
             summary = "설문 단계 조회",
@@ -57,7 +64,10 @@ public class SkinTestController {
     public ApiResponse<SkinTestPreviewResponse> preview(
             @Valid @RequestBody SkinTestPreviewRequest request) {
 
-        return ApiResponse.ok(SkinTestPreviewResponse);
+        SkinInput skinInput = skinInputMapper.toSkinInput(request);
+        RecommendationResult result = skinTestApplicationService.calculate(skinInput);
+        SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(),result)
+        return ApiResponse.ok(response);
     }
 
 //    @Operation(
