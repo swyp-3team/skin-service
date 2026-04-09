@@ -16,9 +16,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Skin Test", description = "피부진단 / 온보딩")
+@Validated
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
