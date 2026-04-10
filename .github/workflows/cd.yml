@@ -32,6 +32,6 @@ jobs:
           script: |
             cd /home/ec2-user/app
             echo "${{ secrets.ENVIRONMENTVARIABLES }}" > .env
-            mv *SNAPSHOT.jar app.jar
+            mv build/libs/*SNAPSHOT.jar app.jar
             chmod +x deploy.sh
             ./deploy.sh
