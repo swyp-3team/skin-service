@@ -1,17 +1,23 @@
 package com.swyp3.skin.admin.product.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("admin")
+@RequestMapping("/admin/products")
+@RequiredArgsConstructor
 public class AdminProductController {
 
-    @GetMapping("/products")
-    public String products(Model model) {
-        model.addAttribute("userRole", "ADMIN");
+
+    @GetMapping
+    public String productPage() {
         return "admin/product/index";
+    }
+
+    @GetMapping("/new")
+    public String productCreatePage() {
+        return "admin/product/form";
     }
 }

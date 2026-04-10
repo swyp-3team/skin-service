@@ -12,7 +12,7 @@ public class AdminController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("pageTitle", "Admin Dashboard");
-        model.addAttribute("systemName", "Skin Service");
+        model.addAttribute("systemName", "Layerd");
         model.addAttribute("userRole", "ADMIN");
         return "admin/index";
     }

@@ -35,4 +35,24 @@ public class Product extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean active;
+
+    public static Product create(
+            String name,
+            String brand,
+            ProductCategory category,
+            String description,
+            String imageUrl,
+            String purchaseUrl,
+            boolean active
+    ){
+        Product product = new Product();
+        product.name = name;
+        product.brand = brand;
+        product.category = category;
+        product.description = description;
+        product.imageUrl = imageUrl;
+        product.purchaseUrl = purchaseUrl;
+        product.active = active;
+        return product;
+    }
 }
