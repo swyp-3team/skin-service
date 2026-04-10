@@ -5,10 +5,12 @@ import com.swyp3.skin.recommendation.calculator.*;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
 import com.swyp3.skin.recommendation.model.enums.SkinState;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class RecommendationEngine {
 
     private final ScoreCalculator scoreCalculator = new ScoreCalculator();

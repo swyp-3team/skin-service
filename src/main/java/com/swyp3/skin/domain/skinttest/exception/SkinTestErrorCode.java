@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum SkinTestErrorCode implements ErrorCode {
-    INVALID_SURVEY_STEP(HttpStatus.BAD_REQUEST, "SKIN_TEST_400_001", "유효하지 않은 설문 단계입니다.");
+    INVALID_SURVEY_STEP(HttpStatus.BAD_REQUEST, "SKIN_TEST_400_001", "유효하지 않은 설문 단계입니다."),
+    INVALID_SURVEY_ANSWER_PAYLOAD(HttpStatus.BAD_REQUEST, "SKIN_TEST_400_002", "설문 응답 형식이 올바르지 않습니다.");
 
     private final HttpStatus status;
     private final String code;

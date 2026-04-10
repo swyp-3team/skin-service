@@ -25,5 +25,5 @@ class ProductGroupScore extends BaseEntity {
     private Double score;
 
     @Column(nullable = false)
-    private Integer rank;
+    private Integer priority;
 }
