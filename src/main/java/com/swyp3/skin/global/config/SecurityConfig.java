@@ -42,7 +42,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/login/**", "/oauth2/**", // 로그인 관련 경로 허용
                                 "/swagger-ui/**", "/swagger-ui.html",
-                                "/v3/api-docs/**", "/api-docs/**"
+                                "/v3/api-docs/**", "/api-docs/**",
+                                "/admin/**" // 개발중만 임시
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
