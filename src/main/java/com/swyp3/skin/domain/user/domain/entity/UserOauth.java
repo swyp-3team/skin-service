@@ -8,6 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "user_oauth", uniqueConstraints = {
+        @UniqueConstraint(
+                name = "uk_provider_and_id",
+                columnNames = {"provider", "provider_user_id"}
+        )
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 기본 생성자 보안 강화
 public class UserOauth extends BaseEntity {
@@ -23,7 +29,7 @@ public class UserOauth extends BaseEntity {
     @Column(nullable = false)
     private AuthProvider provider;
 
-    @Column(nullable = false , unique = true)
+    @Column(nullable = false)
     private String providerUserId;
 
     private String email;
