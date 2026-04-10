@@ -1,7 +1,8 @@
 package com.swyp3.skin.api.v1.skintest.dto.request;
 
-import com.swyp3.skin.recommendation.model.enums.Concern;
-import com.swyp3.skin.recommendation.model.enums.SkinType;
+
+import com.swyp3.skin.domain.skinresult.domain.enums.Concern;
+import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;

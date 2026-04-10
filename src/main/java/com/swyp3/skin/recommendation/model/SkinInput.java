@@ -1,8 +1,8 @@
 package com.swyp3.skin.recommendation.model;
 
-import com.swyp3.skin.recommendation.model.enums.Concern;
+import com.swyp3.skin.domain.skinresult.domain.enums.Concern;
+import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
 import com.swyp3.skin.recommendation.model.enums.SkinState;
-import com.swyp3.skin.recommendation.model.enums.SkinType;
 
 import java.util.List;
 import java.util.Map;

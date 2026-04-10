@@ -2,7 +2,7 @@
 package com.swyp3.skin.api.v1.skintest.dto.response;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
-import com.swyp3.skin.recommendation.model.enums.SkinType;
+import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @Schema(description = "피부 진단 미리보기 응답")
 public record SkinTestPreviewResponse(
 
-        @Schema(description = "분석된 피부 타입", example = "OILY")
+        @Schema(description = "선택한 피부 타입", example = "OILY")
         SkinType skinType,
 
         @Schema(description = "결과 요약 문장", example = "피지와 트러블 관리가 우선이며 진정 케어가 필요합니다.")
