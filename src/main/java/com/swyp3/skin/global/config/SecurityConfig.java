@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 "/", "/login/**", "/oauth2/**", // 로그인 관련 경로 허용
                                 "/swagger-ui/**", "/swagger-ui.html",
                                 "/v3/api-docs/**", "/api-docs/**",
-                                "/admin/**" // 개발중만 임시
+                                "/admin/**", // 개발중만 임시
+                                "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
