@@ -49,7 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else if ("kakao".equals(registrationId)) {
             providerUserId = String.valueOf(attributes.get("id"));
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-            Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+            Map<String, Object> properties = (Map<String, Object>) attributes.get("profile");
 
             if (kakaoAccount != null) {
                 email = (String) kakaoAccount.get("email");
