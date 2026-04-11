@@ -1,10 +1,12 @@
 package com.swyp3.skin.global.auth;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -20,7 +22,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JwtTokenProvider jwtTokenProvider; // 주입 추가
+    @Value("${app.cookie.secure:false}")
+    private boolean cookieSecure;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     private final RequestCache requestCache = new HttpSessionRequestCache();
 
@@ -28,31 +33,25 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        // 1. 유저 정보 가져오기
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId();
 
         log.info("로그인 성공! JWT 발급 시작. 유저 ID: {}", userId);
-        //2. JWT 토큰 발급
         String accessToken = jwtTokenProvider.createAccessToken(userId);
 
-        String targetUrl = "http://localhost:8080/swagger-ui/index.html";
+        String redirectUri = request.getParameter("redirect_uri");
 
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
-
-        if (savedRequest != null) {
-            targetUrl = savedRequest.getRedirectUrl();
-            requestCache.removeRequest(request, response);
-            log.info("원래 가려던 목적지로 리다이렉트 합니다: {}", targetUrl);
-        } else {
-            log.info("원래 목적지가 없어 기본 목적지(스웨거)로 리다이렉트 합니다.");
+        if (redirectUri == null || redirectUri.isBlank()) {
+            redirectUri = "https://layerd.co.kr";
         }
 
-        // 3. 리다이렉트 주소 설정
-        String redirectUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("accessToken", accessToken)
-                .build().toUriString();
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(cookieSecure);
+        cookie.setPath("/");
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
 
-        response.sendRedirect(targetUrl);
+        response.sendRedirect(redirectUri);
     }
 }
