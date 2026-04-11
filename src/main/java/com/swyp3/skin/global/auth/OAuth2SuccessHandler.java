@@ -1,6 +1,7 @@
 package com.swyp3.skin.global.auth;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             redirectUri = "https://layerd.co.kr";
         }
 
-        String redirectUrl = UriComponentsBuilder.fromUriString(redirectUri)
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
 
+        response.sendRedirect(redirectUri);
     }
 }
