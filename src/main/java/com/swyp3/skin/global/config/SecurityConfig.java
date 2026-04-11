@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,6 +31,26 @@ public class SecurityConfig {
     private final WebConfig webConfig;
 
     @Bean
+    @Order(1) // 프론트 통신 불가로 임시 세션에서 체크
+    public SecurityFilterChain adminChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/admin/**")
+                .csrf(csrf -> csrf.disable()) // 임시. 나중에 enable + 토큰 처리 권장
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
+                );
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 // 2. JWT 사용을 위한 세션 정책 설정 (STATELESS)
@@ -44,7 +65,6 @@ public class SecurityConfig {
                                 "/login/**", "/oauth2/**",
                                 "/swagger-ui/**", "/swagger-ui.html",
                                 "/v3/api-docs/**", "/api-docs/**",
-                                "/admin/**",
                                 "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                         ).permitAll()
                         .anyRequest().authenticated()

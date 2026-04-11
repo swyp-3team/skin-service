@@ -49,9 +49,10 @@ public class AdminProductService {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Long delete(Long productId) {
         Product findProduct = findById(productId);
+        productGroupScoreRepository.deleteByProductId(productId);
         productRepository.delete(findProduct);
         return productId;
     }

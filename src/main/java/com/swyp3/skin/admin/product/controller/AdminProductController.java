@@ -27,6 +27,7 @@ public class AdminProductController {
     public String productPage(Model model) {
         List<Product> products = adminProductService.findAll();
         model.addAttribute("products", products);
+        model.addAttribute("categories", ProductCategory.values());
         return "admin/product/index";
     }
 
@@ -53,8 +54,8 @@ public class AdminProductController {
         return "redirect:/admin/products";
     }
 
-    @GetMapping("/{id}/edit")
-    public String editPage(
+    @PostMapping("/{id}/edit")
+    public String edit(
             @PathVariable("id") Long productId,
             @Valid @ModelAttribute AdminProductUpdateForm form,
             RedirectAttributes redirectAttributes
@@ -63,6 +64,7 @@ public class AdminProductController {
         redirectAttributes.addFlashAttribute("message", "상품 수정 완료(ID=" + productId + ")");
         return "redirect:/admin/products";
     }
+
 
     @PostMapping("/{productId}/delete")
     public String delete(
