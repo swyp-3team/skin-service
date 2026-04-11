@@ -1,16 +1,14 @@
+server:
+  forward-headers-strategy: framework
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 5
+
+logging:
+  level:
+    root: WARN
 spring:
-
-  server:
-    forward-headers-strategy: framework
-    tomcat:
-      threads:
-        max: 20
-        min-spare: 5
-
-  logging:
-    level:
-      root: WARN
-
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
