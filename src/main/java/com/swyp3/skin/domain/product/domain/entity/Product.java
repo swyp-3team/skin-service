@@ -40,6 +40,7 @@ public class Product extends BaseEntity {
             String name,
             String brand,
             ProductCategory category,
+            int price,
             String description,
             String imageUrl,
             String purchaseUrl,
@@ -49,10 +50,31 @@ public class Product extends BaseEntity {
         product.name = name;
         product.brand = brand;
         product.category = category;
+        product.price = price;
         product.description = description;
         product.imageUrl = imageUrl;
         product.purchaseUrl = purchaseUrl;
         product.active = active;
         return product;
+    }
+
+    public void update(
+            String name,
+            String brand,
+            ProductCategory category,
+            int price,
+            String description,
+            String imageUrl,
+            String purchaseUrl,
+            boolean active
+    ) {
+        this.name = name;
+        this.brand = brand;
+        this.category = category;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.purchaseUrl = purchaseUrl;
+        this.active = active;
     }
 }

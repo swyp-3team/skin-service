@@ -1,0 +1,7 @@
+package com.swyp3.skin.domain.product.repository;
+
+import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductGroupScoreRepository extends JpaRepository<ProductGroupScore,Long> {
+}
