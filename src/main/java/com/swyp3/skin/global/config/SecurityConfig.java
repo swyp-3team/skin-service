@@ -31,19 +31,21 @@ public class SecurityConfig {
     private final WebConfig webConfig;
 
     @Bean
-    @Order(1) // 프론트 통신 불가로 임시 세션에서 체크
+    @Order(1)
     public SecurityFilterChain adminChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin/**")
-                .csrf(csrf -> csrf.disable()) // 임시. 나중에 enable + 토큰 처리 권장
+                .securityMatcher("/admin/**", "/oauth2/**", "/login/**")
+                .csrf(csrf -> csrf.disable())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/oauth2/**", "/login/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
                         .successHandler(oAuth2SuccessHandler)
                 );
         return http.build();
