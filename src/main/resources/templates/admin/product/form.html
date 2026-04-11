@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>상품 등록</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" />
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand fw-bold text-primary" th:href="@{/admin}">Layerd Admin</a>
+        <ul class="navbar-nav ms-2">
+            <li class="nav-item"><a class="nav-link active" th:href="@{/admin/products}">상품</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container-fluid px-3 py-3">
+    <div class="row g-3">
+        <aside class="col-12 col-lg-2">
+            <div class="list-group">
+                <a th:href="@{/admin/products}" class="list-group-item list-group-item-action">상품 목록</a>
+                <a th:href="@{/admin/products/new}" class="list-group-item list-group-item-action active">상품 등록</a>
+            </div>
+        </aside>
+
+        <section class="col-12 col-lg-10">
+            <div class="card">
+                <div class="card-header bg-white fw-semibold">상품 관리</div>
+                <div class="card-body">
+                    <h2 class="h6 mb-3">상품 등록</h2>
+
+                    <form th:action="@{/admin/products}" th:object="${form}" method="post" class="row g-4">
+
+                        <div class="col-12">
+                            <h2 class="h5 mb-1">상품 기본 정보</h2>
+                            <p class="text-secondary small mb-0">상품 메타데이터와 노출 정보를 입력하세요.</p>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">상품명 <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{name}" class="form-control" placeholder="예: 라운드랩 1025 독도 토너">
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">브랜드 <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{brand}" class="form-control" placeholder="예: ROUND LAB">
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">카테고리 <span class="text-danger">*</span></label>
+                            <select th:field="*{category}" class="form-select">
+                                <option value="">카테고리 선택</option>
+                                <option value="CLEANSER">클렌저 (CLEANSER)</option>
+                                <option value="TONER">토너 (TONER)</option>
+                                <option value="ESSENCE">에센스 (ESSENCE)</option>
+                                <option value="SERUM">세럼 (SERUM)</option>
+                                <option value="AMPOULE">앰플 (AMPOULE)</option>
+                                <option value="LOTION">로션 (LOTION)</option>
+                                <option value="CREAM">크림 (CREAM)</option>
+                                <option value="SUNSCREEN">선크림 (SUNSCREEN)</option>
+                                <option value="MASK">마스크 (MASK)</option>
+                                <option value="SPOT">스팟 (SPOT)</option>
+                            </select>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">가격(원) <span class="text-danger">*</span></label>
+                            <input type="number" min="0" step="100" th:field="*{price}" class="form-control" placeholder="예: 22000">
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">활성 여부</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" th:field="*{active}" id="active">
+                                <label class="form-check-label" for="active">앱/웹에 노출</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">설명 <span class="text-danger">*</span></label>
+                            <textarea th:field="*{description}" rows="4" class="form-control" placeholder="제품 특징, 피부타입 적합성, 사용감 등"></textarea>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">이미지 URL <span class="text-danger">*</span></label>
+                            <input type="url" th:field="*{imageUrl}" class="form-control" placeholder="https://...">
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">구매 URL <span class="text-danger">*</span></label>
+                            <input type="url" th:field="*{purchaseUrl}" class="form-control" placeholder="https://...">
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('purchaseUrl')}" th:errors="*{purchaseUrl}"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <hr>
+                            <h2 class="h5 mb-1">성분군 점수 Top3</h2>
+                            <p class="text-secondary small mb-0">중복 없이 3개를 선택하세요. Top1이 가장 중요한 성분군입니다.</p>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">Top1 성분군 <span class="text-danger">*</span></label>
+                            <select th:field="*{groupScores[0].ingredientGroup}" class="form-select">
+                                <option value="">성분군 선택</option>
+                                <option value="ACNE">여드름 케어 (ACNE)</option>
+                                <option value="SEBUM_CONTROL">피지 조절 (SEBUM_CONTROL)</option>
+                                <option value="SOOTHING">진정 (SOOTHING)</option>
+                                <option value="HYDRATION">수분 공급 (HYDRATION)</option>
+                                <option value="BARRIER">장벽 강화 (BARRIER)</option>
+                                <option value="BRIGHTENING">브라이트닝 (BRIGHTENING)</option>
+                                <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
+                                <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
+                            </select>
+                            <input type="number" step="0.01" min="0" th:field="*{groupScores[0].score}" class="form-control mt-2" placeholder="점수 예: 0.82">
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">Top2 성분군 <span class="text-danger">*</span></label>
+                            <select th:field="*{groupScores[1].ingredientGroup}" class="form-select">
+                                <option value="">성분군 선택</option>
+                                <option value="ACNE">여드름 케어 (ACNE)</option>
+                                <option value="SEBUM_CONTROL">피지 조절 (SEBUM_CONTROL)</option>
+                                <option value="SOOTHING">진정 (SOOTHING)</option>
+                                <option value="HYDRATION">수분 공급 (HYDRATION)</option>
+                                <option value="BARRIER">장벽 강화 (BARRIER)</option>
+                                <option value="BRIGHTENING">브라이트닝 (BRIGHTENING)</option>
+                                <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
+                                <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
+                            </select>
+                            <input type="number" step="0.01" min="0" th:field="*{groupScores[1].score}" class="form-control mt-2" placeholder="점수 예: 0.61">
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">Top3 성분군 <span class="text-danger">*</span></label>
+                            <select th:field="*{groupScores[2].ingredientGroup}" class="form-select">
+                                <option value="">성분군 선택</option>
+                                <option value="ACNE">여드름 케어 (ACNE)</option>
+                                <option value="SEBUM_CONTROL">피지 조절 (SEBUM_CONTROL)</option>
+                                <option value="SOOTHING">진정 (SOOTHING)</option>
+                                <option value="HYDRATION">수분 공급 (HYDRATION)</option>
+                                <option value="BARRIER">장벽 강화 (BARRIER)</option>
+                                <option value="BRIGHTENING">브라이트닝 (BRIGHTENING)</option>
+                                <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
+                                <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
+                            </select>
+                            <input type="number" step="0.01" min="0" th:field="*{groupScores[2].score}" class="form-control mt-2" placeholder="점수 예: 0.47">
+                        </div>
+
+                        <div class="col-12 d-flex gap-2">
+                            <a th:href="@{/admin/products}" class="btn btn-outline-secondary">취소</a>
+                            <button type="submit" class="btn btn-primary">상품 등록</button>
+                        </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+</body>
+</html>
+

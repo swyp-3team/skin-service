@@ -73,7 +73,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         AuthProvider authProvider = AuthProvider.from(registrationId);
         return userOauthRepository.findByProviderAndProviderUserId(authProvider, finalProviderUserId)
                 // 기존 유저인 경우 (CustomUserDetails의 생성자도 간소화했다고 가정)
-                .map(oauth -> new CustomUserDetails(oauth.getUser(), attributes))
+                .map(oauth -> {
+                    User user = oauth.getUser();
+                    return new CustomUserDetails(
+                            user.getId(),
+                            user.getRole().name(),
+                            attributes
+                    );
+                })
                 .orElseGet(() -> {
 
                     User user = userRepository.save(User.create(UserRole.USER));
@@ -92,7 +99,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             finalProfileImageUrl
                     ));
 
-                    return new CustomUserDetails(user, attributes);
+                    return new CustomUserDetails(user.getId(),user.getRole().name(), attributes);
 
                 });
     }

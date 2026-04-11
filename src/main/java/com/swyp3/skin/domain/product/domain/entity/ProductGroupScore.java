@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class ProductGroupScore extends BaseEntity {
+public class ProductGroupScore extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,4 +26,18 @@ class ProductGroupScore extends BaseEntity {
 
     @Column(nullable = false)
     private Integer priority;
+
+    public static ProductGroupScore create(
+            Product product,
+            IngredientGroup ingredientGroup,
+            Double score,
+            Integer priority
+    ) {
+        ProductGroupScore pgs = new ProductGroupScore();
+        pgs.product = product;
+        pgs.ingredientGroup = ingredientGroup;
+        pgs.score = score;
+        pgs.priority = priority;
+        return pgs;
+    }
 }
