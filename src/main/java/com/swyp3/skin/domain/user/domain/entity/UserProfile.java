@@ -15,15 +15,19 @@ public class UserProfile extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false, unique = true)
     private User user;
 
+    @Column(nullable = false)
+    private String nickname;
+
     private String profileImageUrl;
 
 
-    private UserProfile(User user, String profileImageUrl) {
+    private UserProfile(User user, String nickname, String profileImageUrl) {
         this.user = user;
+        this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
     }
 
-    public static UserProfile create(User user, String profileImageUrl) {
-        return new UserProfile(user, profileImageUrl);
+    public static UserProfile create(User user, String nickname, String profileImageUrl) {
+        return new UserProfile(user, nickname, profileImageUrl);
     }
 }
