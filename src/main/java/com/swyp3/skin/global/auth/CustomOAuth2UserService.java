@@ -39,12 +39,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String providerUserId = ""; // 고유 식별자
         String email = null;
+        String nickname = null; // 필수로 넘어왔던거 같은데?
         String profileImageUrl = null;
 
         //데이터 추출 분기 처리
         if ("google".equals(registrationId)) {
             providerUserId = String.valueOf(attributes.get("sub"));
             email = (String) attributes.get("email");
+            nickname = (String) attributes.get("name");
             profileImageUrl = (String) attributes.get("picture");
         } else if ("kakao".equals(registrationId)) {
             providerUserId = String.valueOf(attributes.get("id"));
@@ -54,6 +56,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 email = (String) kakaoAccount.get("email");
                 Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
                 if (profile != null) {
+                    nickname = (String) profile.get("nickname");
                     profileImageUrl = (String) profile.get("profile_image_url");
                 }
             }
@@ -67,6 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.info("[{}] 로그인 시도 - providerId: {}, email: {}", registrationId, providerUserId, email);
 
         final String finalEmail = email;
+        final String finalNickname = nickname;
         final String finalProfileImageUrl = profileImageUrl;
         final String finalProviderUserId = providerUserId;
 
@@ -96,6 +100,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     // 3. UserProfile 정보 저장 (UserProfile 엔티티도 create 메서드를 만들었다고 가정)
                     userProfileRepository.save(UserProfile.create(
                             user,
+                            finalNickname,
                             finalProfileImageUrl
                     ));
 
