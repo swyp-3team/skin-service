@@ -55,16 +55,15 @@
                             <label class="form-label fw-semibold">카테고리 <span class="text-danger">*</span></label>
                             <select th:field="*{category}" class="form-select">
                                 <option value="">카테고리 선택</option>
-                                <option value="CLEANSER">클렌저 (CLEANSER)</option>
+                                <option value="SKIN">스킨 (SKIN)</option>
                                 <option value="TONER">토너 (TONER)</option>
+                                <option value="LOTION">로션 (LOTION)</option>
+                                <option value="EMULSION">에멀젼 (EMULSION)</option>
                                 <option value="ESSENCE">에센스 (ESSENCE)</option>
                                 <option value="SERUM">세럼 (SERUM)</option>
                                 <option value="AMPOULE">앰플 (AMPOULE)</option>
-                                <option value="LOTION">로션 (LOTION)</option>
                                 <option value="CREAM">크림 (CREAM)</option>
-                                <option value="SUNSCREEN">선크림 (SUNSCREEN)</option>
-                                <option value="MASK">마스크 (MASK)</option>
-                                <option value="SPOT">스팟 (SPOT)</option>
+                                <option value="SUN_CARE">선케어 (SUN_CARE)</option>
                             </select>
                             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
                         </div>
