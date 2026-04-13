@@ -1,6 +1,7 @@
 package com.swyp3.skin.global.config;
 
-import com.swyp3.skin.global.auth.CustomOAuth2UserService; // 추가 필요
+import com.swyp3.skin.global.auth.CustomOAuth2UserService;
+import com.swyp3.skin.global.auth.JwtAuthenticationFilter;
 import com.swyp3.skin.global.auth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,10 +26,11 @@ import java.util.List;
 public class SecurityConfig {
 
     @Value("${app.cors.allowed-origins}")
-    private String allowedOrigins; // application.yaml 값 읽어옴
+    private String allowedOrigins;
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final WebConfig webConfig;
 
     @Bean
@@ -55,7 +58,6 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 2. JWT 사용을 위한 세션 정책 설정 (STATELESS)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -71,11 +73,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                // 3. OAuth2 로그인 상세 설정 적용
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)) // DB 저장 로직 연결
-                        .successHandler(oAuth2SuccessHandler) // 토큰 발급 핸들러 연결
-                );
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
+                )
+
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
