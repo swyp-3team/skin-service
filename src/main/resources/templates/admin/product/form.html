@@ -109,16 +109,17 @@
 
                         <div class="col-12 col-md-4">
                             <label class="form-label fw-semibold">Top1 성분군 <span class="text-danger">*</span></label>
-                            <select th:field="*{groupScores[0].ingredientGroup}" class="form-select">
-                                <option value="">성분군 선택</option>
-                                <option value="ACNE">여드름 케어 (ACNE)</option>
-                                <option value="SEBUM_CONTROL">피지 조절 (SEBUM_CONTROL)</option>
-                                <option value="SOOTHING">진정 (SOOTHING)</option>
-                                <option value="HYDRATION">수분 공급 (HYDRATION)</option>
-                                <option value="BARRIER">장벽 강화 (BARRIER)</option>
-                                <option value="BRIGHTENING">브라이트닝 (BRIGHTENING)</option>
-                                <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
-                                <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
+                            <select th:field="*{category}" class="form-select">
+                                <option value="">카테고리 선택</option>
+                                <option value="SKIN">스킨 (SKIN)</option>
+                                <option value="TONER">토너 (TONER)</option>
+                                <option value="LOTION">로션 (LOTION)</option>
+                                <option value="EMULSION">에멀젼 (EMULSION)</option>
+                                <option value="ESSENCE">에센스 (ESSENCE)</option>
+                                <option value="SERUM">세럼 (SERUM)</option>
+                                <option value="AMPOULE">앰플 (AMPOULE)</option>
+                                <option value="CREAM">크림 (CREAM)</option>
+                                <option value="SUN_CARE">선케어 (SUN_CARE)</option>
                             </select>
                             <input type="number" step="0.01" min="0" th:field="*{groupScores[0].score}" class="form-control mt-2" placeholder="점수 예: 0.82">
                         </div>
