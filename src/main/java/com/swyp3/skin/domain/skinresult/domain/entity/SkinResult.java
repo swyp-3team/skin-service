@@ -30,4 +30,19 @@ public class SkinResult extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime diagnosedAt;
+
+    public SkinResult(User user, SkinType skinType, String summary, LocalDateTime diagnosedAt) {
+        this.user = user;
+        this.skinType = skinType;
+        this.summary = summary;
+        this.diagnosedAt = diagnosedAt;
+    }
+
+    public static SkinResult create(
+            User user,
+            SkinType skinType,
+            String summary,
+            LocalDateTime diagnosedAt) {
+        return new SkinResult(user, skinType, summary, diagnosedAt);
+    }
 }

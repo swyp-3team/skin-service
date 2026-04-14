@@ -5,12 +5,7 @@ import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.*;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
-import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
-import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
-import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
 import com.swyp3.skin.domain.skinttest.dto.SkinPreviewCacheValue;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
 import com.swyp3.skin.domain.skinttest.service.SkinPreviewCacheService;
 import com.swyp3.skin.domain.skinttest.service.SkinTestApplicationService;
 import com.swyp3.skin.global.auth.CustomUserDetails;
@@ -64,7 +59,7 @@ public class SkinTestController {
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
 
         SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(), result);
-        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(userId, skinInput, result));
+        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(userId, skinInput, result, response.summary()));
         return ApiResponse.ok(new SkinTestPreviewWithTokenResponse(response, token));
     }
 

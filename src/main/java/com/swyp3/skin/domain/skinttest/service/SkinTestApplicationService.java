@@ -4,10 +4,16 @@ import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.service.SkinResultGroupScoreService;
+import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.domain.skinttest.dto.SkinPreviewCacheValue;
 import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
 import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
-import com.swyp3.skin.domain.user.domain.repository.UserRepository;
+import com.swyp3.skin.domain.user.domain.entity.User;
+import com.swyp3.skin.domain.user.repository.UserRepository;
+import com.swyp3.skin.global.auth.exception.AuthErrorCode;
+import com.swyp3.skin.global.auth.exception.AuthException;
 import com.swyp3.skin.recommendation.core.RecommendationEngine;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
@@ -19,6 +25,9 @@ import org.springframework.stereotype.Service;
 public class SkinTestApplicationService {
 
     private final UserRepository userRepository;
+
+    private final SkinResultService skinResultService;
+    private final SkinResultGroupScoreService skinResultGroupScoreService;
     private final SkinPreviewCacheService skinPreviewCacheService;
     private final RecommendationEngine recommendationEngine;
 
@@ -45,7 +54,9 @@ public class SkinTestApplicationService {
             throw new SkinTestException(SkinTestErrorCode.INVALID_PREVIEW_TOKEN_OWNER);
         }
 
-        userRepository.findById(userId).orElseThrow(
-                () -> new );
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+        SkinResult skinResult = skinResultService.save(user,cached);
+        skinResultGroupScoreService.saveAll(skinResult,cached.result().getScores());
     }
 }

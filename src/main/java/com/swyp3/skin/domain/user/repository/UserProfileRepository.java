@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.user.domain.repository;
+package com.swyp3.skin.domain.user.repository;
 
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.domain.user.domain.entity.UserProfile;

@@ -6,6 +6,7 @@ import com.swyp3.skin.recommendation.model.SkinInput;
 public record SkinPreviewCacheValue(
         Long userId,
         SkinInput skinInput,
-        RecommendationResult result
+        RecommendationResult result,
+        String summary
 ) {
 }
