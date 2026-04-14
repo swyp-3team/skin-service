@@ -24,7 +24,8 @@ public final class SkinTestStepMapper {
                         // list형태로 변환하여 SkinTestStepResponse 의 options 필드 채우기
                         .map(option -> new SkinTestQuestionOptionResponse(
                                 option.optionNumber(),
-                                option.content()
+                                option.content(),
+                                option.code()
                         ))
                         .toList()
         );

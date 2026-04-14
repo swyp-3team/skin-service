@@ -14,4 +14,5 @@ public class SkinTestApplicationService {
     public RecommendationResult calculate(SkinInput skinInput){
         return recommendationEngine.calculate(skinInput);
     }
+
 }

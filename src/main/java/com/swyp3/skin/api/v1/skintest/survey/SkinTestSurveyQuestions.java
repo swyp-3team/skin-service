@@ -1,5 +1,8 @@
 package com.swyp3.skin.api.v1.skintest.survey;
 
+import com.swyp3.skin.recommendation.model.enums.Concern;
+import com.swyp3.skin.recommendation.model.enums.SkinType;
+
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +40,11 @@ public final class SkinTestSurveyQuestions {
             Map.entry(11, new SkinTestSurveyQuestion(11, "피부톤이 균일하지 않다고 느끼나요?", options())),
 
             Map.entry(12, new SkinTestSurveyQuestion(12, "눈가나 팔자 주름이 신경 쓰이나요?", options())),
-            Map.entry(13, new SkinTestSurveyQuestion(13, "피부 탄력이 예전보다 줄었다고 느끼나요?", options()))
+            Map.entry(13, new SkinTestSurveyQuestion(13, "피부 탄력이 예전보다 줄었다고 느끼나요?", options())),
+
+            Map.entry(14, new SkinTestSurveyQuestion(14, "현재 고민을 선택해 주세요", concernOptions())),
+            Map.entry(15, new SkinTestSurveyQuestion(15, "피부 타입을 선택해 주세요", skinTypeOptions()))
+
     );
 
     private static List<SkinTestSurveyOption> options() {
@@ -47,6 +54,29 @@ public final class SkinTestSurveyQuestions {
                 new SkinTestSurveyOption(3, "보통이다"),
                 new SkinTestSurveyOption(4, "그렇다"),
                 new SkinTestSurveyOption(5, "매우 그렇다")
+        );
+    }
+
+    private static List<SkinTestSurveyOption> concernOptions() {
+        return List.of(
+                new SkinTestSurveyOption(null, "건조", Concern.DRY.name()),
+                new SkinTestSurveyOption(null, "트러블", Concern.ACNE.name()),
+                new SkinTestSurveyOption(null, "색소/잡티", Concern.PIGMENTATION.name()),
+                new SkinTestSurveyOption(null, "주름/노화", Concern.AGING.name()),
+                new SkinTestSurveyOption(null, "민감", Concern.SENSITIVE.name()),
+                new SkinTestSurveyOption(null, "피지", Concern.SEBUM.name()),
+                new SkinTestSurveyOption(null, "모공", Concern.PORE.name())
+
+        );
+    }
+
+    private static List<SkinTestSurveyOption> skinTypeOptions() {
+        return List.of(
+                new SkinTestSurveyOption(null, "건성", SkinType.DRY.name()),
+                new SkinTestSurveyOption(null, "지성", SkinType.OILY.name()),
+                new SkinTestSurveyOption(null, "복합성", SkinType.COMBINATION.name()),
+                new SkinTestSurveyOption(null, "민감성", SkinType.SENSITIVE.name()),
+                new SkinTestSurveyOption(null, "잘 모르겠어요", SkinType.UNKNOWN.name())
         );
     }
 }
