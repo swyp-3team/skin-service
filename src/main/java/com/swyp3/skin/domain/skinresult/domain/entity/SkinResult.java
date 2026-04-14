@@ -31,7 +31,7 @@ public class SkinResult extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime diagnosedAt;
 
-    public SkinResult(User user, SkinType skinType, String summary, LocalDateTime diagnosedAt) {
+    private SkinResult(User user, SkinType skinType, String summary, LocalDateTime diagnosedAt) {
         this.user = user;
         this.skinType = skinType;
         this.summary = summary;

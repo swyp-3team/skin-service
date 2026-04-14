@@ -57,6 +57,7 @@ public class SkinTestApplicationService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
         SkinResult skinResult = skinResultService.save(user,cached);
-        skinResultGroupScoreService.saveAll(skinResult,cached.result().getScores());
+        skinResultGroupScoreService.saveAll(skinResult,cached.result());
+
     }
 }

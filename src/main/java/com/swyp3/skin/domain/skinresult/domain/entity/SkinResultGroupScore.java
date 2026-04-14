@@ -32,4 +32,22 @@ public class SkinResultGroupScore extends BaseEntity {
 
     @Column(nullable = false)
     private String reason;
+
+    private SkinResultGroupScore(SkinResult skinResult, IngredientGroup ingredientGroup, Double score, Integer priority, String reason) {
+        this.skinResult = skinResult;
+        this.ingredientGroup = ingredientGroup;
+        this.score = score;
+        this.priority = priority;
+        this.reason = reason;
+    }
+
+    public static SkinResultGroupScore create(
+            SkinResult skinResult,
+            IngredientGroup ingredientGroup,
+            Double score,
+            Integer priority,
+            String reason
+    ) {
+        return new SkinResultGroupScore(skinResult, ingredientGroup, score, priority, reason);
+    }
 }
