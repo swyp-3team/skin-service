@@ -34,4 +34,8 @@ public class SkinPreviewCacheService {
         Cache.ValueWrapper wrapper = getCache().get(previewToken);
         return wrapper == null ? null : (SkinPreviewCacheValue) wrapper.get();
     }
+
+    public void evict(String previewToken) {
+        getCache().evict(previewToken);
+    }
 }

@@ -19,6 +19,7 @@ import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ public class SkinTestApplicationService {
         return SkinTestStepMapper.toResponse(question);
     }
 
+    @Transactional
     public void saveResult(Long userId, String previewToken) {
         SkinPreviewCacheValue cached = skinPreviewCacheService.get(previewToken);
         if (cached == null) {
@@ -59,5 +61,6 @@ public class SkinTestApplicationService {
         SkinResult skinResult = skinResultService.save(user,cached);
         skinResultGroupScoreService.saveAll(skinResult,cached.result());
 
+        skinPreviewCacheService.evict(previewToken);
     }
 }
