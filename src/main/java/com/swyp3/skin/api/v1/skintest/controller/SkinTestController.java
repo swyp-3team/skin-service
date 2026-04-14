@@ -1,27 +1,23 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
+import com.swyp3.skin.api.v1.skintest.dto.request.SaveSkinResultRequest;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
-import com.swyp3.skin.api.v1.skintest.dto.response.MySkinTestResultResponse;
-import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestPreviewResponse;
-import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestResultResponse;
-import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
+import com.swyp3.skin.api.v1.skintest.dto.response.*;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
-import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
-import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestion;
-import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
-import com.swyp3.skin.domain.skinttest.service.SkinTestApplicationService;
+import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
+import com.swyp3.skin.domain.skintest.service.SkinPreviewCacheService;
+import com.swyp3.skin.domain.skintest.service.SkinTestApplicationService;
+import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 public class SkinTestController {
 
     private final SkinTestApplicationService skinTestApplicationService;
+    private final SkinPreviewCacheService skinPreviewCacheService;
+
     private final SkinInputMapper skinInputMapper;
     private final SkinTestPreviewResponseMapper previewResponseMapper;
 
@@ -44,83 +42,35 @@ public class SkinTestController {
     public ApiResponse<SkinTestStepResponse> getSurvey(
             @RequestParam @Min(1) int step
             ) {
-        SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
-
-        if (question == null) {
-            throw new SkinTestException(SkinTestErrorCode.INVALID_SURVEY_STEP);
-        }
-
-        // TODO : 14,15 번 step의 경우 고민,타입 반환 해야함
-
-        SkinTestStepResponse response = SkinTestStepMapper.toResponse(question);
-        return ApiResponse.ok(response);
+        return ApiResponse.ok(skinTestApplicationService.getSurveyStep(step));
     }
 
     @Operation(
-            summary = "성분 추천만 확인",
-            description = "프론트에서 받은 설문값들을 기반으로 추천 성분 추출후 반환합니다."
+            summary = "성분 추천 미리보기",
+            description = "미리보기 결과와 저장용 previewToken을 반환"
     )
     @PostMapping("/result/preview")
-    public ApiResponse<SkinTestPreviewResponse> preview(
+    public ApiResponse<SkinTestPreviewWithTokenResponse> preview(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SkinTestPreviewRequest request) {
-
+        Long userId = userDetails.getUserId();
         SkinInput skinInput = skinInputMapper.toSkinInput(request);
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
+
         SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(), result);
-        return ApiResponse.ok(response);
-    }
-
-//    @Operation(
-//            summary = "이전 단계 이동",
-//            description = "이전 설문 단계의 질문과 선택지 그리고 기존 선택값 조회"
-//    )
-//    @GetMapping("/step/{step}/prev")
-//    public ApiResponse<SkinTestStepResponse> prevStep(
-//            @PathVariable int step,
-//            HttpSession httpSession) {
-//        //TODO : 현재 스탭 - 1  질문/선택지 조회
-//        // 세션에서 이전 단계 저장 답변 추출
-//        // selectedAnswer에 넣어서 응답
-//        return null;
-//    }
-
-//    @Operation(
-//            summary = "진단 완료",
-//            description = "세션에 저장된 설문 답변을 기반으로 피부 타입과 추천 성분 결과를 계산합니다."
-//    )
-//    @PostMapping("/complete")
-//    public ApiResponse<Void> complete(HttpSession httpSession){
-//        //TODO : 세션 답변 읽고
-//        // 세션 설문 답변 조회
-//        // 상태 점수 계산
-//        // 성분군 원점수 계산
-//        // 정규화
-//        // 고민 가중치 적용
-//        // 피부타입 보정
-//        // 최종 성분군 점수 및 우선순위 계산
-//        // 상위 성분군 기준 대표 성분 추출
-//        // 세션에 결과 저장
-//        return ApiResponse.ok();
-//    }
-
-    @Operation(
-            summary = "결과 조회",
-            description = "세션에 저장된 피부 진단 결과를 조회합니다.")
-    @GetMapping("/result")
-    public ApiResponse<SkinTestResultResponse> getResult(HttpSession session) {
-        // TODO: 세션 결과 반환
-        return null;
+        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(userId, skinInput, result, response.summary()));
+        return ApiResponse.ok(new SkinTestPreviewWithTokenResponse(response, token));
     }
 
     @Operation(
             summary = "결과 DB 저장",
-            description = "세션 결과를 로그인한 사용자의 진단 이력으로 저장합니다.")
+            description = "사용자의 진단 이력 저장합니다.")
     @PostMapping("/result/save")
-    public ApiResponse<Void> saveResult() {
-        // TODO: 세션 결과조회
-        // SkinResult 저장
-        // SkinResultScore 저장
-        // SkinResultIngredient 저장
+    public ApiResponse<Void> saveResult(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody SaveSkinResultRequest request
+            ) {
+        skinTestApplicationService.saveResult(userDetails.getUserId(), request.previewToken());
         return ApiResponse.ok();
     }
 

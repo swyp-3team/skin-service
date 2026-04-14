@@ -15,6 +15,12 @@ public record SkinTestQuestionOptionResponse(
                 description = "사용자 화면에 노출할 선택지 문구",
                 example = "매우 건조해요"
         )
-        String content
+        String content,
+        @Schema(
+                description = "선택지 코드값(14: 피부고민, 15: 피부타입). 1~13 단계는 null",
+                example = "ACNE",
+                nullable = true
+        )
+        String code
 ) {
 }

@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.auth.domain.repository;
+package com.swyp3.skin.domain.auth.repository;
 
 import com.swyp3.skin.domain.auth.domain.entity.RefreshToken;
 import com.swyp3.skin.domain.user.domain.entity.User;

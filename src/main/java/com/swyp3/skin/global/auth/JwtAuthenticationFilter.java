@@ -1,6 +1,6 @@
 package com.swyp3.skin.global.auth;
 
-import com.swyp3.skin.domain.user.domain.repository.UserRepository;
+import com.swyp3.skin.domain.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
