@@ -1,8 +1,8 @@
-package com.swyp3.skin.domain.skinttest.service;
+package com.swyp3.skin.domain.skintest.service;
 
-import com.swyp3.skin.domain.skinttest.dto.SkinPreviewCacheValue;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
+import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
+import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
+import com.swyp3.skin.domain.skintest.exception.SkinTestException;
 import com.swyp3.skin.global.config.CacheConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;

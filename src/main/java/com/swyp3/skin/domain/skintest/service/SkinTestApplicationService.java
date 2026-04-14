@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.skinttest.service;
+package com.swyp3.skin.domain.skintest.service;
 
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestStepMapper;
@@ -7,9 +7,9 @@ import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultGroupScoreService;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
-import com.swyp3.skin.domain.skinttest.dto.SkinPreviewCacheValue;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestErrorCode;
-import com.swyp3.skin.domain.skinttest.exception.SkinTestException;
+import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
+import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
+import com.swyp3.skin.domain.skintest.exception.SkinTestException;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.domain.user.repository.UserRepository;
 import com.swyp3.skin.global.auth.exception.AuthErrorCode;

@@ -1,6 +1,5 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestPreviewResponse;
@@ -9,17 +8,15 @@ import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.skinresult.domain.enums.Concern;
 import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
-import com.swyp3.skin.domain.skinttest.service.SkinTestApplicationService;
+import com.swyp3.skin.domain.skintest.service.SkinTestApplicationService;
 import com.swyp3.skin.global.exception.GlobalExceptionHandler;
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;

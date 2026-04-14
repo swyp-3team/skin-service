@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.skinttest.exception;
+package com.swyp3.skin.domain.skintest.exception;
 
 import com.swyp3.skin.global.exception.ErrorCode;
 import lombok.Getter;

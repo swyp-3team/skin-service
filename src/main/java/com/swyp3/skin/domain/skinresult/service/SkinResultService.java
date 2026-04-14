@@ -2,7 +2,7 @@ package com.swyp3.skin.domain.skinresult.service;
 
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.repository.SkinResultRepository;
-import com.swyp3.skin.domain.skinttest.dto.SkinPreviewCacheValue;
+import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.skinttest.dto;
+package com.swyp3.skin.domain.skintest.dto;
 
 import com.swyp3.skin.recommendation.model.RecommendationResult;
 import com.swyp3.skin.recommendation.model.SkinInput;
