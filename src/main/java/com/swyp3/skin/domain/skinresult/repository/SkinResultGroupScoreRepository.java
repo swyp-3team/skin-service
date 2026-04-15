@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SkinResultGroupScoreRepository extends JpaRepository<SkinResultGroupScore, Long> {
-    public List<SkinResultGroupScore> findBySkinResultId(Long skinResultId);
+    List<SkinResultGroupScore> findBySkinResultId(Long skinResultId);
 }
