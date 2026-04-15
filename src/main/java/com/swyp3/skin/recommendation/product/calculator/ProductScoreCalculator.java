@@ -1,21 +1,26 @@
 package com.swyp3.skin.recommendation.product.calculator;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
+import com.swyp3.skin.recommendation.product.dto.ProductScore;
 import com.swyp3.skin.recommendation.product.dto.ProductSupply;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class ProductScoreCalculator {
 
     public List<ProductScore> calculate(
             Map<IngredientGroup, Double> need,
             List<ProductSupply> supplies
     ) {
+
         List<ProductScore> result = new ArrayList<>();
 
         for (ProductSupply supply : supplies) {
+
             double score = dotProduct(need, supply.getSupply());
 
             result.add(new ProductScore(

@@ -7,12 +7,15 @@ import com.swyp3.skin.domain.product.repository.ProductRepository;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.repository.SkinResultGroupScoreRepository;
 import com.swyp3.skin.recommendation.product.calculator.ProductScoreCalculator;
+import com.swyp3.skin.recommendation.product.dto.ProductScore;
 import com.swyp3.skin.recommendation.product.dto.ProductSupply;
+import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
 import com.swyp3.skin.recommendation.product.mapper.ProductVectorMapper;
 import com.swyp3.skin.recommendation.product.policy.ProductFilterPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,7 +68,18 @@ public class ProductRecommendationService {
             List<Product> products,
             List<ProductScore> scores
     ) {
-        // TODO
-        return null;
+        Map<Long, Product> productMap = products.stream()
+                .collect(Collectors.toMap(
+                        Product::getId,
+                        p -> p
+                ));
+
+        return scores.stream()
+                .sorted(Comparator.comparingDouble(ProductScore::getScore).reversed())
+                .map(score -> new RecommendedProduct(
+                        productMap.get(score.getProductId()),
+                        score.getScore()
+                ))
+                .toList();
     }
 }
