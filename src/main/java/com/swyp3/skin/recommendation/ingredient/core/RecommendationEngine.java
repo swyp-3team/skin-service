@@ -1,10 +1,11 @@
-package com.swyp3.skin.recommendation.core;
+package com.swyp3.skin.recommendation.ingredient.core;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
-import com.swyp3.skin.recommendation.calculator.*;
-import com.swyp3.skin.recommendation.model.RecommendationResult;
-import com.swyp3.skin.recommendation.model.SkinInput;
-import com.swyp3.skin.recommendation.model.enums.SkinState;
+import com.swyp3.skin.recommendation.ingredient.calculator.*;
+import com.swyp3.skin.recommendation.ingredient.calculator.*;
+import com.swyp3.skin.recommendation.ingredient.model.RecommendationResult;
+import com.swyp3.skin.recommendation.ingredient.model.SkinInput;
+import com.swyp3.skin.recommendation.ingredient.model.enums.SkinState;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

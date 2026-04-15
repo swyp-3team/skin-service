@@ -1,4 +1,4 @@
-package com.swyp3.skin.recommendation.model.enums;
+package com.swyp3.skin.recommendation.ingredient.model.enums;
 
 // 사용자 피부 타입
 public enum SkinType {

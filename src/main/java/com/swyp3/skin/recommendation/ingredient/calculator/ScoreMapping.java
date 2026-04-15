@@ -1,7 +1,7 @@
-package com.swyp3.skin.recommendation.calculator;
+package com.swyp3.skin.recommendation.ingredient.calculator;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
-import com.swyp3.skin.recommendation.model.enums.SkinState;
+import com.swyp3.skin.recommendation.ingredient.model.enums.SkinState;
 
 import java.util.HashMap;
 import java.util.Map;

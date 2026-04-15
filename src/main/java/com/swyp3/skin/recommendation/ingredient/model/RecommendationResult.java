@@ -1,4 +1,4 @@
-package com.swyp3.skin.recommendation.model;
+package com.swyp3.skin.recommendation.ingredient.model;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 

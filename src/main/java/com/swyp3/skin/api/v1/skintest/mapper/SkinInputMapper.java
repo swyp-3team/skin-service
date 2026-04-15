@@ -4,8 +4,8 @@ import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
 import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
 import com.swyp3.skin.domain.skintest.exception.SkinTestException;
-import com.swyp3.skin.recommendation.model.SkinInput;
-import com.swyp3.skin.recommendation.model.enums.SkinState;
+import com.swyp3.skin.recommendation.ingredient.model.SkinInput;
+import com.swyp3.skin.recommendation.ingredient.model.enums.SkinState;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;

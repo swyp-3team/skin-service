@@ -1,18 +1,5 @@
 package com.swyp3.skin.recommendation.core;
 
-import com.swyp3.skin.domain.common.enums.IngredientGroup;
-import com.swyp3.skin.recommendation.model.RecommendationResult;
-import com.swyp3.skin.recommendation.model.SkinInput;
-import com.swyp3.skin.recommendation.model.enums.Concern;
-import com.swyp3.skin.recommendation.model.enums.SkinState;
-import com.swyp3.skin.recommendation.model.enums.SkinType;
-import com.swyp3.skin.recommendation.model.test.TestCase;
-import com.swyp3.skin.recommendation.testdata.TestData;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Map;
-
 public class RecommendationEngineTest {
 
 //    @Test

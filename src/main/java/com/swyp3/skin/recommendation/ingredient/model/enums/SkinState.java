@@ -1,4 +1,4 @@
-package com.swyp3.skin.recommendation.model.enums;
+package com.swyp3.skin.recommendation.ingredient.model.enums;
 
 // 피부 상태
 public enum SkinState {

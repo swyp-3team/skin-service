@@ -1,9 +1,9 @@
 package com.swyp3.skin.recommendation.testdata;
 
-import com.swyp3.skin.recommendation.model.enums.Concern;
-import com.swyp3.skin.recommendation.model.enums.SkinState;
-import com.swyp3.skin.recommendation.model.enums.SkinType;
-import com.swyp3.skin.recommendation.model.test.TestCase;
+import com.swyp3.skin.recommendation.ingredient.model.enums.Concern;
+import com.swyp3.skin.recommendation.ingredient.model.enums.SkinState;
+import com.swyp3.skin.recommendation.ingredient.model.enums.SkinType;
+import com.swyp3.skin.recommendation.ingredient.model.test.TestCase;
 
 import java.util.List;
 import java.util.Map;

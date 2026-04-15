@@ -3,7 +3,7 @@ package com.swyp3.skin.api.v1.skintest.mapper;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestPreviewResponse;
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
-import com.swyp3.skin.recommendation.model.RecommendationResult;
+import com.swyp3.skin.recommendation.ingredient.model.RecommendationResult;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

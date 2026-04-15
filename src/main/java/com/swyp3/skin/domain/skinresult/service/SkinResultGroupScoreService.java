@@ -4,7 +4,7 @@ import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.repository.SkinResultGroupScoreRepository;
-import com.swyp3.skin.recommendation.model.RecommendationResult;
+import com.swyp3.skin.recommendation.ingredient.model.RecommendationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
