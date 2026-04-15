@@ -4,6 +4,7 @@ import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
 import com.swyp3.skin.domain.product.repository.ProductGroupScoreRepository;
+import com.swyp3.skin.recommendation.product.dto.ProductSupply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,7 @@
 package com.swyp3.skin.recommendation.product.calculator;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
+import com.swyp3.skin.recommendation.product.dto.ProductSupply;
 
 import java.util.ArrayList;
 import java.util.List;

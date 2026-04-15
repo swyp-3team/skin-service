@@ -7,7 +7,9 @@ import com.swyp3.skin.domain.product.repository.ProductRepository;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.repository.SkinResultGroupScoreRepository;
 import com.swyp3.skin.recommendation.product.calculator.ProductScoreCalculator;
+import com.swyp3.skin.recommendation.product.dto.ProductSupply;
 import com.swyp3.skin.recommendation.product.mapper.ProductVectorMapper;
+import com.swyp3.skin.recommendation.product.policy.ProductFilterPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
