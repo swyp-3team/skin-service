@@ -103,11 +103,43 @@
                         <div class="col-12">
                             <hr>
                             <h2 class="h5 mb-1">성분군 점수 Top3</h2>
-                            <p class="text-secondary small mb-0">중복 없이 3개를 선택하세요. Top1이 가장 중요한 성분군입니다.</p>
+                            <p class="text-secondary small mb-0">
+                                중복 없이 3개를 선택하세요. Top1이 가장 중요한 성분군입니다.
+                            </p>
                         </div>
 
+                        <!-- Top1 -->
                         <div class="col-12 col-md-4">
-                            <label class="form-label fw-semibold">Top1 성분군 <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold">
+                                Top1 성분군 <span class="text-danger">*</span>
+                            </label>
+
+                            <select th:field="*{groupScores[0].ingredientGroup}" class="form-select">
+                                <option value="">성분군 선택</option>
+                                <option value="ACNE">여드름 케어 (ACNE)</option>
+                                <option value="SEBUM_CONTROL">피지 조절 (SEBUM_CONTROL)</option>
+                                <option value="SOOTHING">진정 (SOOTHING)</option>
+                                <option value="HYDRATION">수분 공급 (HYDRATION)</option>
+                                <option value="BARRIER">장벽 강화 (BARRIER)</option>
+                                <option value="BRIGHTENING">브라이트닝 (BRIGHTENING)</option>
+                                <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
+                                <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
+                            </select>
+
+                            <input type="number"
+                                   step="0.01"
+                                   min="0"
+                                   th:field="*{groupScores[0].score}"
+                                   class="form-control mt-2"
+                                   placeholder="점수 예: 0.61">
+                        </div>
+
+                        <!-- Top2 -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold">
+                                Top2 성분군 <span class="text-danger">*</span>
+                            </label>
+
                             <select th:field="*{groupScores[1].ingredientGroup}" class="form-select">
                                 <option value="">성분군 선택</option>
                                 <option value="ACNE">여드름 케어 (ACNE)</option>
@@ -119,27 +151,21 @@
                                 <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
                                 <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
                             </select>
-                            <input type="number" step="0.01" min="0" th:field="*{groupScores[1].score}" class="form-control mt-2" placeholder="점수 예: 0.61">
+
+                            <input type="number"
+                                   step="0.01"
+                                   min="0"
+                                   th:field="*{groupScores[1].score}"
+                                   class="form-control mt-2"
+                                   placeholder="점수 예: 0.61">
                         </div>
 
+                        <!-- Top3 -->
                         <div class="col-12 col-md-4">
-                            <label class="form-label fw-semibold">Top2 성분군 <span class="text-danger">*</span></label>
-                            <select th:field="*{groupScores[1].ingredientGroup}" class="form-select">
-                                <option value="">성분군 선택</option>
-                                <option value="ACNE">여드름 케어 (ACNE)</option>
-                                <option value="SEBUM_CONTROL">피지 조절 (SEBUM_CONTROL)</option>
-                                <option value="SOOTHING">진정 (SOOTHING)</option>
-                                <option value="HYDRATION">수분 공급 (HYDRATION)</option>
-                                <option value="BARRIER">장벽 강화 (BARRIER)</option>
-                                <option value="BRIGHTENING">브라이트닝 (BRIGHTENING)</option>
-                                <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
-                                <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
-                            </select>
-                            <input type="number" step="0.01" min="0" th:field="*{groupScores[1].score}" class="form-control mt-2" placeholder="점수 예: 0.61">
-                        </div>
+                            <label class="form-label fw-semibold">
+                                Top3 성분군 <span class="text-danger">*</span>
+                            </label>
 
-                        <div class="col-12 col-md-4">
-                            <label class="form-label fw-semibold">Top3 성분군 <span class="text-danger">*</span></label>
                             <select th:field="*{groupScores[2].ingredientGroup}" class="form-select">
                                 <option value="">성분군 선택</option>
                                 <option value="ACNE">여드름 케어 (ACNE)</option>
@@ -151,7 +177,13 @@
                                 <option value="TURNOVER">턴오버/각질 (TURNOVER)</option>
                                 <option value="ANTI_AGING">안티에이징 (ANTI_AGING)</option>
                             </select>
-                            <input type="number" step="0.01" min="0" th:field="*{groupScores[2].score}" class="form-control mt-2" placeholder="점수 예: 0.47">
+
+                            <input type="number"
+                                   step="0.01"
+                                   min="0"
+                                   th:field="*{groupScores[2].score}"
+                                   class="form-control mt-2"
+                                   placeholder="점수 예: 0.47">
                         </div>
 
                         <div class="col-12 d-flex gap-2">
