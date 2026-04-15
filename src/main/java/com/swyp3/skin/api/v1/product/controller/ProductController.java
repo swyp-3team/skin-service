@@ -2,11 +2,20 @@ package com.swyp3.skin.api.v1.product.controller;
 
 import com.swyp3.skin.api.v1.product.dto.response.ProductDetailResponse;
 import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
+import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.service.SkinResultService;
+import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
+import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
+import com.swyp3.skin.recommendation.product.service.ProductRecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Product", description = "제품추천")
 @RestController
@@ -14,12 +23,44 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
 
-    // 추천 로직 미정에 따라 현재는 보류
+    private final SkinResultService skinResultService;
+    private final ProductRecommendationService productRecommendationService;
+    private final ProductGroupScoreService productGroupScoreService;
+
     @Operation(summary = "추천 제품 조회")
     @GetMapping("/recommend")
-    public Object recommend(@RequestParam(required = false) String category,
-                            @RequestParam int page,
-                            @RequestParam int size) {
+    public ApiResponse<ProductListResponse> recommend(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(required = false) String category
+            ) {
+        Long userId = userDetails.getUserId();
+
+        List<RecommendedProduct> recommended = productRecommendationService.recommend(
+                skinResultService.getLatestByUserId(userId)
+                        .getId()
+        );
+
+        // 카테고리 필터링
+        if(category != null) {
+            recommended = recommended.stream()
+                    .filter(p ->
+                            p.getProduct().getCategory().name().equalsIgnoreCase(category))
+                            .toList();
+        }
+
+        List<RecommendedProduct> top = recommended.stream()
+                .limit(10)
+                .toList();
+
+        // 프로덕트 그룹 스코어 가져오기 위해서 -> 추후 태그로 활용
+        List<Long> productIds = top.stream()
+                .map(recommendedProduct -> recommendedProduct.getProduct().getId())
+                .toList();
+
+
+
+        ProductListResponse.from(top);
+
         return null;
     }
 
