@@ -1,7 +1,7 @@
 package com.swyp3.skin.api.v1.skintest.survey;
 
-import com.swyp3.skin.recommendation.model.enums.Concern;
-import com.swyp3.skin.recommendation.model.enums.SkinType;
+import com.swyp3.skin.recommendation.ingredient.model.enums.Concern;
+import com.swyp3.skin.recommendation.ingredient.model.enums.SkinType;
 
 import java.util.List;
 import java.util.Map;
