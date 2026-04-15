@@ -2,6 +2,7 @@ package com.swyp3.skin.api.v1.product.controller;
 
 import com.swyp3.skin.api.v1.product.dto.response.ProductDetailResponse;
 import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
+import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
 import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
@@ -16,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Product", description = "제품추천")
 @RestController
@@ -57,11 +59,12 @@ public class ProductController {
                 .map(recommendedProduct -> recommendedProduct.getProduct().getId())
                 .toList();
 
+        Map<Long,List<ProductGroupScore>> groupScoreMap =
+                productGroupScoreService.getGroupScoreMap(productIds);
 
+        ProductListResponse response = ProductListResponse.from(top, groupScoreMap);
 
-        ProductListResponse.from(top);
-
-        return null;
+        return ApiResponse.ok(response);
     }
 
     @Operation(
