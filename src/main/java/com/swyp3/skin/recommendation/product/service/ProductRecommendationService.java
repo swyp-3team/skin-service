@@ -4,6 +4,7 @@ import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.repository.ProductGroupScoreRepository;
 import com.swyp3.skin.domain.product.repository.ProductRepository;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.repository.SkinResultGroupScoreRepository;
 import com.swyp3.skin.recommendation.product.calculator.ProductScoreCalculator;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,8 +51,11 @@ public class ProductRecommendationService {
     }
 
     private Map<IngredientGroup, Double> loadNeed(Long resultId) {
-        // TODO
-        return null;
+        return skinResultGroupScoreRepository.findBySkinResultId(resultId).stream()
+                .collect(Collectors.toMap(
+                        SkinResultGroupScore::getIngredientGroup,
+                        SkinResultGroupScore::getScore)
+                );
     }
 
     private List<RecommendedProduct> toRecommended(
