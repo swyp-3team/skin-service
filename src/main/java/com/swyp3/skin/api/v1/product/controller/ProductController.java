@@ -2,8 +2,10 @@ package com.swyp3.skin.api.v1.product.controller;
 
 import com.swyp3.skin.api.v1.product.dto.response.ProductDetailResponse;
 import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
+import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
 import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
+import com.swyp3.skin.domain.product.service.ProductService;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.global.auth.CustomUserDetails;
@@ -25,6 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProductController {
 
+    private final ProductService productService;
     private final SkinResultService skinResultService;
     private final ProductRecommendationService productRecommendationService;
 
@@ -68,9 +71,13 @@ public class ProductController {
             description = "특정 제품의 상세 정보와 포함 성분 정보를 조회합니다."
     )
     @GetMapping("/{productId}")
-    public ApiResponse<ProductDetailResponse> getDetail(@PathVariable Long productId) {
-        // TODO: 제품 상세 조회
-        return null;
+    public ApiResponse<ProductDetailResponse> getDetail(
+            @PathVariable Long productId) {
+
+        Product product = productService.getById(productId);
+
+        ProductDetailResponse response = ProductDetailResponse.from(product);
+        return ApiResponse.ok(response);
     }
 
     @Operation(summary = "제품 검색")
