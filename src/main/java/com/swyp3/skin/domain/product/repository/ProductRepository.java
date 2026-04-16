@@ -10,7 +10,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("""
         SELECT p FROM Product p
-        WHERE p.active = ture
+        WHERE p.active = true
             AND (
                 LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
                 OR LOWER(p.brand) LIKE LOWER(CONCAT('%', :keyword, '%'))
