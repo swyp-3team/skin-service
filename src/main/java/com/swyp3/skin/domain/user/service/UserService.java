@@ -56,8 +56,6 @@ public class UserService {
                 });
     }
 
-
-
     public MyPageResponse getMyPageInfo(Long userId) {
 
         UserOauth userOauth = userOauthRepository.findByUser_id(userId)

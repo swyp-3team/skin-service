@@ -28,7 +28,7 @@ public class AuthController {
     public ApiResponse<CurrentUserResponse> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        return ApiResponse.ok(authApplicationService.getCurrentUser(userDetails.getUserId()));
+        return ApiResponse.ok(authApplicationService.getCurrentUser(userDetails.userId()));
     }
 
     @Operation(summary = "AccessToken 재발급")
@@ -45,7 +45,7 @@ public class AuthController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             HttpServletResponse response
     ) {
-        authApplicationService.logout(userDetails.getUserId());
+        authApplicationService.logout(userDetails.userId());
 
         // 쿠키 삭제 (AccessToken 무효화)
         Cookie cookie = new Cookie("accessToken", null);

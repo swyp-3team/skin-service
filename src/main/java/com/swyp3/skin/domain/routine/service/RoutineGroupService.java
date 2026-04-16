@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.routine.service;
 
 import com.swyp3.skin.domain.routine.domain.entity.RoutineGroup;
+import com.swyp3.skin.domain.routine.repository.RoutineGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

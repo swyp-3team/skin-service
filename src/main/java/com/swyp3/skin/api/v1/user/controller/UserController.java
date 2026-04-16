@@ -21,7 +21,7 @@ public class UserController {
     public ApiResponse<MyPageResponse> getMyPage(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Long userId = userDetails.getUserId();
+        Long userId = userDetails.userId();
         MyPageResponse response = userService.getMyPageInfo(userId);
         return ApiResponse.ok(response);
     }

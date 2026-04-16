@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.routine.service;
+package com.swyp3.skin.domain.routine.repository;
 
 import com.swyp3.skin.domain.routine.domain.entity.RoutineGroup;
 import org.springframework.data.jpa.repository.JpaRepository;

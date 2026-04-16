@@ -29,7 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
 
         try {
             String jwt = resolveToken(request);
@@ -39,9 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 userRepository.findById(userId).ifPresent(user -> {
                     CustomUserDetails userDetails = new CustomUserDetails(
-                            user.getId(),
-                            user.getRole().name(),
-                            Collections.emptyMap()
+                            userId,
+                            user.getRole(),
+                            null,
+                            null,
+                            null
                     );
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());

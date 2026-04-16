@@ -43,7 +43,7 @@ public class ProductController {
             @RequestParam int page,
             @RequestParam int size
             ) {
-        Long userId = userDetails.getUserId();
+        Long userId = userDetails.userId();
 
         List<RecommendedProduct> recommended = productRecommendationService.recommend(
                 skinResultService.getLatestByUserId(userId)
