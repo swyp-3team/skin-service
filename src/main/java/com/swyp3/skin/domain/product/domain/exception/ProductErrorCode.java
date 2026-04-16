@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ProductErrorCode implements ErrorCode {
 
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND,"PRODUCT_ERROR_404_001", "상품을 찾을 수 없습니다.");
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND,"PRODUCT_ERROR_404_001", "상품을 찾을 수 없습니다."),
+    INVALID_KEYWORD(HttpStatus.BAD_REQUEST,"PRODUCT_ERROR_400_001","키워드는 비어있을수 없습니다." );
 
     private final HttpStatus status;
     private final String code;

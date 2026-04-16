@@ -2,8 +2,12 @@ package com.swyp3.skin.api.v1.product.controller;
 
 import com.swyp3.skin.api.v1.product.dto.response.ProductDetailResponse;
 import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
+import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResponse;
+import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResult;
 import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
+import com.swyp3.skin.domain.product.domain.exception.ProductErrorCode;
+import com.swyp3.skin.domain.product.domain.exception.ProductException;
 import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
 import com.swyp3.skin.domain.product.service.ProductService;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
@@ -82,11 +86,19 @@ public class ProductController {
 
     @Operation(summary = "제품 검색")
     @GetMapping("/search")
-    public ApiResponse<ProductListResponse> search(
+    public ApiResponse<ProductSearchResponse> search(
                               @RequestParam String keyword,
                               @RequestParam int page,
                               @RequestParam int size) {
-        // TODO: 검색 로직
-        return null;
+
+        if (keyword.isBlank()) {
+            throw new ProductException(ProductErrorCode.INVALID_KEYWORD);
+        }
+        ProductSearchResult productSearchResult =
+                productService.search(keyword, page, size);
+
+        ProductSearchResponse response =
+                ProductSearchResponse.from(productSearchResult);
+        return ApiResponse.ok(response);
     }
 }
