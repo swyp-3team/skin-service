@@ -1,5 +1,6 @@
 package com.swyp3.skin.api.v1.product.dto.response;
 
+import com.swyp3.skin.domain.product.domain.entity.Product;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -17,22 +18,27 @@ public record ProductDetailResponse(
         @Schema(description = "브랜드명", example = "SKINLAB")
         String brand,
 
-        @Schema(description = "제품 카테고리", example = "SERUM")
-        String category,
+        @Schema(description = "제품 대표 이미지 URL", example = "https://cdn.example.com/product-1.png")
+        String imageUrl,
 
         @Schema(description = "제품 설명", example = "민감하고 건조한 피부를 위한 진정 보습 세럼입니다.")
         String description,
 
-        @Schema(description = "제품 대표 이미지 URL", example = "https://cdn.example.com/product-1.png")
-        String imageUrl,
+        @Schema(description = "상품 등록일 (YYYY-MM-DD)", example = "2026-04-16")
+        String createdDate,
 
         @Schema(description = "구매 링크", example = "https://shop.example.com/product/1")
-        String purchaseUrl,
-
-        @ArraySchema(
-                schema = @Schema(implementation = ProductGroupScoreResponse.class),
-                arraySchema = @Schema(description = "제품 성분군 점수 목록")
-        )
-        List<ProductGroupScoreResponse> groupScores
+        String purchaseUrl
 ) {
+    public static ProductDetailResponse from(Product product) {
+        return new ProductDetailResponse(
+                product.getId(),
+                product.getName(),
+                product.getBrand(),
+                product.getImageUrl(),
+                product.getDescription(),
+                product.getCreatedAt().toLocalDate().toString(),
+                product.getPurchaseUrl()
+        );
+    }
 }

@@ -2,8 +2,14 @@ package com.swyp3.skin.api.v1.product.controller;
 
 import com.swyp3.skin.api.v1.product.dto.response.ProductDetailResponse;
 import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
+import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResponse;
+import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResult;
+import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
+import com.swyp3.skin.domain.product.domain.exception.ProductErrorCode;
+import com.swyp3.skin.domain.product.domain.exception.ProductException;
 import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
+import com.swyp3.skin.domain.product.service.ProductService;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.global.auth.CustomUserDetails;
@@ -25,15 +31,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProductController {
 
+    private final ProductService productService;
     private final SkinResultService skinResultService;
     private final ProductRecommendationService productRecommendationService;
-    private final ProductGroupScoreService productGroupScoreService;
 
     @Operation(summary = "추천 제품 조회")
     @GetMapping("/recommend")
     public ApiResponse<ProductListResponse> recommend(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(required = false) String category
+            @RequestParam(required = false) String category,
+            @RequestParam int page,
+            @RequestParam int size
             ) {
         Long userId = userDetails.getUserId();
 
@@ -43,26 +51,21 @@ public class ProductController {
         );
 
         // 카테고리 필터링
-        if(category != null) {
+        if(category != null && !category.isBlank()) {
             recommended = recommended.stream()
                     .filter(p ->
                             p.getProduct().getCategory().name().equalsIgnoreCase(category))
                             .toList();
         }
 
-        List<RecommendedProduct> top = recommended.stream()
-                .limit(10)
+        List<RecommendedProduct> sliced = recommended.stream()
+                .skip((long) page * size)
+                .limit(size)
                 .toList();
 
-        // 프로덕트 그룹 스코어 가져오기 위해서 -> 추후 태그로 활용
-        List<Long> productIds = top.stream()
-                .map(recommendedProduct -> recommendedProduct.getProduct().getId())
-                .toList();
-
-        Map<Long,List<ProductGroupScore>> groupScoreMap =
-                productGroupScoreService.getGroupScoreMap(productIds);
-
-        ProductListResponse response = ProductListResponse.from(top, groupScoreMap);
+        SkinResult skinResult = skinResultService.getLatestByUserId(userId);
+        boolean hasNext = recommended.size() > (page + 1) * size;
+        ProductListResponse response = ProductListResponse.from(sliced, skinResult, hasNext);
 
         return ApiResponse.ok(response);
     }
@@ -72,18 +75,30 @@ public class ProductController {
             description = "특정 제품의 상세 정보와 포함 성분 정보를 조회합니다."
     )
     @GetMapping("/{productId}")
-    public ApiResponse<ProductDetailResponse> getDetail(@PathVariable Long productId) {
-        // TODO: 제품 상세 조회
-        return null;
+    public ApiResponse<ProductDetailResponse> getDetail(
+            @PathVariable Long productId) {
+
+        Product product = productService.getById(productId);
+
+        ProductDetailResponse response = ProductDetailResponse.from(product);
+        return ApiResponse.ok(response);
     }
 
     @Operation(summary = "제품 검색")
     @GetMapping("/search")
-    public ApiResponse<ProductListResponse> search(
+    public ApiResponse<ProductSearchResponse> search(
                               @RequestParam String keyword,
                               @RequestParam int page,
                               @RequestParam int size) {
-        // TODO: 검색 로직
-        return null;
+
+        if (keyword.isBlank()) {
+            throw new ProductException(ProductErrorCode.INVALID_KEYWORD);
+        }
+        ProductSearchResult productSearchResult =
+                productService.search(keyword, page, size);
+
+        ProductSearchResponse response =
+                ProductSearchResponse.from(productSearchResult);
+        return ApiResponse.ok(response);
     }
 }
