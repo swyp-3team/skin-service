@@ -28,7 +28,7 @@ public class AuthApplicationService {
     private final UserRepository userRepository;
 
     public CurrentUserResponse getCurrentUser(Long userId) {
-        UserProfile userProfile = userProfileRepository.findByUserId(userId)
+        UserProfile userProfile = userProfileRepository.findByUser_Id(userId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
 
         return new CurrentUserResponse(

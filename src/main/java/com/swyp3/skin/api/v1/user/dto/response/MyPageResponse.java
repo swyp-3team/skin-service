@@ -1,0 +1,47 @@
+package com.swyp3.skin.api.v1.user.dto.response;
+
+import com.swyp3.skin.api.v1.user.dto.response.mypage.RoutineGroupSummary;
+import com.swyp3.skin.api.v1.user.dto.response.mypage.SkinResultSummary;
+import com.swyp3.skin.api.v1.user.dto.response.mypage.UserInfo;
+import com.swyp3.skin.domain.routine.domain.entity.RoutineGroup;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.user.domain.entity.UserOauth;
+import com.swyp3.skin.domain.user.domain.entity.UserProfile;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
+
+@Schema(description = "마이 페이지 응답")
+public record MyPageResponse(
+
+        @Schema(description = "사용자 정보",example = "이름 : 홍길동, 이메일 : example.gamil.com")
+        UserInfo user,
+
+        @Schema(description = "최근 피부 진단 결과 목록",example = "진단 시각: 2026-04-03 14:30:00")
+        List<SkinResultSummary> skinResults,
+
+        @Schema(description = "최근 루틴 목록",example = "루틴명 : 아침 루틴, 진단 시각: 2026-04-03 14:30:00")
+        List<RoutineGroupSummary> routines
+) {
+
+    public static MyPageResponse from(
+            UserOauth userOauth, UserProfile userProfile,
+            List<SkinResult> skinResults,
+            List<RoutineGroup> routineGroups
+    ) {
+        return new MyPageResponse(
+                UserInfo.from(
+                        userProfile.getNickname(),
+                        userOauth.getEmail(),
+                        userProfile.getProfileImageUrl()
+                ),
+                skinResults.stream()
+                        .map(SkinResultSummary::from)
+                        .toList(),
+                routineGroups.stream()
+                        .map(RoutineGroupSummary::from)
+                        .toList()
+
+        );
+    }
+}
