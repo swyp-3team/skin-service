@@ -1,5 +1,6 @@
 package com.swyp3.skin.domain.skinresult.domain.entity;
 
+import com.swyp3.skin.domain.skinresult.domain.enums.Concern;
 import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.global.entity.BaseEntity;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,13 +30,23 @@ public class SkinResult extends BaseEntity {
     @Column(nullable = false)
     private String summary;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "skin_result_concern",
+            joinColumns = @JoinColumn(name = "skin_result_id", nullable = false)
+    )
+    @Column(name = "concern", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private List<Concern> concerns;
+
     @Column(nullable = false)
     private LocalDateTime diagnosedAt;
 
-    private SkinResult(User user, SkinType skinType, String summary, LocalDateTime diagnosedAt) {
+    private SkinResult(User user, SkinType skinType, String summary, List<Concern> concerns,LocalDateTime diagnosedAt) {
         this.user = user;
         this.skinType = skinType;
         this.summary = summary;
+        this.concerns = concerns;
         this.diagnosedAt = diagnosedAt;
     }
 
@@ -42,7 +54,8 @@ public class SkinResult extends BaseEntity {
             User user,
             SkinType skinType,
             String summary,
+            List<Concern> concerns,
             LocalDateTime diagnosedAt) {
-        return new SkinResult(user, skinType, summary, diagnosedAt);
+        return new SkinResult(user, skinType, summary,concerns ,diagnosedAt);
     }
 }
