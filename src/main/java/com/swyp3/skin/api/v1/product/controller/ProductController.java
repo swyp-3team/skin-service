@@ -27,13 +27,14 @@ public class ProductController {
 
     private final SkinResultService skinResultService;
     private final ProductRecommendationService productRecommendationService;
-    private final ProductGroupScoreService productGroupScoreService;
 
     @Operation(summary = "추천 제품 조회")
     @GetMapping("/recommend")
     public ApiResponse<ProductListResponse> recommend(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(required = false) String category
+            @RequestParam(required = false) String category,
+            @RequestParam int page,
+            @RequestParam int size
             ) {
         Long userId = userDetails.getUserId();
 
@@ -43,26 +44,21 @@ public class ProductController {
         );
 
         // 카테고리 필터링
-        if(category != null) {
+        if(category != null && !category.isBlank()) {
             recommended = recommended.stream()
                     .filter(p ->
                             p.getProduct().getCategory().name().equalsIgnoreCase(category))
                             .toList();
         }
 
-        List<RecommendedProduct> top = recommended.stream()
-                .limit(10)
+        List<RecommendedProduct> sliced = recommended.stream()
+                .skip((long) page * size)
+                .limit(size)
                 .toList();
 
-        // 프로덕트 그룹 스코어 가져오기 위해서 -> 추후 태그로 활용
-        List<Long> productIds = top.stream()
-                .map(recommendedProduct -> recommendedProduct.getProduct().getId())
-                .toList();
-
-        Map<Long,List<ProductGroupScore>> groupScoreMap =
-                productGroupScoreService.getGroupScoreMap(productIds);
-
-        ProductListResponse response = ProductListResponse.from(top, groupScoreMap);
+        SkinResult skinResult = skinResultService.getLatestByUserId(userId);
+        boolean hasNext = recommended.size() > (page + 1) * size;
+        ProductListResponse response = ProductListResponse.from(sliced, skinResult, hasNext);
 
         return ApiResponse.ok(response);
     }
