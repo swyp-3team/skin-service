@@ -1,6 +1,7 @@
 package com.swyp3.skin.admin.product.dto;
 
 import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
+import com.swyp3.skin.domain.product.domain.enums.ProductUsageTime;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,9 @@ public record AdminProductUpdateForm(
 
         @NotNull(message = "카테고리는 필수입니다.")
         ProductCategory category,
+
+        @NotNull(message = "루틴 시간대는 필수입니다.")
+        ProductUsageTime productUsageTime,
 
         @NotNull(message = "가격은 필수입니다.")
         @Min(value = 0, message = "가격은 0 이상이어야 합니다.")

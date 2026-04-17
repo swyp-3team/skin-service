@@ -2,6 +2,7 @@ package com.swyp3.skin.admin.product.dto;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
+import com.swyp3.skin.domain.product.domain.enums.ProductUsageTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -20,6 +21,9 @@ public record AdminProductCreateForm(
 
         @NotNull(message = "카테고리는 필수입니다.")
         ProductCategory category,
+
+        @NotNull(message = "루틴 시간대는 필수입니다.")
+        ProductUsageTime productUsageTime,
 
         @NotNull(message = "가격은 필수입니다.")
         @DecimalMin(value = "0", inclusive = true, message = "가격은 0 이상이어야 합니다.")
@@ -44,7 +48,7 @@ public record AdminProductCreateForm(
 ) {
     public static AdminProductCreateForm empty() {
         return new AdminProductCreateForm(
-                "", "", null, 0, "", "", "", true,
+                "", "", null, null, 0, "", "", "", true,
                 List.of(
                         new GroupScoreForm(null, null),
                         new GroupScoreForm(null, null),
