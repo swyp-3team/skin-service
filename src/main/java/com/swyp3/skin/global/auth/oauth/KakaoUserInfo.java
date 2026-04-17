@@ -33,19 +33,35 @@ public class KakaoUserInfo implements OAuth2UserInfo{
     @Override
     public String getNickname() {
         Map<String, Object> profile = getKakaoProfile();
+        if (profile != null && profile.get("nickname") != null) {
+            return (String) profile.get("nickname");
+        }
 
-        if (profile == null) return null;
+        Map<String, Object> properties =
+                (Map<String, Object>) attributes.get("properties");
 
-        return (String) profile.get("nickname");
+        if (properties != null && properties.get("nickname") != null) {
+            return (String) properties.get("nickname");
+        }
+
+        return null;
     }
 
     @Override
     public String getProfileImageUrl() {
         Map<String, Object> profile = getKakaoProfile();
+        if (profile != null && profile.get("profile_image_url") != null) {
+            return (String) profile.get("profile_image_url");
+        }
 
-        if (profile == null) return null;
+        Map<String, Object> properties =
+                (Map<String, Object>) attributes.get("properties");
 
-        return (String) profile.get("profile_image_url");
+        if (properties != null && properties.get("profile_image") != null) {
+            return (String) properties.get("profile_image");
+        }
+
+        return null;
     }
 
 
