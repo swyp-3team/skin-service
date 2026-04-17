@@ -41,95 +41,206 @@
                     </div>
 
                     <div th:if="${!#lists.isEmpty(products)}" class="d-flex flex-wrap gap-2 mb-4">
-                        <a th:each="c : ${categories}"
-                           th:href="${'#category-' + c.name()}"
-                           class="btn btn-outline-secondary btn-sm"
-                           th:text="${
-                               c.name() == 'SKIN' ? '스킨' :
-                               c.name() == 'TONER' ? '토너' :
-                               c.name() == 'LOTION' ? '로션' :
-                               c.name() == 'EMULSION' ? '에멀전' :
-                               c.name() == 'ESSENCE' ? '에센스' :
-                               c.name() == 'SERUM' ? '세럼' :
-                               c.name() == 'AMPOULE' ? '앰플' :
-                               c.name() == 'CREAM' ? '크림' :
-                               c.name() == 'SUN_CARE' ? '선케어' : c.name()
-                           }">토너</a>
+                        <a href="#group-skin-toner" class="btn btn-outline-secondary btn-sm">스킨/토너</a>
+                        <a href="#group-lotion-emulsion" class="btn btn-outline-secondary btn-sm">로션/에멀전</a>
+                        <a href="#group-essence-line" class="btn btn-outline-secondary btn-sm">에센스/세럼/앰플</a>
+                        <a href="#group-cream" class="btn btn-outline-secondary btn-sm">크림</a>
+                        <a href="#group-sun-care" class="btn btn-outline-secondary btn-sm">선케어</a>
                     </div>
 
                     <div th:if="${!#lists.isEmpty(products)}" class="d-flex flex-column gap-4">
-                        <div th:each="c : ${categories}" class="border rounded-3 overflow-hidden" th:id="${'category-' + c.name()}">
+                        <div class="border rounded-3 overflow-hidden" id="group-skin-toner">
                             <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h3 class="h6 mb-0" th:text="${
-                                        c.name() == 'SKIN' ? '스킨' :
-                                        c.name() == 'TONER' ? '토너' :
-                                        c.name() == 'LOTION' ? '로션' :
-                                        c.name() == 'EMULSION' ? '에멀전' :
-                                        c.name() == 'ESSENCE' ? '에센스' :
-                                        c.name() == 'SERUM' ? '세럼' :
-                                        c.name() == 'AMPOULE' ? '앰플' :
-                                        c.name() == 'CREAM' ? '크림' :
-                                        c.name() == 'SUN_CARE' ? '선케어' : c.name()
-                                    }">토너</h3>
-                                </div>
+                                <h3 class="h6 mb-0">스킨/토너</h3>
                                 <a href="#top" class="small text-decoration-none">위로</a>
                             </div>
+                            <div class="p-3 d-flex flex-column gap-4">
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).SKIN}">
+                                    <h4 class="h6 mb-2">스킨</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                            <tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).TONER}">
+                                    <h4 class="h6 mb-2">토너</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                            <tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="table-responsive">
-                                <table class="table table-sm table-bordered align-middle mb-0">
-                                    <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 80px;">ID</th>
-                                        <th>상품명</th>
-                                        <th style="width: 120px;">브랜드</th>
-                                        <th style="width: 100px;">가격</th>
-                                        <th style="width: 90px;">활성</th>
-                                        <th style="width: 180px;">관리</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <th:block th:with="categoryHasItems=${false}">
-                                        <tr th:each="p : ${products}" th:if="${p.category == c}">
-                                            <td th:text="${p.id}">1</td>
-                                            <td th:text="${p.name}">상품명</td>
-                                            <td th:text="${p.brand}">브랜드</td>
-                                            <td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
-                                            <td>
-                                                <span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'"
-                                                      th:text="${p.active} ? 'Y' : 'N'">Y</span>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex gap-1">
-                                                    <button type="button"
-                                                            class="btn btn-outline-primary btn-sm edit-btn"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#editProductModal"
-                                                            th:attr="data-id=${p.id},
-                                                                 data-name=${p.name},
-                                                                 data-brand=${p.brand},
-                                                                 data-category=${p.category},
-                                                                 data-price=${p.price},
-                                                                 data-description=${p.description},
-                                                                 data-image-url=${p.imageUrl},
-                                                                 data-purchase-url=${p.purchaseUrl},
-                                                                 data-active=${p.active}">
-                                                        수정
-                                                    </button>
+                        <div class="border rounded-3 overflow-hidden" id="group-lotion-emulsion">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom">
+                                <h3 class="h6 mb-0">로션/에멀전</h3>
+                                <a href="#top" class="small text-decoration-none">위로</a>
+                            </div>
+                            <div class="p-3 d-flex flex-column gap-4">
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).LOTION}">
+                                    <h4 class="h6 mb-2">로션</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                            <tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).EMULSION}">
+                                    <h4 class="h6 mb-2">에멀전</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                            <tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                                    <form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post"
-                                                          onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                                                        <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </th:block>
-                                    <tr th:unless="${#lists.contains(products.![category], c)}">
-                                        <td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <div class="border rounded-3 overflow-hidden" id="group-essence-line">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom">
+                                <h3 class="h6 mb-0">에센스/세럼/앰플</h3>
+                                <a href="#top" class="small text-decoration-none">위로</a>
+                            </div>
+                            <div class="p-3 d-flex flex-column gap-4">
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).ESSENCE}">
+                                    <h4 class="h6 mb-2">에센스</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light"><tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr></thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).SERUM}">
+                                    <h4 class="h6 mb-2">세럼</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light"><tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr></thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).AMPOULE}">
+                                    <h4 class="h6 mb-2">앰플</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light"><tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr></thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border rounded-3 overflow-hidden" id="group-cream">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom">
+                                <h3 class="h6 mb-0">크림</h3>
+                                <a href="#top" class="small text-decoration-none">위로</a>
+                            </div>
+                            <div class="p-3">
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).CREAM}">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light"><tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr></thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border rounded-3 overflow-hidden" id="group-sun-care">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom">
+                                <h3 class="h6 mb-0">선케어</h3>
+                                <a href="#top" class="small text-decoration-none">위로</a>
+                            </div>
+                            <div class="p-3">
+                                <div th:with="c=${T(com.swyp3.skin.domain.product.domain.enums.ProductCategory).SUN_CARE}">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light"><tr><th style="width: 80px;">ID</th><th>상품명</th><th style="width: 120px;">브랜드</th><th style="width: 100px;">가격</th><th style="width: 90px;">활성</th><th style="width: 180px;">관리</th></tr></thead>
+                                            <tbody>
+                                            <tr th:each="p : ${products}" th:if="${p.category == c}">
+                                                <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
+                                                <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                            </tr>
+                                            <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -149,24 +260,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">상품명</label>
-                            <input class="form-control" name="name" id="edit-name" required />
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">브랜드</label>
-                            <input class="form-control" name="brand" id="edit-brand" required />
-                        </div>
+                        <div class="col-12 col-md-6"><label class="form-label">상품명</label><input class="form-control" name="name" id="edit-name" required /></div>
+                        <div class="col-12 col-md-6"><label class="form-label">브랜드</label><input class="form-control" name="brand" id="edit-brand" required /></div>
                         <div class="col-12 col-md-4">
                             <label class="form-label">카테고리</label>
                             <select class="form-select" name="category" id="edit-category" required>
                                 <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
                             </select>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <label class="form-label">가격</label>
-                            <input type="number" min="0" class="form-control" name="price" id="edit-price" required />
-                        </div>
+                        <div class="col-12 col-md-4"><label class="form-label">가격</label><input type="number" min="0" class="form-control" name="price" id="edit-price" required /></div>
                         <div class="col-12 col-md-4">
                             <label class="form-label">활성 여부</label>
                             <select class="form-select" name="active" id="edit-active" required>
@@ -174,18 +276,9 @@
                                 <option value="false">비활성</option>
                             </select>
                         </div>
-                        <div class="col-12">
-                            <label class="form-label">설명</label>
-                            <textarea class="form-control" rows="4" name="description" id="edit-description" required></textarea>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">이미지 URL</label>
-                            <input type="url" class="form-control" name="imageUrl" id="edit-image-url" required />
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">구매 URL</label>
-                            <input type="url" class="form-control" name="purchaseUrl" id="edit-purchase-url" required />
-                        </div>
+                        <div class="col-12"><label class="form-label">설명</label><textarea class="form-control" rows="4" name="description" id="edit-description" required></textarea></div>
+                        <div class="col-12 col-md-6"><label class="form-label">이미지 URL</label><input type="url" class="form-control" name="imageUrl" id="edit-image-url" required /></div>
+                        <div class="col-12 col-md-6"><label class="form-label">구매 URL</label><input type="url" class="form-control" name="purchaseUrl" id="edit-purchase-url" required /></div>
                     </div>
                 </div>
                 <div class="modal-footer">
