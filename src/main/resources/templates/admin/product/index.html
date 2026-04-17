@@ -226,7 +226,7 @@
                                             <tr th:each="p : ${products}" th:if="${p.category == c}">
                                                 <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
                                                 <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
-                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-product-usage-time=${p.productUsageTime},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
                                             </tr>
                                             <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
                                             </tbody>
@@ -250,7 +250,7 @@
                                             <tr th:each="p : ${products}" th:if="${p.category == c}">
                                                 <td th:text="${p.id}">1</td><td th:text="${p.name}">상품명</td><td th:text="${p.brand}">브랜드</td><td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}">12000</td>
                                                 <td><span class="badge" th:classappend="${p.active} ? ' text-bg-success' : ' text-bg-secondary'" th:text="${p.active} ? 'Y' : 'N'">Y</span></td>
-                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
+                                                <td><div class="d-flex gap-1"><button type="button" class="btn btn-outline-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" th:attr="data-id=${p.id},data-name=${p.name},data-brand=${p.brand},data-category=${p.category},data-product-usage-time=${p.productUsageTime},data-price=${p.price},data-description=${p.description},data-image-url=${p.imageUrl},data-purchase-url=${p.purchaseUrl},data-active=${p.active}">수정</button><form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"><button type="submit" class="btn btn-outline-danger btn-sm">삭제</button></form></div></td>
                                             </tr>
                                             <tr th:unless="${#lists.contains(products.![category], c)}"><td colspan="6" class="text-center text-secondary py-4">이 카테고리에 등록된 상품이 없습니다.</td></tr>
                                             </tbody>
@@ -284,7 +284,7 @@
                                 <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
                             </select>
                         </div>
-                        <div class="col-12 col-md-4"><label class="form-label">가격</label><input type="number" min="0" class="form-control" name="price" id="edit-price" required /></div>
+                        <div class="col-12 col-md-4"><label class="form-label">가격</label><input type="number" min="0" step="100" class="form-control" name="price" id="edit-price" required /></div>
                         <div class="col-12 col-md-4">
                             <label class="form-label">시간대 선택</label>
                             <select class="form-select" name="productUsageTime" id="edit-product-usage-time" required>
