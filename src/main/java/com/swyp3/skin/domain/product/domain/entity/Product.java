@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.product.domain.entity;
 
 import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
+import com.swyp3.skin.domain.product.domain.enums.ProductUsageTime;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,6 +25,10 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private ProductCategory category;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private ProductUsageTime productUsageTime;
+
     @Column(nullable = false)
     private int price;
 
@@ -40,6 +45,7 @@ public class Product extends BaseEntity {
             String name,
             String brand,
             ProductCategory category,
+            ProductUsageTime productUsageTime,
             int price,
             String description,
             String imageUrl,
@@ -50,6 +56,7 @@ public class Product extends BaseEntity {
         product.name = name;
         product.brand = brand;
         product.category = category;
+        product.productUsageTime = productUsageTime;
         product.price = price;
         product.description = description;
         product.imageUrl = imageUrl;
@@ -62,6 +69,7 @@ public class Product extends BaseEntity {
             String name,
             String brand,
             ProductCategory category,
+            ProductUsageTime productUsageTime,
             int price,
             String description,
             String imageUrl,
@@ -71,6 +79,7 @@ public class Product extends BaseEntity {
         this.name = name;
         this.brand = brand;
         this.category = category;
+        this.productUsageTime = productUsageTime;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
