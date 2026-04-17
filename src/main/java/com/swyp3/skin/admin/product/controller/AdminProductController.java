@@ -68,7 +68,7 @@ public class AdminProductController {
 
     @PostMapping("/{productId}/delete")
     public String delete(
-            @PathVariable Long productId,
+            @PathVariable("productId") Long productId,
             RedirectAttributes redirectAttributes) {
         adminProductService.delete(productId);
         redirectAttributes.addFlashAttribute("message", "상품 삭제 완료(ID=" + productId + ")");
