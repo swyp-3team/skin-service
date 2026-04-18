@@ -7,10 +7,14 @@ import com.swyp3.skin.domain.user.domain.enums.UserRole;
 import com.swyp3.skin.domain.user.repository.UserOauthRepository;
 import com.swyp3.skin.domain.user.repository.UserProfileRepository;
 import com.swyp3.skin.domain.user.repository.UserRepository;
+import com.swyp3.skin.domain.user.service.UserService;
 import com.swyp3.skin.global.auth.enums.AuthProvider;
 import com.swyp3.skin.global.auth.exception.AuthErrorCode;
 import com.swyp3.skin.global.auth.exception.AuthException;
 import java.util.Map;
+
+import com.swyp3.skin.global.auth.oauth.OAuth2UserInfo;
+import com.swyp3.skin.global.auth.oauth.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -25,88 +29,26 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
-    private final UserOauthRepository userOauthRepository;
-    private final UserProfileRepository userProfileRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
-
+        log.info("attributes = {}", attributes);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        AuthProvider provider = AuthProvider.from(registrationId);
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.of(registrationId, attributes);
+        User user = userService.findOrCreateUser(userInfo, provider);
 
-        String providerUserId = ""; // 고유 식별자
-        String email = null;
-        String nickname = null; // 필수로 넘어왔던거 같은데?
-        String profileImageUrl = null;
-
-        //데이터 추출 분기 처리
-        if ("google".equals(registrationId)) {
-            providerUserId = String.valueOf(attributes.get("sub"));
-            email = (String) attributes.get("email");
-            nickname = (String) attributes.get("name");
-            profileImageUrl = (String) attributes.get("picture");
-        } else if ("kakao".equals(registrationId)) {
-            providerUserId = String.valueOf(attributes.get("id"));
-            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-
-            if (kakaoAccount != null) {
-                email = (String) kakaoAccount.get("email");
-                Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-                if (profile != null) {
-                    nickname = (String) profile.get("nickname");
-                    profileImageUrl = (String) profile.get("profile_image_url");
-                }
-            }
-        }
-
-        // null처리
-        if (providerUserId == null || providerUserId.isBlank()) {
-            throw new AuthException(AuthErrorCode.INVALID_PROVIDER);
-        }
-
-        log.info("[{}] 로그인 시도 - providerId: {}, email: {}", registrationId, providerUserId, email);
-
-        final String finalEmail = email;
-        final String finalNickname = nickname;
-        final String finalProfileImageUrl = profileImageUrl;
-        final String finalProviderUserId = providerUserId;
-
-        AuthProvider authProvider = AuthProvider.from(registrationId);
-        return userOauthRepository.findByProviderAndProviderUserId(authProvider, finalProviderUserId)
-                // 기존 유저인 경우 (CustomUserDetails의 생성자도 간소화했다고 가정)
-                .map(oauth -> {
-                    User user = oauth.getUser();
-                    return new CustomUserDetails(
-                            user.getId(),
-                            user.getRole().name(),
-                            attributes
-                    );
-                })
-                .orElseGet(() -> {
-
-                    User user = userRepository.save(User.create(UserRole.USER));
-
-                    // 2. UserOauth 연동 정보 저장 (Builder 대신 정적 팩토리 메서드)
-                    userOauthRepository.save(UserOauth.create(
-                            user,
-                            authProvider,
-                            finalProviderUserId,
-                            finalEmail
-                    ));
-
-                    // 3. UserProfile 정보 저장 (UserProfile 엔티티도 create 메서드를 만들었다고 가정)
-                    userProfileRepository.save(UserProfile.create(
-                            user,
-                            finalNickname,
-                            finalProfileImageUrl
-                    ));
-
-                    return new CustomUserDetails(user.getId(),user.getRole().name(), attributes);
-
-                });
+        return new CustomUserDetails(
+                user.getId(),
+                user.getRole(),
+                userInfo.getNickname(),
+                provider,
+                userInfo.getEmail()
+        );
     }
 }
 

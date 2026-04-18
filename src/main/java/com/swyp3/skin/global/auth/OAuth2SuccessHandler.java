@@ -13,7 +13,6 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -38,7 +37,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         }
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long userId = userDetails.getUserId();
+        Long userId = userDetails.userId();
 
         log.info("로그인 성공! JWT 발급 시작. 유저 ID: {}", userId);
         String accessToken = jwtTokenProvider.createAccessToken(userId);

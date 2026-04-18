@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,11 @@ public class SkinResultService {
     }
 
     public SkinResult getLatestByUserId(Long userId) {
-        return skinResultRepository.findTopByUserIdOrderByCreatedAtDesc(userId)
+        return skinResultRepository.findTopByUser_IdOrderByCreatedAtDesc(userId)
                 .orElseThrow(() -> new SkinResultException(SkinResultErrorCode.SKIN_RESULT_NOT_YET));
+    }
+
+    public List<SkinResult> getTop4ByUserId(Long userId) {
+        return skinResultRepository.findTop4ByUser_IdOrderByCreatedAtDesc(userId);
     }
 }

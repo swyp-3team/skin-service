@@ -53,7 +53,7 @@ public class SkinTestController {
     public ApiResponse<SkinTestPreviewWithTokenResponse> preview(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SkinTestPreviewRequest request) {
-        Long userId = userDetails.getUserId();
+        Long userId = userDetails.userId();
         SkinInput skinInput = skinInputMapper.toSkinInput(request);
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
 
@@ -70,7 +70,7 @@ public class SkinTestController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SaveSkinResultRequest request
             ) {
-        skinTestApplicationService.saveResult(userDetails.getUserId(), request.previewToken());
+        skinTestApplicationService.saveResult(userDetails.userId(), request.previewToken());
         return ApiResponse.ok();
     }
 
