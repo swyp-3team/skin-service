@@ -65,20 +65,15 @@ public class SkinTestController {
             summary = "결과 DB 저장",
             description = "사용자의 진단 이력 저장합니다.")
     @PostMapping("/results")
-    public ApiResponse<Void> saveResult(
+    public ApiResponse<CreateSkinResultResponse> saveResult(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody CreateSkinResultRequest request
             ) {
         Long userId = userDetails.userId();
 
-        SkinTestPreviewRequest resultResponse;
-        Long resultId;
-
-
-
-
-        skinTestApplicationService.saveResult(userDetails.userId(), request.previewToken());
-        return ApiResponse.ok();
+        CreateSkinResultResponse response =
+                skinTestApplicationService.createResult(userId, request);
+        return ApiResponse.ok(response);
     }
 
     @Operation(

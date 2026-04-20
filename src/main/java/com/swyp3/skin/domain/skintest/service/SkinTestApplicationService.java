@@ -61,12 +61,7 @@ public class SkinTestApplicationService {
         ResolvedSkinResultData resolved = resolveResultData(request);
         Long resultId = persistResult(userId, resolved);
 
-        SkinTestPreviewResponse response = previewResponseMapper.toResponse(
-                resolved.skinInput().getSkinType(),
-                resolved.recommendationResult()
-        );
-
-        return new CreateSkinResultResponse(resultId, response);
+        return new CreateSkinResultResponse(resultId);
     }
 
     private ResolvedSkinResultData resolveResultData(CreateSkinResultRequest request) {
