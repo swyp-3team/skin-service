@@ -66,7 +66,7 @@ public class SkinTestApplicationService {
 
     private ResolvedSkinResultData resolveResultData(CreateSkinResultRequest request) {
         if (isPreviewMode(request)){
-            SkinPreviewCacheValue cached = skinPreviewCacheService.get(request.previewToken());
+            SkinPreviewCacheValue cached = skinPreviewCacheService.consume(request.previewToken());
             if (cached == null) {
                 throw new SkinTestException(SkinTestErrorCode.PREVIEW_TOKEN_EXPIRED);
             }
@@ -106,10 +106,6 @@ public class SkinTestApplicationService {
 
         SkinResult skinResult = skinResultService.saveFromResolvedData(user, savePayload);
         skinResultGroupScoreService.saveAll(skinResult, resolved.recommendationResult());
-
-        if (resolved.consumedPreviewToken() != null) {
-            skinPreviewCacheService.evict(resolved.consumedPreviewToken());
-        }
 
         return skinResult.getId();
     }
