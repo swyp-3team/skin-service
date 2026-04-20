@@ -76,12 +76,12 @@ class SkinTestApplicationServiceTest {
         // 사용자 조회
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         // DB저장 결과 -> mock
-        when(skinResultService.save(user, cached)).thenReturn(skinResult);
+        when(skinResultService.saveFromResolvedData(user, cached)).thenReturn(skinResult);
 
         skinTestApplicationService.saveResult(userId, token);
 
         // 실제로 DB저장 되었는지
-        verify(skinResultService).save(user, cached);
+        verify(skinResultService).saveFromResolvedData(user, cached);
         // 성분군 점수 저장
         verify(skinResultGroupScoreService).saveAll(skinResult, result);
         // 캐시 제거

@@ -73,4 +73,9 @@ public class UserService {
         return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroups);
 
     }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+    }
 }
