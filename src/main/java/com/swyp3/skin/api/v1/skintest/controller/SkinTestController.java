@@ -1,6 +1,5 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
-import com.swyp3.skin.api.v1.skintest.dto.request.SaveSkinResultRequest;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.*;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
@@ -49,7 +48,7 @@ public class SkinTestController {
             summary = "성분 추천 미리보기",
             description = "미리보기 결과와 저장용 previewToken을 반환"
     )
-    @PostMapping("/result/preview")
+    @PostMapping("/results/preview")
     public ApiResponse<SkinTestPreviewWithTokenResponse> preview(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SkinTestPreviewRequest request) {
@@ -65,7 +64,7 @@ public class SkinTestController {
     @Operation(
             summary = "결과 DB 저장",
             description = "사용자의 진단 이력 저장합니다.")
-    @PostMapping("/result/save")
+    @PostMapping("/results")
     public ApiResponse<Void> saveResult(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SaveSkinResultRequest request
@@ -77,7 +76,7 @@ public class SkinTestController {
     @Operation(
             summary = "내 진단 조회",
             description = "로그인한 사용자의 최신 피부 진단 결과를 조회합니다.")
-    @GetMapping("/result/me")
+    @GetMapping("/results/{id}")
     public ApiResponse<MySkinTestResultResponse> getMyResult() {
         // TODO: 사용자 결과 조회
         return null;
