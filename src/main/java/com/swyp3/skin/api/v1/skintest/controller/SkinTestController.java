@@ -1,5 +1,6 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
+import com.swyp3.skin.api.v1.skintest.dto.request.CreateSkinResultRequest;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.*;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
@@ -50,14 +51,13 @@ public class SkinTestController {
     )
     @PostMapping("/results/preview")
     public ApiResponse<SkinTestPreviewWithTokenResponse> preview(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SkinTestPreviewRequest request) {
-        Long userId = userDetails.userId();
+
         SkinInput skinInput = skinInputMapper.toSkinInput(request);
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
-
         SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(), result);
-        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(userId, skinInput, result, response.summary()));
+
+        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(skinInput, result, response.summary()));
         return ApiResponse.ok(new SkinTestPreviewWithTokenResponse(response, token));
     }
 
@@ -67,8 +67,16 @@ public class SkinTestController {
     @PostMapping("/results")
     public ApiResponse<Void> saveResult(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @Valid @RequestBody SaveSkinResultRequest request
+            @Valid @RequestBody CreateSkinResultRequest request
             ) {
+        Long userId = userDetails.userId();
+
+        SkinTestPreviewRequest resultResponse;
+        Long resultId;
+
+
+
+
         skinTestApplicationService.saveResult(userDetails.userId(), request.previewToken());
         return ApiResponse.ok();
     }

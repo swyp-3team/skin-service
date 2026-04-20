@@ -4,7 +4,6 @@ import com.swyp3.skin.domain.skinresult.domain.enums.Concern;
 import com.swyp3.skin.domain.skinresult.domain.enums.SkinType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.AssertTrue;
 
 import java.util.List;
 
@@ -33,35 +32,4 @@ public record CreateSkinResultRequest(
         )
         List<Concern> concerns
 ) {
-
-    @AssertTrue(message = "previewToken 단독 또는 answers+skinType+concerns 조합 중 하나만 전달해야 합니다.")
-    public boolean isValidMode() {
-        return isTokenMode() || isSurveyMode();
-    }
-
-    public boolean hasPreviewToken() {
-        return previewToken != null && !previewToken.isBlank();
-    }
-
-    public SkinTestPreviewRequest toPreviewRequest() {
-        List<AnswerDto> mappedAnswers = answers.stream()
-                .map(a -> new AnswerDto(a.step(), a.answer()))
-                .toList();
-
-        return new SkinTestPreviewRequest(mappedAnswers, skinType, concerns);
-    }
-
-    private boolean isTokenMode() {
-        if (!hasPreviewToken()) {
-            return false;
-        }
-        return (answers == null || answers.isEmpty()) && skinType == null &&(concerns == null || concerns.isEmpty());
-    }
-
-    private boolean isSurveyMode(){
-        if (hasPreviewToken()) {
-            return false;
-        }
-        return answers != null && !answers.isEmpty() && skinType != null && concerns != null && !concerns.isEmpty();
-    }
 }
