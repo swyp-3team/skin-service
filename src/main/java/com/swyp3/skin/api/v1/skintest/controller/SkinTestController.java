@@ -15,7 +15,6 @@ import com.swyp3.skin.recommendation.ingredient.model.SkinInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -39,10 +38,8 @@ public class SkinTestController {
             description = "특정 단계의 질문, 선택지 를 반환합니다."
     )
     @GetMapping("/surveys")
-    public ApiResponse<SkinTestStepResponse> getSurvey(
-            @RequestParam @Min(1) int step
-            ) {
-        return ApiResponse.ok(skinTestApplicationService.getSurveyStep(step));
+    public ApiResponse<SkinSurveyResponse> getSurvey() {
+        return ApiResponse.ok(skinTestApplicationService.getSurveys());
     }
 
     @Operation(

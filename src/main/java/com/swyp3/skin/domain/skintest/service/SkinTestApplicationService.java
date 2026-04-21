@@ -4,7 +4,7 @@ import com.swyp3.skin.api.v1.skintest.dto.request.AnswerDto;
 import com.swyp3.skin.api.v1.skintest.dto.request.CreateSkinResultRequest;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.CreateSkinResultResponse;
-import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestPreviewResponse;
+import com.swyp3.skin.api.v1.skintest.dto.response.SkinSurveyResponse;
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestStepResponse;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
@@ -27,10 +27,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class SkinTestApplicationService {
+
+    private final List<SkinTestStepResponse> cachedQuestions = buildCachedQuestions();
 
     private final UserService userService;
 
@@ -45,15 +48,15 @@ public class SkinTestApplicationService {
     public RecommendationResult calculate(SkinInput skinInput){
         return recommendationEngine.calculate(skinInput);
     }
+    private List<SkinTestStepResponse> buildCachedQuestions() {
+        return SkinTestSurveyQuestions.QUESTIONS.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> SkinTestStepMapper.toResponse(entry.getValue()))
+                .toList();
+    }
 
-    public SkinTestStepResponse getSurveyStep(int step) {
-        SkinTestSurveyQuestion question = SkinTestSurveyQuestions.QUESTIONS.get(step);
-
-        if (question == null) {
-            throw new SkinTestException(SkinTestErrorCode.INVALID_SURVEY_STEP);
-        }
-
-        return SkinTestStepMapper.toResponse(question);
+    public SkinSurveyResponse getSurveys() {
+        return new SkinSurveyResponse(cachedQuestions);
     }
 
     @Transactional
