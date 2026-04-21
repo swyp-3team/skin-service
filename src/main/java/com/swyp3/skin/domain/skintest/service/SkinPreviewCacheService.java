@@ -1,5 +1,6 @@
 package com.swyp3.skin.domain.skintest.service;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
 import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
 import com.swyp3.skin.domain.skintest.exception.SkinTestException;
@@ -30,12 +31,25 @@ public class SkinPreviewCacheService {
         return cache;
     }
 
+    public SkinPreviewCacheValue consume(String previewToken) {
+        Cache findCache = getCache();
+        Object nativeCache = findCache.getNativeCache();
+
+        if (!(nativeCache instanceof com.github.benmanes.caffeine.cache.Cache<?, ?> caffeineCache)) {
+            throw new SkinTestException(SkinTestErrorCode.PREVIEW_CACHE_TYPE_MISMATCH);
+        }
+
+        @SuppressWarnings("unchecked")
+        com.github.benmanes.caffeine.cache.Cache<Object, Object> cache
+                = (com.github.benmanes.caffeine.cache.Cache<Object, Object>) caffeineCache;
+
+        Object removed = cache.asMap().remove(previewToken);
+        return removed == null ? null : (SkinPreviewCacheValue) removed;
+    }
+
     public SkinPreviewCacheValue get(String previewToken) {
         Cache.ValueWrapper wrapper = getCache().get(previewToken);
         return wrapper == null ? null : (SkinPreviewCacheValue) wrapper.get();
     }
 
-    public void evict(String previewToken) {
-        getCache().evict(previewToken);
-    }
 }

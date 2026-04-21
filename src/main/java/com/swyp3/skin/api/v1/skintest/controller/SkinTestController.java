@@ -1,6 +1,6 @@
 package com.swyp3.skin.api.v1.skintest.controller;
 
-import com.swyp3.skin.api.v1.skintest.dto.request.SaveSkinResultRequest;
+import com.swyp3.skin.api.v1.skintest.dto.request.CreateSkinResultRequest;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.*;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
@@ -15,7 +15,6 @@ import com.swyp3.skin.recommendation.ingredient.model.SkinInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -39,45 +38,45 @@ public class SkinTestController {
             description = "특정 단계의 질문, 선택지 를 반환합니다."
     )
     @GetMapping("/surveys")
-    public ApiResponse<SkinTestStepResponse> getSurvey(
-            @RequestParam @Min(1) int step
-            ) {
-        return ApiResponse.ok(skinTestApplicationService.getSurveyStep(step));
+    public ApiResponse<SkinSurveyResponse> getSurvey() {
+        return ApiResponse.ok(skinTestApplicationService.getSurveys());
     }
 
     @Operation(
             summary = "성분 추천 미리보기",
             description = "미리보기 결과와 저장용 previewToken을 반환"
     )
-    @PostMapping("/result/preview")
+    @PostMapping("/results/preview")
     public ApiResponse<SkinTestPreviewWithTokenResponse> preview(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SkinTestPreviewRequest request) {
-        Long userId = userDetails.userId();
+
         SkinInput skinInput = skinInputMapper.toSkinInput(request);
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
-
         SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(), result);
-        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(userId, skinInput, result, response.summary()));
+
+        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(skinInput, result, response.summary()));
         return ApiResponse.ok(new SkinTestPreviewWithTokenResponse(response, token));
     }
 
     @Operation(
             summary = "결과 DB 저장",
             description = "사용자의 진단 이력 저장합니다.")
-    @PostMapping("/result/save")
-    public ApiResponse<Void> saveResult(
+    @PostMapping("/results")
+    public ApiResponse<CreateSkinResultResponse> saveResult(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @Valid @RequestBody SaveSkinResultRequest request
+            @Valid @RequestBody CreateSkinResultRequest request
             ) {
-        skinTestApplicationService.saveResult(userDetails.userId(), request.previewToken());
-        return ApiResponse.ok();
+        Long userId = userDetails.userId();
+
+        CreateSkinResultResponse response =
+                skinTestApplicationService.createResult(userId, request);
+        return ApiResponse.ok(response);
     }
 
     @Operation(
             summary = "내 진단 조회",
             description = "로그인한 사용자의 최신 피부 진단 결과를 조회합니다.")
-    @GetMapping("/result/me")
+    @GetMapping("/results/{id}")
     public ApiResponse<MySkinTestResultResponse> getMyResult() {
         // TODO: 사용자 결과 조회
         return null;

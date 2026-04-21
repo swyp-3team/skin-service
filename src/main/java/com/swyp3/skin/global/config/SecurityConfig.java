@@ -68,7 +68,8 @@ public class SecurityConfig {
                                 "/", "/error",
                                 "/swagger-ui/**", "/swagger-ui.html",
                                 "/v3/api-docs/**", "/api-docs/**",
-                                "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
+                                "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
+                                "/api/v1/surveys","/api/v1/results/preview"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

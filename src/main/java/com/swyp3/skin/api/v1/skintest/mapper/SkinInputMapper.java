@@ -1,5 +1,6 @@
 package com.swyp3.skin.api.v1.skintest.mapper;
 
+import com.swyp3.skin.api.v1.skintest.dto.request.AnswerDto;
 import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.survey.SkinTestSurveyQuestions;
 import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
@@ -19,7 +20,7 @@ public class SkinInputMapper {
         HashMap<Integer, Integer> answerByStep = new HashMap<>();
 
         // 문항별 답변 목록 -> 설문 단계 번호
-        for (SkinTestPreviewRequest.AnswerDto answer : request.answers()) {
+        for (AnswerDto answer : request.answers()) {
             Integer step = answer.step();
 
             // 만약 질문목록에 해당 단계가 없다면 INVALID_SURVEY_STEP
