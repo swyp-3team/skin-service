@@ -6,7 +6,7 @@ import com.swyp3.skin.recommendation.ingredient.model.SkinInput;
 public record ResolvedSkinResultData(
         SkinInput skinInput,
         RecommendationResult recommendationResult,
-        String summary,
+        String typeName,
         String consumedPreviewToken
 ) {
 }

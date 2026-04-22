@@ -1,0 +1,28 @@
+package com.swyp3.skin.recommendation.ux;
+
+public enum IngredientType {
+    HYALURONIC_ACID,
+    GLYCERIN,
+    BETA_GLUCAN,
+    CERAMIDE,
+    CERAMIDE_LIGHT,
+    PANTHENOL,
+    CENTELLA,
+    MADECASSOSIDE,
+    NIACINAMIDE,
+    NIACINAMIDE_LOW,
+    ZINC,
+    CLAY,
+    AHA_GLYCOLIC_ACID,
+    AHA_LOW,
+    BHA_SALICYLIC_ACID,
+    SALICYLIC_ACID,
+    SALICYLIC_ACID_LOW,
+    PHA,
+    VITAMIN_C,
+    VITAMIN_C_STABLE,
+    ARBUTIN,
+    PEPTIDE,
+    RETINOL_LOW,
+    AZELAIC_ACID
+}

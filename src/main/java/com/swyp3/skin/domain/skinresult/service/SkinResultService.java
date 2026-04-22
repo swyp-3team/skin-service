@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.skinresult.service;
 
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.domain.exception.SkinResultErrorCode;
 import com.swyp3.skin.domain.skinresult.domain.exception.SkinResultException;
 import com.swyp3.skin.domain.skinresult.repository.SkinResultRepository;
@@ -22,7 +23,7 @@ public class SkinResultService {
     @Transactional
     public SkinResult saveFromResolvedData(User user, SkinPreviewCacheValue cached) {
         SkinResult skinResult = SkinResult.create(
-                user, cached.skinInput().getSkinType(), cached.summary(), cached.skinInput().getConcerns(),LocalDateTime.now()
+                user, cached.skinInput().getSkinType(), cached.typeName(), cached.skinInput().getConcerns(),LocalDateTime.now()
         );
         return skinResultRepository.save(skinResult);
     }
@@ -35,4 +36,13 @@ public class SkinResultService {
     public List<SkinResult> getTop4ByUserId(Long userId) {
         return skinResultRepository.findTop4ByUser_IdOrderByCreatedAtDesc(userId);
     }
+
+
+
+    public SkinResult findByIdAndUserId(Long resultId, Long userId) {
+        return skinResultRepository.findByIdAndUser_Id(resultId, userId)
+                .orElseThrow(()-> new SkinResultException(SkinResultErrorCode.SKIN_RESULT_NOT_YET));
+    }
+
+
 }

@@ -28,7 +28,7 @@ public class SkinResult extends BaseEntity {
     private SkinType skinType;
 
     @Column(nullable = false)
-    private String summary;
+    private String typeName;
 
     @ElementCollection
     @CollectionTable(
@@ -42,10 +42,10 @@ public class SkinResult extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime diagnosedAt;
 
-    private SkinResult(User user, SkinType skinType, String summary, List<Concern> concerns,LocalDateTime diagnosedAt) {
+    private SkinResult(User user, SkinType skinType, String typeName, List<Concern> concerns, LocalDateTime diagnosedAt) {
         this.user = user;
         this.skinType = skinType;
-        this.summary = summary;
+        this.typeName = typeName;
         this.concerns = concerns;
         this.diagnosedAt = diagnosedAt;
     }
@@ -53,9 +53,9 @@ public class SkinResult extends BaseEntity {
     public static SkinResult create(
             User user,
             SkinType skinType,
-            String summary,
+            String typeName,
             List<Concern> concerns,
             LocalDateTime diagnosedAt) {
-        return new SkinResult(user, skinType, summary,concerns ,diagnosedAt);
+        return new SkinResult(user, skinType, typeName,concerns ,diagnosedAt);
     }
 }
