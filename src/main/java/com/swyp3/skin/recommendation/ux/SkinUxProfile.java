@@ -9,7 +9,7 @@ public record SkinUxProfile(
         @Schema(description = "유형명", example = "촉촉한 수분 결핍형")
         String typeName,
 
-        @Schema(description = "부제", example = "속은 건조한데 겉은 번들거려요")
+        @Schema(description = "타입 설명", example = "속은 건조한데 겉은 번들거려요")
         String subtitle,
 
         @Schema(description = "피부설명")
