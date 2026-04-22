@@ -1,4 +1,4 @@
-package com.swyp3.skin.api.v1.skintest.ux;
+package com.swyp3.skin.domain.skintest.ux;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
