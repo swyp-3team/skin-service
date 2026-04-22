@@ -14,7 +14,8 @@ public enum SkinTestErrorCode implements ErrorCode {
     INVALID_PREVIEW_TOKEN_OWNER(HttpStatus.FORBIDDEN, "SKIN_TEST_403_001", "해당 미리보기 토큰에 접근할 권한이 없습니다."),
     PREVIEW_CACHE_TYPE_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR,"SKIN_TEST_500_001" ,"캐시 값이 서버 지정값과 다릅니다." ),
     INVALID_RECOMMENDATION_RANKING_SIZE(HttpStatus.INTERNAL_SERVER_ERROR,"SKIN_TEST_500_002" , "추천 성분의 성분군이 추출되지않았습니다."),
-    UX_PROFILE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR,"SKIN_TEST_500_003" ,"UX 프로필 추출이 제대로 수행되지 않았습니다." );
+    UX_PROFILE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR,"SKIN_TEST_500_003" ,"UX 프로필 추출이 제대로 수행되지 않았습니다." ),
+    INGREDIENT_META_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "SKIN_TEST_500_004", "사용자 추천 성분에 해당하는 성분 메타데이터가 없습니다."),;
 
 
     private final HttpStatus status;

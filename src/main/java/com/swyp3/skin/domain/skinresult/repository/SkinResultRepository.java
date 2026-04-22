@@ -11,4 +11,6 @@ public interface SkinResultRepository extends JpaRepository<SkinResult,Long> {
     Optional<SkinResult> findTopByUser_IdOrderByCreatedAtDesc(Long userId);
 
     List<SkinResult> findTop4ByUser_IdOrderByCreatedAtDesc(Long userId);
+
+    Optional<SkinResult> findByIdAndUser_Id(Long id, Long userId);
 }

@@ -42,4 +42,8 @@ public class SkinResultGroupScoreService {
         }
         skinResultGroupScoreRepository.saveAll(entities);
     }
+
+    public List<SkinResultGroupScore> getTop2ScoresByResultId(Long resultId) {
+        return skinResultGroupScoreRepository.findTop2BySkinResultIdOrderByPriorityAsc(resultId);
+    }
 }
