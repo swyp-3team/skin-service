@@ -87,8 +87,6 @@ public class SkinTestController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long resultId
     ) {
-        // TODO: 사용자 결과 조회
-
         SkinResult skinResult = skinResultService.findByIdAndUserId(resultId, customUserDetails.userId());
         SkinTestResultResponse response =
                 resultResponseMapper.toResponse(skinResult);

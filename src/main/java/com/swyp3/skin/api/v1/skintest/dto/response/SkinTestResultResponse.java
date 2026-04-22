@@ -1,5 +1,6 @@
 package com.swyp3.skin.api.v1.skintest.dto.response;
 
+import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
 import com.swyp3.skin.recommendation.ux.IngredientMeta;
 import com.swyp3.skin.recommendation.ux.SkinUxProfile;
@@ -31,33 +32,12 @@ public record SkinTestResultResponse(
         String subSummary,
 
         @Schema(description = "추천 성분및 섦명")
-        List<IngredientMeta> ingredientMetas,
-
-        @ArraySchema(
-                arraySchema = @Schema(description = "추천 상품 리스트"),
-                schema = @Schema(implementation = SkinTestResultProductResponse.class)
-        )
-        List<SkinTestResultProductResponse> productResponses
+        List<IngredientMeta> ingredientMetas
 ) {
-        public record SkinTestResultProductResponse(
-
-                @Schema(description = "상품 카테고리")
-                ProductCategory category,
-
-                @Schema(description = "상품 이름")
-                String name,
-
-                @Schema(description = "상품 가격")
-                int price
-
-        ){
-        }
-
         public static SkinTestResultResponse of(
                 String diagnosedAt,
                 SkinUxProfile uxProfile,
-                List<IngredientMeta> ingredientMetas,
-                List<SkinTestResultProductResponse> productResponses
+                List<IngredientMeta> ingredientMetas
         ){
                 return new SkinTestResultResponse(
                         diagnosedAt,
@@ -66,8 +46,7 @@ public record SkinTestResultResponse(
                         uxProfile.summary(),
                         uxProfile.concerns(),
                         uxProfile.subSummary(),
-                        ingredientMetas,
-                        productResponses
+                        ingredientMetas
                 );
         }
 }
