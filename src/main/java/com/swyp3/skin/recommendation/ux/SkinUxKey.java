@@ -1,4 +1,4 @@
-package com.swyp3.skin.domain.skintest.ux;
+package com.swyp3.skin.recommendation.ux;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 
