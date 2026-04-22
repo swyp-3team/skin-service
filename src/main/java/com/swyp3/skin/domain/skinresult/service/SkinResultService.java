@@ -22,7 +22,7 @@ public class SkinResultService {
     @Transactional
     public SkinResult saveFromResolvedData(User user, SkinPreviewCacheValue cached) {
         SkinResult skinResult = SkinResult.create(
-                user, cached.skinInput().getSkinType(), cached.summary(), cached.skinInput().getConcerns(),LocalDateTime.now()
+                user, cached.skinInput().getSkinType(), cached.typeName(), cached.skinInput().getConcerns(),LocalDateTime.now()
         );
         return skinResultRepository.save(skinResult);
     }

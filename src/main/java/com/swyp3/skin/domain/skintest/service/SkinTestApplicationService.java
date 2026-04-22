@@ -76,7 +76,7 @@ public class SkinTestApplicationService {
             return new ResolvedSkinResultData(
                     cached.skinInput(),
                     cached.result(),
-                    cached.summary(),
+                    cached.typeName(),
                     request.previewToken()
             );
         }
@@ -85,12 +85,12 @@ public class SkinTestApplicationService {
             SkinTestPreviewRequest previewRequest = toPreviewRequest(request);
             SkinInput skinInput = skinInputMapper.toSkinInput(previewRequest);
             RecommendationResult result = recommendationEngine.calculate(skinInput);
-            String summary = previewResponseMapper.toResponse(request.skinType(), result).summary();
+            String typeName = previewResponseMapper.toResponse(result).uxProfile().typeName();
 
             return new ResolvedSkinResultData(
                     skinInput,
                     result,
-                    summary,
+                    typeName,
                     null
             );
         }
@@ -104,7 +104,7 @@ public class SkinTestApplicationService {
         SkinPreviewCacheValue savePayload = new SkinPreviewCacheValue(
                 resolved.skinInput(),
                 resolved.recommendationResult(),
-                resolved.summary()
+                resolved.typeName()
         );
 
         SkinResult skinResult = skinResultService.saveFromResolvedData(user, savePayload);
