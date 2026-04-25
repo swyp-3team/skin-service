@@ -29,37 +29,24 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final RequestCache requestCache = new HttpSessionRequestCache();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        if (response.isCommitted()) {
-            return;
-        }
+        if (response.isCommitted()) return;
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.userId();
 
-        log.info("로그인 성공! JWT 발급 시작. 유저 ID: {}", userId);
         String accessToken = jwtTokenProvider.createAccessToken(userId);
 
-        // TODO : 정확히 비활성화 시점을 모르겠지만 원래는 세션의 context를 비활성화 해줘야함
-
-        String redirectUri = request.getParameter("redirect_uri");
-        if (redirectUri == null || redirectUri.isBlank()) {
-            SavedRequest saved = requestCache.getRequest(request, response);
-            redirectUri = (saved != null) ? saved.getRedirectUrl() : "/admin";
-        } // 어떻게든 admin으로 보내볼려고
+        String redirectUri = "https://layerd.co.kr/oauth2/callback";
 
 
-        Cookie cookie = new Cookie("accessToken", accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(cookieSecure);
-        cookie.setPath("/");
-        cookie.setMaxAge(3600);
-        response.addCookie(cookie);
+        response.setHeader("Set-Cookie",
+                "accessToken=" + accessToken +
+                "; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=3600");
 
-        if (!response.isCommitted()) {
-            response.sendRedirect(redirectUri); // 한 번만
-        }
+        response.sendRedirect(redirectUri);
     }
 }
