@@ -5,6 +5,9 @@ import com.swyp3.skin.api.v1.skintest.dto.request.SkinTestPreviewRequest;
 import com.swyp3.skin.api.v1.skintest.dto.response.*;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
+import com.swyp3.skin.api.v1.skintest.mapper.SkinTestResultResponseMapper;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
 import com.swyp3.skin.domain.skintest.service.SkinPreviewCacheService;
 import com.swyp3.skin.domain.skintest.service.SkinTestApplicationService;
@@ -27,11 +30,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SkinTestController {
 
+    private final SkinResultService skinResultService;
+
     private final SkinTestApplicationService skinTestApplicationService;
     private final SkinPreviewCacheService skinPreviewCacheService;
 
     private final SkinInputMapper skinInputMapper;
     private final SkinTestPreviewResponseMapper previewResponseMapper;
+    private final SkinTestResultResponseMapper resultResponseMapper;
 
     @Operation(
             summary = "설문 단계 조회",
@@ -52,9 +58,9 @@ public class SkinTestController {
 
         SkinInput skinInput = skinInputMapper.toSkinInput(request);
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
-        SkinTestPreviewResponse response = previewResponseMapper.toResponse(request.skinType(), result);
+        SkinTestPreviewResponse response = previewResponseMapper.toResponse(result);
 
-        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(skinInput, result, response.summary()));
+        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(skinInput, result, response.typeName()));
         return ApiResponse.ok(new SkinTestPreviewWithTokenResponse(response, token));
     }
 
@@ -76,9 +82,15 @@ public class SkinTestController {
     @Operation(
             summary = "내 진단 조회",
             description = "로그인한 사용자의 최신 피부 진단 결과를 조회합니다.")
-    @GetMapping("/results/{id}")
-    public ApiResponse<MySkinTestResultResponse> getMyResult() {
-        // TODO: 사용자 결과 조회
-        return null;
+    @GetMapping("/results/{resultId}")
+    public ApiResponse<SkinTestResultResponse> getMyResult(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long resultId
+    ) {
+        SkinResult skinResult = skinResultService.findByIdAndUserId(resultId, customUserDetails.userId());
+        SkinTestResultResponse response =
+                resultResponseMapper.toResponse(skinResult);
+
+        return ApiResponse.ok(response);
     }
 }

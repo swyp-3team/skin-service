@@ -24,7 +24,7 @@ public record SkinResultDetailSkeletonResponse(
         return new SkinResultDetailSkeletonResponse(
                 skinResult.getId(),
                 skinResult.getSkinType().name(),
-                skinResult.getSummary(),
+                skinResult.getTypeName(),
                 skinResult.getDiagnosedAt()
         );
     }
