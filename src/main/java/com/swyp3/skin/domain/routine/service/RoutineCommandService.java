@@ -61,7 +61,7 @@ public class RoutineCommandService {
         RoutineRecommendationResponse response = resolveRoutineData(userDetails, request);
 
         User user = userService.findById(userDetails.userId());
-        SkinResult skinResult = skinResultService.findByIdAndUserId(response.skinResultId(), userDetails.userId());
+        SkinResult skinResult = skinResultService.getSkinResultById(response.skinResultId(), userDetails.userId());
 
         RoutineGroup routineGroup = routineGroupRepository.save(RoutineGroup.of(
                 user,
