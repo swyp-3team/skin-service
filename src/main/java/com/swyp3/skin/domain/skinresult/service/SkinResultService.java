@@ -22,7 +22,7 @@ public class SkinResultService {
     @Transactional
     public SkinResult saveFromResolvedData(User user, SkinPreviewCacheValue cached) {
         SkinResult skinResult = SkinResult.create(
-                user, cached.skinInput().getSkinType(), cached.summary(), cached.skinInput().getConcerns(),LocalDateTime.now()
+                user, cached.skinInput().getSkinType() , cached.typeName(), cached.skinInput().getConcerns(),LocalDateTime.now()
         );
         return skinResultRepository.save(skinResult);
     }
@@ -40,4 +40,6 @@ public class SkinResultService {
         return skinResultRepository.findByIdAndUser_id(skinResultId,userId)
                 .orElseThrow(() -> new SkinResultException(SkinResultErrorCode.SKIN_RESULT_NOT_FOUND));
     }
+
+
 }
