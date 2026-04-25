@@ -1,13 +1,22 @@
 package com.swyp3.skin.api.v1.routine.controller;
 
-import com.swyp3.skin.api.v1.routine.dto.response.RoutineDetailResponse;
-import com.swyp3.skin.api.v1.routine.dto.response.RoutineListResponse;
-import com.swyp3.skin.api.v1.routine.dto.response.RoutineRecommendationResponse;
-import com.swyp3.skin.api.v1.routine.dto.response.SaveRoutineResponse;
+import com.swyp3.skin.api.v1.routine.dto.request.SaveRoutineRequest;
+import com.swyp3.skin.api.v1.routine.dto.response.*;
+import com.swyp3.skin.domain.routine.dto.RoutinePreviewCacheValue;
+import com.swyp3.skin.domain.routine.service.*;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.service.SkinResultService;
+import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
+import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
+import com.swyp3.skin.recommendation.product.service.ProductRecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,23 +24,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 @Tag(name = "Routine", description = "루틴 추천 및 저장 관리")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/routines")
 public class RoutineController {
+
+    private final SkinResultService skinResultService;
+    private final ProductRecommendationService productRecommendationService;
+    private final RoutineRecommendationService routineRecommendationService;
+    private final RoutineCommandService routineCommandService;
+    private final RoutineQueryService routineQueryService;
+    private final RoutinePreviewCacheService routinePreviewCacheService;
 
     @Operation(
             summary = "맞춤형 루틴 추천",
             description = "최신 피부 진단 결과를 기반으로 사용자의 AM/PM 루틴 미리보기 정보를 반환"
     )
     @GetMapping("/recommendation")
-    public ApiResponse<RoutineRecommendationResponse> getRecommendation() {
-        // TODO:
-        // 최신 피부 진단 결과 조회
-        // 추천 엔진으로 AM/PM 루틴 계산
-        // 추천 결과를 세션 또는 임시 저장소에 보관
-        // 응답 DTO로 반환
-        return null;
+    public ApiResponse<RoutineRecommendationWithTokenResponse> getRecommendation(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Long userId = userDetails.userId();
+        SkinResult latestSkinResult = skinResultService.getLatestByUserId(userId);
+        List<RecommendedProduct> recommended = productRecommendationService.recommend(latestSkinResult.getId());
+        RoutineRecommendationResponse response = routineRecommendationService.recommend(recommended, latestSkinResult);
+        String previewToken = routinePreviewCacheService.put(new RoutinePreviewCacheValue(userId, response));
+
+        return ApiResponse.ok(new RoutineRecommendationWithTokenResponse(response, previewToken));
     }
 
     @Operation(
