@@ -30,14 +30,17 @@ public record ProductListResponse(
         List<ProductSummaryResponse> products,
 
         @Schema(description = "다음 페이지 존재 여부", example = "true")
-        boolean hasNext
-) {
+        boolean hasNext,
+
+        @Schema(description = "마지막 상품의 ID", example = "12")
+        Long nextCursor
+        ) {
 
     public static ProductListResponse from(
             List<RecommendedProduct> sliced,
             SkinResult skinResult,
             boolean hasNext
-    ){
+    ) {
 
         List<ProductSummaryResponse> products = sliced.stream()
                 .map(ProductSummaryResponse::from)
@@ -51,11 +54,16 @@ public record ProductListResponse(
                 .toLocalDate()
                 .toString();
 
+        Long nextCursor = (hasNext && !sliced.isEmpty())
+                ? sliced.get(sliced.size() - 1).getProduct().getId()
+                : null;
+
         return new ProductListResponse(
                 tags,
                 skinResultDate,
                 products,
-                hasNext
+                hasNext,
+                nextCursor
         );
     }
 }

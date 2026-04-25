@@ -13,6 +13,7 @@ public enum SkinResultErrorCode implements ErrorCode {
     SKIN_RESULT_NOT_YET(HttpStatus.NOT_FOUND,"SKIN_RESULT_404_001", "피부 진단을 아직 수행하지 않았습니다.");
 
 
+
     private final HttpStatus status;
     private final String code;
     private final String message;
