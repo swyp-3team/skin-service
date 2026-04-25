@@ -33,16 +33,12 @@ public class RoutineProduct extends BaseEntity {
     public static RoutineProduct of(
             Routine routine,
             Product product,
-            RoutineStepCategory routineStepCategory,
-            String note,
-            String reason
+            RoutineStepCategory routineStepCategory
     ) {
         RoutineProduct routineProduct = new RoutineProduct();
         routineProduct.routine = routine;
         routineProduct.product = product;
         routineProduct.routineStepCategory = routineStepCategory;
-        routineProduct.note = note;
-        routineProduct.reason = reason;
         return routineProduct;
     }
 }
