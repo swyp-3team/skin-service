@@ -144,9 +144,7 @@ public class RoutineCommandService {
         return RoutineProduct.of(
                 routine,
                 product,
-                routineStepCategory,
-                routineStepCategory.getNote(),
-                routineStepCategory.name()
+                routineStepCategory
         );
     }
 }
