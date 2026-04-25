@@ -1,7 +1,9 @@
 package com.swyp3.skin.domain.product.service;
 
 import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
+import com.swyp3.skin.domain.common.pagination.CursorPaginationUtils;
 import com.swyp3.skin.domain.common.pagination.SliceResult;
+import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
@@ -39,7 +41,12 @@ public class ProductRecommendationFacade {
                 productService.filter(recommended, categories);
 
         SliceResult<RecommendedProduct> sliced =
-                productService.sliceWithCursor(filtered, cursor, size);
+                CursorPaginationUtils.sliceWithCursor(
+                        filtered,
+                        cursor,
+                        size,
+                        recommendedProduct ->
+                                recommendedProduct.getProduct().getId());
 
         return ProductListResponse.from(
                 sliced.items(),
