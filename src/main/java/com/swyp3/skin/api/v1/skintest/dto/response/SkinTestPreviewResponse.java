@@ -14,11 +14,11 @@ public record SkinTestPreviewResponse(
         @Schema(description = "진단 날짜(프리뷰 시점 기준 오늘)", example = "2026-04-22")
         String diagnosedDate,
 
-        @Schema(description = "타입 네임")
-        String typeName,
+        @Schema(description = "피부 유형명")
+        String skinType,
 
-        @Schema(description = "타입 설명")
-        String subTitle,
+        @Schema(description = "부제")
+        String subtitle,
 
         @Schema(description = "피부 설명")
         String summary
@@ -30,7 +30,7 @@ public record SkinTestPreviewResponse(
             ) {
         return new SkinTestPreviewResponse(
                 diagnosedDate,
-                skinUxProfile.typeName(),
+                skinUxProfile.skinType(),
                 skinUxProfile.subtitle(),
                 skinUxProfile.summary()
         );

@@ -25,4 +25,14 @@ public class Routine extends BaseEntity {
 
     @Column(length = 500)
     private String memo;
+
+    public static Routine of(
+            RoutineGroup routineGroup,
+            RoutineType routineType
+    ) {
+        Routine routine = new Routine();
+        routine.routineGroup = routineGroup;
+        routine.routineType = routineType;
+        return routine;
+    }
 }

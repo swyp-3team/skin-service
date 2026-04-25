@@ -16,11 +16,11 @@ public record SkinTestResultResponse(
         @Schema(description = "진단 시각", example = "2026.04.22")
         String diagnosedAt,
 
-        @Schema(description = "타입 네임")
-        String typeName,
+        @Schema(description = "피부 유형명")
+        String skinType,
 
-        @Schema(description = "타입 설명")
-        String subTitle,
+        @Schema(description = "부제")
+        String subtitle,
 
         @Schema(description = "피부 설명")
         String summary,
@@ -31,7 +31,7 @@ public record SkinTestResultResponse(
         @Schema(description = "피부 고민 설명")
         String subSummary,
 
-        @Schema(description = "추천 성분및 섦명")
+        @Schema(description = "추천 성분 및 설명")
         List<IngredientMeta> ingredientMetas
 ) {
         public static SkinTestResultResponse of(
@@ -41,11 +41,11 @@ public record SkinTestResultResponse(
         ){
                 return new SkinTestResultResponse(
                         diagnosedAt,
-                        uxProfile.typeName(),
+                        uxProfile.skinType(),
                         uxProfile.subtitle(),
                         uxProfile.summary(),
                         uxProfile.concerns(),
-                        uxProfile.subSummary(),
+                        uxProfile.routineSummary(),
                         ingredientMetas
                 );
         }

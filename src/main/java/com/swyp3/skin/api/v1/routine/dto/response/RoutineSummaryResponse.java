@@ -13,18 +13,6 @@ public record RoutineSummaryResponse(
         @Schema(description = "루틴 제목", example = "민감 피부 데일리 루틴")
         String title,
 
-        @Schema(description = "기준 피부 타입", example = "SENSITIVE")
-        String skinType,
-
-        @Schema(description = "루틴 전체 요약", example = "아침 진정, 저녁 장벽 회복 중심")
-        String summary,
-
-        @Schema(description = "AM 루틴 ID", example = "31")
-        Long amRoutineId,
-
-        @Schema(description = "PM 루틴 ID", example = "32")
-        Long pmRoutineId,
-
         @Schema(description = "생성 시각", example = "2026-04-05T14:30:00")
         LocalDateTime createdAt
 ) {

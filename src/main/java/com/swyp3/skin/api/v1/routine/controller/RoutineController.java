@@ -1,13 +1,22 @@
 package com.swyp3.skin.api.v1.routine.controller;
 
-import com.swyp3.skin.api.v1.routine.dto.response.RoutineDetailResponse;
-import com.swyp3.skin.api.v1.routine.dto.response.RoutineListResponse;
-import com.swyp3.skin.api.v1.routine.dto.response.RoutineRecommendationResponse;
-import com.swyp3.skin.api.v1.routine.dto.response.SaveRoutineResponse;
+import com.swyp3.skin.api.v1.routine.dto.request.SaveRoutineRequest;
+import com.swyp3.skin.api.v1.routine.dto.response.*;
+import com.swyp3.skin.domain.routine.dto.RoutinePreviewCacheValue;
+import com.swyp3.skin.domain.routine.service.*;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.service.SkinResultService;
+import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
+import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
+import com.swyp3.skin.recommendation.product.service.ProductRecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,23 +24,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 @Tag(name = "Routine", description = "루틴 추천 및 저장 관리")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/routines")
 public class RoutineController {
+
+    private final SkinResultService skinResultService;
+    private final ProductRecommendationService productRecommendationService;
+    private final RoutineRecommendationService routineRecommendationService;
+    private final RoutineCommandService routineCommandService;
+    private final RoutineQueryService routineQueryService;
+    private final RoutinePreviewCacheService routinePreviewCacheService;
 
     @Operation(
             summary = "맞춤형 루틴 추천",
             description = "최신 피부 진단 결과를 기반으로 사용자의 AM/PM 루틴 미리보기 정보를 반환"
     )
     @GetMapping("/recommendation")
-    public ApiResponse<RoutineRecommendationResponse> getRecommendation() {
-        // TODO:
-        // 최신 피부 진단 결과 조회
-        // 추천 엔진으로 AM/PM 루틴 계산
-        // 추천 결과를 세션 또는 임시 저장소에 보관
-        // 응답 DTO로 반환
-        return null;
+    public ApiResponse<RoutineRecommendationWithTokenResponse> getRecommendation(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Long userId = userDetails.userId();
+        SkinResult latestSkinResult = skinResultService.getLatestByUserId(userId);
+        List<RecommendedProduct> recommended = productRecommendationService.recommend(latestSkinResult.getId());
+        RoutineRecommendationResponse response = routineRecommendationService.recommend(recommended, latestSkinResult);
+        String previewToken = routinePreviewCacheService.put(new RoutinePreviewCacheValue(userId, response));
+
+        return ApiResponse.ok(new RoutineRecommendationWithTokenResponse(response, previewToken));
     }
 
     @Operation(
@@ -39,15 +62,12 @@ public class RoutineController {
             description = "직전에 추천된 AM/PM 루틴 결과를 그대로 사용자의 루틴으로 저장"
     )
     @PostMapping
-    public ApiResponse<SaveRoutineResponse> saveRoutine(){
-        // TODO :
-        // 직전 생성된 루틴 추천 결과 조회
-        // 추천 결과 없으면 예외처리(ex.생성된 루틴이 없습니다)
-        // 루틴 그룹 생성
-        // 생성 루틴 그룹 기준으로 각 타입별 루틴 저장
-        // 각 루틴 하위 루틴 프로덕트 저장
-        // 저장 완료 응답 DTO반환
-        return null;
+    public ApiResponse<SaveRoutineResponse> saveRoutine(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody SaveRoutineRequest request
+    ){
+        SaveRoutineResponse saveRoutineResponse = routineCommandService.save(userDetails, request);
+        return ApiResponse.ok(saveRoutineResponse);
     }
 
     @Operation(
@@ -56,13 +76,13 @@ public class RoutineController {
     )
     @GetMapping
     public ApiResponse<RoutineListResponse> getRoutines(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        // TODO :
-        // 사용자 루틴 목록 조회
-        // 페이지 응답 DTO로 반환
-        return null;
+        Long userId = userDetails.userId();
+        RoutineListResponse response = routineQueryService.inquiryRoutineGroups(userId, page, size);
+        return ApiResponse.ok(response);
     }
 
     @Operation(
@@ -70,27 +90,24 @@ public class RoutineController {
             description = "선택한 루틴의 AM/PM 구성, 사용 순서, 추천 이유, 주의사항을 함께 조회"
     )
     @GetMapping("/{routineGroupId}")
-    public ApiResponse<RoutineDetailResponse> getRoutine(@PathVariable Long routineGroupId) {
-        // TODO :
-        // 루틴그룹 아이디 기준 루틴 그룹 조회
-        // 그룹에 속한 각 루틴 조회
-        // 각 루틴에 포함된 루틴 프로덕트 조회
-        // 응답 DTO로 반환
-        return null;
+    public ApiResponse<RoutineDetailResponse> getDetailRoutine(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long routineGroupId) {
+        RoutineDetailResponse response = routineQueryService.inquiryDetailRoutineGroup(userDetails.userId(), routineGroupId);
+        return ApiResponse.ok(response);
     }
+
     @Operation(
             summary = "루틴 삭제",
             description = "선택한 루틴 기준으로 동일 그룹의 AM/PM 루틴과 하위 데이터를 함께 삭제"
     )
     @DeleteMapping("/{routineGroupId}")
     public ApiResponse<Void> deleteRoutine(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "삭제할 루틴 대표 ID", example = "1")
             @PathVariable Long routineGroupId
     ) {
-        // TODO:
-        // 그룹아이디 기준 삭제 대상 조회
-        // 그룹에 속한 루틴및 루틴 프로덕트 삭제
-        // 루틴 그룹 삭제
+        routineCommandService.deleteRoutine(routineGroupId, userDetails.userId());
         return ApiResponse.ok();
     }
 }

@@ -28,9 +28,30 @@ public class RoutineGroup extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
+    @Column(nullable = false, length = 100)
+    private String skinType;
+
+    @Column(length = 100)
+    private String subtitle;
+
     @Column(length = 500)
     private String summary;
 
-    @Column(length = 500)
-    private String caution;
+    public static RoutineGroup of(
+            User user,
+            SkinResult skinResult,
+            String title,
+            String skinType,
+            String subtitle,
+            String summary
+    ) {
+        RoutineGroup routineGroup = new RoutineGroup();
+        routineGroup.user = user;
+        routineGroup.skinResult = skinResult;
+        routineGroup.title = title;
+        routineGroup.skinType = skinType;
+        routineGroup.subtitle = subtitle;
+        routineGroup.summary = summary;
+        return routineGroup;
+    }
 }
