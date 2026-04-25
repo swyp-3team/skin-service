@@ -9,6 +9,7 @@ import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
 import com.swyp3.skin.domain.product.domain.exception.ProductErrorCode;
 import com.swyp3.skin.domain.product.domain.exception.ProductException;
 import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
+import com.swyp3.skin.domain.product.service.ProductRecommendationFacade;
 import com.swyp3.skin.domain.product.service.ProductService;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
@@ -32,41 +33,26 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
-    private final SkinResultService skinResultService;
-    private final ProductRecommendationService productRecommendationService;
+    private final ProductRecommendationFacade productRecommendationFacade;
 
     @Operation(summary = "추천 제품 조회")
     @GetMapping("/recommend")
     public ApiResponse<ProductListResponse> recommend(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(required = false) String category,
-            @RequestParam int page,
+            @RequestParam(required = false) List<String> categories,
+            @RequestParam(required = false) Long skinResultId,
+            @RequestParam(required = false) Long cursor,
             @RequestParam int size
             ) {
         Long userId = userDetails.userId();
 
-        List<RecommendedProduct> recommended = productRecommendationService.recommend(
-                skinResultService.getLatestByUserId(userId)
-                        .getId()
+        ProductListResponse response = productRecommendationFacade.getRecommendedProducts(
+                userId,
+                skinResultId,
+                categories,
+                cursor,
+                size
         );
-
-        // 카테고리 필터링
-        if(category != null && !category.isBlank()) {
-            recommended = recommended.stream()
-                    .filter(p ->
-                            p.getProduct().getCategory().name().equalsIgnoreCase(category))
-                            .toList();
-        }
-
-        List<RecommendedProduct> sliced = recommended.stream()
-                .skip((long) page * size)
-                .limit(size)
-                .toList();
-
-        SkinResult skinResult = skinResultService.getLatestByUserId(userId);
-        boolean hasNext = recommended.size() > (page + 1) * size;
-        ProductListResponse response = ProductListResponse.from(sliced, skinResult, hasNext);
-
         return ApiResponse.ok(response);
     }
 
