@@ -35,4 +35,9 @@ public class SkinResultService {
     public List<SkinResult> getTop4ByUserId(Long userId) {
         return skinResultRepository.findTop4ByUser_IdOrderByCreatedAtDesc(userId);
     }
+
+    public SkinResult getSkinResultById(Long skinResultId,Long userId) {
+        return skinResultRepository.findByIdAndUser_id(skinResultId,userId)
+                .orElseThrow(() -> new SkinResultException(SkinResultErrorCode.SKIN_RESULT_NOT_FOUND));
+    }
 }
