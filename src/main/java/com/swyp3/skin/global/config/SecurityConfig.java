@@ -45,7 +45,15 @@ public class SecurityConfig {
                         s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers(
+                                "/oauth2/**",
+                                "/login/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/api-docs/**",
+                                "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
+                                "/", "/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
