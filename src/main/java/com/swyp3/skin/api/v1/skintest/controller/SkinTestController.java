@@ -60,7 +60,7 @@ public class SkinTestController {
         RecommendationResult result = skinTestApplicationService.calculate(skinInput);
         SkinTestPreviewResponse response = previewResponseMapper.toResponse(result);
 
-        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(skinInput, result, response.typeName()));
+        String token = skinPreviewCacheService.put(new SkinPreviewCacheValue(skinInput, result, response.skinType()));
         return ApiResponse.ok(new SkinTestPreviewWithTokenResponse(response, token));
     }
 

@@ -85,7 +85,7 @@ public class SkinTestApplicationService {
             SkinTestPreviewRequest previewRequest = toPreviewRequest(request);
             SkinInput skinInput = skinInputMapper.toSkinInput(previewRequest);
             RecommendationResult result = recommendationEngine.calculate(skinInput);
-            String typeName = previewResponseMapper.toResponse(result).typeName();
+            String typeName = previewResponseMapper.toResponse(result).skinType();
 
             return new ResolvedSkinResultData(
                     skinInput,
