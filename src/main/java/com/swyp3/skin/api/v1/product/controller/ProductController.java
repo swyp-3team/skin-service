@@ -39,7 +39,7 @@ public class ProductController {
     @GetMapping("/recommend")
     public ApiResponse<ProductListResponse> recommend(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) List<String> category,
             @RequestParam int page,
             @RequestParam int size
             ) {
@@ -51,11 +51,14 @@ public class ProductController {
         );
 
         // 카테고리 필터링
-        if(category != null && !category.isBlank()) {
+        if(category != null && !category.isEmpty()) {
             recommended = recommended.stream()
-                    .filter(p ->
-                            p.getProduct().getCategory().name().equalsIgnoreCase(category))
-                            .toList();
+                    .filter(product -> category.stream()
+                            .anyMatch(c -> product.getProduct()
+                                    .getCategory()
+                                    .name()
+                                    .equalsIgnoreCase(c)))
+                    .toList();
         }
 
         List<RecommendedProduct> sliced = recommended.stream()
