@@ -74,7 +74,7 @@ public class ProductService {
                 .limit(size)
                 .toList();
 
-        boolean hasNext = sliced.size() > startIndex + size;
+        boolean hasNext = filtered.size() > startIndex + size;
 
         return new SliceResult<>(sliced, hasNext);
     }

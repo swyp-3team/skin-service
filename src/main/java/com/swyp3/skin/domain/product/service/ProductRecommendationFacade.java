@@ -17,7 +17,7 @@ public class ProductRecommendationFacade {
 
     private final ProductService productService;
     private final SkinResultService skinResultService;
-    private final ProductRecommendationService productRecommendationService;
+    private final ProductRecommendCacheService productRecommendCacheService;
 
 
     public ProductListResponse getRecommendedProducts(
@@ -32,7 +32,8 @@ public class ProductRecommendationFacade {
                 : skinResultService.getLatestByUserId(userId);
 
         List<RecommendedProduct> recommended =
-                productRecommendationService.recommend(skinResult.getId());
+                productRecommendCacheService.getOrCalculate(skinResult.getId());
+
 
         List<RecommendedProduct> filtered =
                 productService.filter(recommended, categories);

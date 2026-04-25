@@ -33,9 +33,7 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
-    private final SkinResultService skinResultService;
     private final ProductRecommendationFacade productRecommendationFacade;
-    private final ProductRecommendationService productRecommendationService;
 
     @Operation(summary = "추천 제품 조회")
     @GetMapping("/recommend")
@@ -43,7 +41,7 @@ public class ProductController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(required = false) List<String> categories,
             @RequestParam(required = false) Long skinResultId,
-            @RequestParam Long cursor,
+            @RequestParam(required = false) Long cursor,
             @RequestParam int size
             ) {
         Long userId = userDetails.userId();

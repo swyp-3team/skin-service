@@ -15,10 +15,14 @@ public class CacheConfig {
 
 
     public static final String LAYERD_PREVIEW_CACHE = "LayerdPreviewCache";
+    public static final String PRODUCT_RECOMMEND_CACHE = "ProductRecommendCache";
+
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager manager = new CaffeineCacheManager(LAYERD_PREVIEW_CACHE);
+        CaffeineCacheManager manager =
+                new CaffeineCacheManager(LAYERD_PREVIEW_CACHE,PRODUCT_RECOMMEND_CACHE);
+
         manager.setCaffeine(
                 Caffeine.newBuilder()
                         .maximumSize(3_000)
