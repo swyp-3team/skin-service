@@ -74,14 +74,14 @@ public class ProductController {
     @GetMapping("/search")
     public ApiResponse<ProductSearchResponse> search(
                               @RequestParam String keyword,
-                              @RequestParam int page,
+                              @RequestParam(required = false) int cursor,
                               @RequestParam int size) {
 
         if (keyword.isBlank()) {
             throw new ProductException(ProductErrorCode.INVALID_KEYWORD);
         }
         ProductSearchResult productSearchResult =
-                productService.search(keyword, page, size);
+                productService.search(keyword, cursor, size);
 
         ProductSearchResponse response =
                 ProductSearchResponse.from(productSearchResult);

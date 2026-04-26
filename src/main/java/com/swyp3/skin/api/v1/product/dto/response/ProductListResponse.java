@@ -42,10 +42,6 @@ public record ProductListResponse(
             boolean hasNext
     ) {
 
-        List<ProductSummaryResponse> products = sliced.stream()
-                .map(ProductSummaryResponse::from)
-                .toList();
-
         List<String> tags = skinResult.getConcerns().stream()
                 .map(Enum::name)
                 .toList();
@@ -53,6 +49,10 @@ public record ProductListResponse(
         String skinResultDate = skinResult.getCreatedAt()
                 .toLocalDate()
                 .toString();
+
+        List<ProductSummaryResponse> products = sliced.stream()
+                .map(ProductSummaryResponse::from)
+                .toList();
 
         Long nextCursor = (hasNext && !sliced.isEmpty())
                 ? sliced.get(sliced.size() - 1).getProduct().getId()

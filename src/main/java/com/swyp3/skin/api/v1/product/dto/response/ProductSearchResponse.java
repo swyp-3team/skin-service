@@ -22,7 +22,6 @@ public record ProductSearchResponse(
                 .map(product -> new ProductSummaryResponse(
                         product.getId(),
                         product.getName(),
-                        product.getBrand(),
                         product.getPrice(),
                         product.getImageUrl()
                 ))

@@ -13,9 +13,6 @@ public record ProductSummaryResponse(
         @Schema(description = "제품명", example = "수분 토너")
         String name,
 
-        @Schema(description = "브랜드명", example = "라네즈")
-        String brand,
-
         @Schema(description = "가격 (원)", example = "21000")
         int price,
 
@@ -28,7 +25,6 @@ public record ProductSummaryResponse(
         return new ProductSummaryResponse(
                 product.getId(),
                 product.getName(),
-                product.getBrand(),
                 product.getPrice(),
                 product.getImageUrl()
         );
