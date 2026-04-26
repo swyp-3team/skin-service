@@ -8,6 +8,9 @@ import java.time.format.DateTimeFormatter;
 
 public record SkinProfileResponse(
 
+        @Schema(description = "진단 결과 ID", example = "10")
+        Long resultId,
+
         @Schema(description = "진단 시각", example = "2026.04.22")
         String diagnosedAt,
 
@@ -21,12 +24,13 @@ public record SkinProfileResponse(
         String summary
 )
 {
-    public static SkinProfileResponse from(LocalDateTime diagnosedAt, SkinUxProfile profile) {
+    public static SkinProfileResponse from(Long resultId, LocalDateTime diagnosedAt, SkinUxProfile profile) {
         String formatted = diagnosedAt
                 .toLocalDate()
                 .format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
         return new SkinProfileResponse(
+                resultId,
                 formatted,
                 profile.skinType(),
                 profile.subtitle(),
