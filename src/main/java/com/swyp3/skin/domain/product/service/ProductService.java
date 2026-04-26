@@ -1,6 +1,6 @@
 package com.swyp3.skin.domain.product.service;
 
-import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResult;
+import com.swyp3.skin.api.v1.product.dto.response.ProductSummaryResponse;
 import com.swyp3.skin.domain.common.pagination.CursorPaginationUtils;
 import com.swyp3.skin.domain.common.pagination.SliceResult;
 import com.swyp3.skin.domain.product.domain.entity.Product;
@@ -8,6 +8,7 @@ import com.swyp3.skin.domain.product.domain.exception.ProductErrorCode;
 import com.swyp3.skin.domain.product.domain.exception.ProductException;
 import com.swyp3.skin.domain.product.repository.ProductRepository;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
+import com.swyp3.skin.recommendation.ux.SkinProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,28 +19,26 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
+    private final SkinProfileService skinProfileService;
 
     public Product getById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
     }
 
-    public ProductSearchResult search(String keyword, int cursor, int size) {
-        List<Product> productList = productRepository.search(keyword);
+    public SliceResult<ProductSummaryResponse> search(String keyword, int cursor, int size) {
+        SliceResult<Product> slice =
+                CursorPaginationUtils.sliceWithCursor(productRepository.search(keyword),
+                        cursor,
+                        size,
+                        Product::getId);
 
-        SliceResult<Product> productSliceResult =
-                CursorPaginationUtils.sliceWithCursor(productList, cursor, size, Product::getId);
-
-
-        List<Product> sliced = productList.stream()
-                .skip((long) cursor * size)
-                .limit(size)
+        List<ProductSummaryResponse> dtoList = slice.items().stream()
+                .map(ProductSummaryResponse::from)
                 .toList();
 
-        boolean hasNext = productList.size() > (cursor + 1) * size;
 
-        return new ProductSearchResult(sliced, hasNext);
+        return new SliceResult<>(dtoList, slice.hasNext());
     }
 
     public List<RecommendedProduct> filter(

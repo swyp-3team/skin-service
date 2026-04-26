@@ -29,4 +29,13 @@ public record ProductSummaryResponse(
                 product.getImageUrl()
         );
     }
+
+    public static ProductSummaryResponse from(Product product) {
+        return new ProductSummaryResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl()
+        );
+    }
 }

@@ -1,22 +1,14 @@
 package com.swyp3.skin.api.v1.product.controller;
 
-import com.swyp3.skin.api.v1.product.dto.response.ProductDetailResponse;
-import com.swyp3.skin.api.v1.product.dto.response.ProductListResponse;
-import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResponse;
-import com.swyp3.skin.api.v1.product.dto.response.ProductSearchResult;
+import com.swyp3.skin.api.v1.product.dto.response.*;
+import com.swyp3.skin.domain.common.pagination.SliceResult;
 import com.swyp3.skin.domain.product.domain.entity.Product;
-import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
 import com.swyp3.skin.domain.product.domain.exception.ProductErrorCode;
 import com.swyp3.skin.domain.product.domain.exception.ProductException;
-import com.swyp3.skin.domain.product.service.ProductGroupScoreService;
 import com.swyp3.skin.domain.product.service.ProductRecommendationFacade;
 import com.swyp3.skin.domain.product.service.ProductService;
-import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
-import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
-import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
-import com.swyp3.skin.recommendation.product.service.ProductRecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "Product", description = "제품추천")
 @RestController
@@ -80,11 +71,9 @@ public class ProductController {
         if (keyword.isBlank()) {
             throw new ProductException(ProductErrorCode.INVALID_KEYWORD);
         }
-        ProductSearchResult productSearchResult =
-                productService.search(keyword, cursor, size);
+        SliceResult<ProductSummaryResponse> searched = productService.search(keyword, cursor, size);
+        ProductSearchResponse response = ProductSearchResponse.from(searched, searched.hasNext());
 
-        ProductSearchResponse response =
-                ProductSearchResponse.from(productSearchResult);
         return ApiResponse.ok(response);
     }
 }
