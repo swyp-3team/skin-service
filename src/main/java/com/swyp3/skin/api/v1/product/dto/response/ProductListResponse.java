@@ -3,6 +3,7 @@ package com.swyp3.skin.api.v1.product.dto.response;
 
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
+import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -11,11 +12,14 @@ import java.util.List;
 @Schema(description = "추천 제품 조회 응답")
 public record ProductListResponse(
 
-        @ArraySchema(
-                schema = @Schema(example = "민감성"),
-                arraySchema = @Schema(description = "사용자 피부 타입,고민 태그 (SkinResult 기반)")
-        )
-        List<String> tags,
+        @Schema(description = "유형명", example = "촉촉한 수분 결핍형")
+        String skinType,
+
+        @Schema(description = "부제", example = "속은 건조한데 겉은 번들거려요")
+        String subtitle,
+
+        @Schema(description = "피부 설명")
+        String summary,
 
         @Schema(
                 description = "피부 진단 결과 기준 날짜 (YYYY-MM-DD)",
@@ -37,14 +41,15 @@ public record ProductListResponse(
         ) {
 
     public static ProductListResponse from(
+            SkinUxProfile profile,
             List<RecommendedProduct> sliced,
             SkinResult skinResult,
             boolean hasNext
     ) {
+        String skinType = profile.skinType();
+        String subtitle = profile.subtitle();
+        String summary = profile.summary();
 
-        List<ProductSummaryResponse> products = sliced.stream()
-                .map(ProductSummaryResponse::from)
-                .toList();
 
         List<String> tags = skinResult.getConcerns().stream()
                 .map(Enum::name)
@@ -54,12 +59,18 @@ public record ProductListResponse(
                 .toLocalDate()
                 .toString();
 
+        List<ProductSummaryResponse> products = sliced.stream()
+                .map(ProductSummaryResponse::from)
+                .toList();
+
         Long nextCursor = (hasNext && !sliced.isEmpty())
                 ? sliced.get(sliced.size() - 1).getProduct().getId()
                 : null;
 
         return new ProductListResponse(
-                tags,
+                skinType,
+                subtitle,
+                summary,
                 skinResultDate,
                 products,
                 hasNext,
