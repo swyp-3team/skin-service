@@ -12,21 +12,6 @@ import java.util.List;
 @Schema(description = "추천 제품 조회 응답")
 public record ProductListResponse(
 
-        @Schema(description = "유형명", example = "촉촉한 수분 결핍형")
-        String skinType,
-
-        @Schema(description = "부제", example = "속은 건조한데 겉은 번들거려요")
-        String subtitle,
-
-        @Schema(description = "피부 설명")
-        String summary,
-
-        @Schema(
-                description = "피부 진단 결과 기준 날짜 (YYYY-MM-DD)",
-                example = "2026-04-16"
-        )
-        String skinResultDate,
-
         @ArraySchema(
                 schema = @Schema(implementation = ProductSummaryResponse.class),
                 arraySchema = @Schema(description = "추천 제품 목록")
@@ -41,24 +26,9 @@ public record ProductListResponse(
         ) {
 
     public static ProductListResponse from(
-            SkinUxProfile profile,
             List<RecommendedProduct> sliced,
-            SkinResult skinResult,
             boolean hasNext
     ) {
-        String skinType = profile.skinType();
-        String subtitle = profile.subtitle();
-        String summary = profile.summary();
-
-
-        List<String> tags = skinResult.getConcerns().stream()
-                .map(Enum::name)
-                .toList();
-
-        String skinResultDate = skinResult.getCreatedAt()
-                .toLocalDate()
-                .toString();
-
         List<ProductSummaryResponse> products = sliced.stream()
                 .map(ProductSummaryResponse::from)
                 .toList();
@@ -68,10 +38,6 @@ public record ProductListResponse(
                 : null;
 
         return new ProductListResponse(
-                skinType,
-                subtitle,
-                summary,
-                skinResultDate,
                 products,
                 hasNext,
                 nextCursor
