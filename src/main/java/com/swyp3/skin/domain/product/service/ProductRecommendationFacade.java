@@ -24,7 +24,6 @@ public class ProductRecommendationFacade {
 
     private final ProductService productService;
     private final SkinResultService skinResultService;
-    private final SkinProfileService skinProfileService;
     private final ProductRecommendCacheService productRecommendCacheService;
 
 
@@ -54,12 +53,8 @@ public class ProductRecommendationFacade {
                         recommendedProduct ->
                                 recommendedProduct.getProduct().getId());
 
-        SkinUxProfile profile = skinProfileService.getProfile(skinResult.getId());
-
         return ProductListResponse.from(
-                profile,
                 sliced.items(),
-                skinResult,
                 sliced.hasNext()
         );
     }
