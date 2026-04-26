@@ -3,6 +3,7 @@ package com.swyp3.skin.global.exception;
 import com.swyp3.skin.global.response.dto.ApiResponse;
 import com.swyp3.skin.global.response.dto.ErrorResult;
 import com.swyp3.skin.global.response.dto.FieldValidationError;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -107,7 +108,14 @@ public class GlobalExceptionHandler {
 
     // 위쪽을 모두 통과한 예외처리
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
+    public ResponseEntity<ApiResponse<Void>> handleException(
+            Exception e,
+            HttpServletRequest request) throws Exception {
+        if (request.getRequestURI().startsWith("/actuator")) {
+            throw e;
+        }
+
+
         log.error("Unexpected exception", e);
 
         return ResponseEntity
