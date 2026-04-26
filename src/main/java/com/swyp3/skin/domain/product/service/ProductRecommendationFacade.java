@@ -11,6 +11,7 @@ import com.swyp3.skin.domain.skinresult.service.SkinResultGroupScoreService;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
 import com.swyp3.skin.recommendation.product.service.ProductRecommendationService;
+import com.swyp3.skin.recommendation.ux.SkinProfileService;
 import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ProductRecommendationFacade {
 
     private final ProductService productService;
     private final SkinResultService skinResultService;
-    private final SkinResultGroupScoreService skinResultGroupScoreService;
+    private final SkinProfileService skinProfileService;
     private final ProductRecommendCacheService productRecommendCacheService;
 
 
@@ -53,15 +54,10 @@ public class ProductRecommendationFacade {
                         recommendedProduct ->
                                 recommendedProduct.getProduct().getId());
 
-        List<SkinResultGroupScore> groupScores = skinResultGroupScoreService.getTop2ScoresByResultId(skinResult.getId());
-        List<IngredientGroup> ranking = groupScores.stream()
-                .map(SkinResultGroupScore::getIngredientGroup)
-                .toList();
-
-        validateRankingSize(ranking);
-        SkinUxProfile profile = resolveProfile(ranking);
+        SkinUxProfile profile = skinProfileService.getProfile(skinResult.getId());
 
         return ProductListResponse.from(
+                profile,
                 sliced.items(),
                 skinResult,
                 sliced.hasNext()
