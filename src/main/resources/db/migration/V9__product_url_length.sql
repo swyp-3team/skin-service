@@ -1,0 +1,3 @@
+ALTER TABLE product MODIFY purchase_url VARCHAR(1000);
+
+ALTER TABLE product MODIFY image_Url VARCHAR(500);
