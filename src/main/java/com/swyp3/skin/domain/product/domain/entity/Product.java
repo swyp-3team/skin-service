@@ -35,7 +35,10 @@ public class Product extends BaseEntity {
     @Column(length = 1000)
     private String description;
 
+    @Column(length = 500)
     private String imageUrl;
+
+    @Column(length = 1000)
     private String purchaseUrl;
 
     @Column(nullable = false)
