@@ -54,15 +54,10 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 management:
-  server:
-    port: 8082
-
   endpoints:
     web:
-      base-path: /actuator
       exposure:
-        include: health,metrics,prometheus
-
+        include: health
   endpoint:
     health:
       show-details: never
