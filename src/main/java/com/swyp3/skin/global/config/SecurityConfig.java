@@ -35,18 +35,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    @Order(0)
-    public SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception{
-        http
-                .securityMatcher("/actuator/**")
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                );
-        return http.build();
-    }
-
-    @Bean
     @Order(1)
     public SecurityFilterChain adminChain(HttpSecurity http) throws Exception {
         http
