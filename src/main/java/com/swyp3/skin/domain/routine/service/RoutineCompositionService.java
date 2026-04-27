@@ -4,6 +4,8 @@ import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.enums.ProductUsageTime;
 import com.swyp3.skin.domain.routine.domain.enums.RoutineStepCategory;
 import com.swyp3.skin.domain.routine.domain.enums.RoutineType;
+import com.swyp3.skin.domain.routine.exception.RoutineErrorCode;
+import com.swyp3.skin.domain.routine.exception.RoutineException;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,9 @@ public class RoutineCompositionService {
 
         for (RecommendedProduct recommendedProduct : recommendedProducts) {
             ProductUsageTime usageTime = recommendedProduct.getProduct().getProductUsageTime();
+            if(usageTime == null) {
+                throw new RoutineException(RoutineErrorCode.PRODUCT_USAGE_TIME_NOT_DEFINE);
+            }
 
             for (RoutineType routineType : RoutineType.from(usageTime)) {
                 productsByRoutineType.computeIfAbsent(routineType, ignored -> new ArrayList<>())
@@ -62,7 +67,7 @@ public class RoutineCompositionService {
             for (RecommendedProduct recommendedProduct : routineTypeEntry.getValue()) {
                 Product product = recommendedProduct.getProduct();
                 RoutineStepCategory routineStepCategory =
-                        RoutineStepCategory.toRoutineStepCategory(product.getCategory());
+                        RoutineStepCategory.from(product.getCategory());
 
                 productsForStepCategory.computeIfAbsent(routineStepCategory, ignored -> new ArrayList<>())
                         .add(recommendedProduct);

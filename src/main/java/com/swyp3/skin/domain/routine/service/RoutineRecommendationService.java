@@ -47,7 +47,12 @@ public class RoutineRecommendationService {
 
         for (Map.Entry<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> routineTypeEntry : productsByStepCategory.entrySet()) {
             List<RoutineRecommendedProductResponse> routineProducts = new ArrayList<>();
+
             for (Map.Entry<RoutineStepCategory, List<RecommendedProduct>> stepCategoryEntry : routineTypeEntry.getValue().entrySet()) {
+                List<RecommendedProduct> categoryProducts = stepCategoryEntry.getValue();
+                if(categoryProducts == null || categoryProducts.isEmpty()) {
+                    throw new RoutineException(RoutineErrorCode.ROUTINE_DATA_INCOMPLETE);
+                }
                 routineProducts.add(toProductResponse(stepCategoryEntry.getValue().get(0), stepCategoryEntry.getKey()));
             }
             RoutineSectionResponse sectionResponse = new RoutineSectionResponse(
@@ -60,7 +65,7 @@ public class RoutineRecommendationService {
             }
         }
         if(amRoutine == null || pmRoutine == null) {
-            throw new RoutineException(RoutineErrorCode.ROUTINE_COMPOSITION_FAILED);
+            throw new RoutineException(RoutineErrorCode.ROUTINE_DATA_INCOMPLETE);
         }
 
         return new RoutineRecommendationResponse(
