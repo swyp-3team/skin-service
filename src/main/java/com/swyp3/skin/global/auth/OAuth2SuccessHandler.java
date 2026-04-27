@@ -1,7 +1,6 @@
 package com.swyp3.skin.global.auth;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,24 +37,28 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.userId();
 
-        String accessToken = jwtTokenProvider.createAccessToken(userId);
-
-        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         String redirectUrl;
 
         if (savedRequest != null) {
             redirectUrl = savedRequest.getRedirectUrl();
+            requestCache.removeRequest(request, response);
         } else {
             redirectUrl = "https://layerd.co.kr/oauth2/callback";
         }
 
 
+        boolean isAdminRedirect = redirectUrl.contains("api.layerd.co.kr/admin");
 
-        response.setHeader("Set-Cookie",
-                "accessToken=" + accessToken +
-                "; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=3600");
+        // admin페이지는 쿠키 발급 필요없음
+        if (!isAdminRedirect) {
+            String accessToken = jwtTokenProvider.createAccessToken(userId);
+
+            response.setHeader("Set-Cookie",
+                    "accessToken=" + accessToken +
+                    "; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=3600");
+        }
 
         response.sendRedirect(redirectUrl);
     }

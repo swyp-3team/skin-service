@@ -43,8 +43,10 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
 
-                .sessionManagement(
-                        s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(s -> s
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation().migrateSession()
+                        .maximumSessions(1))
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -64,40 +66,18 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
                         .successHandler(oAuth2SuccessHandler)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .deleteCookies("JSESSIONID", "accessToken")
+                        .permitAll()
                 );
+
+
 
         return http.build();
     }
-
-//    @Bean
-//    @Order(2)
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .formLogin(AbstractHttpConfigurer::disable)
-//                .httpBasic(AbstractHttpConfigurer::disable)
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(
-//                                "/", "/error",
-//                                "/swagger-ui/**", "/swagger-ui.html",
-//                                "/v3/api-docs/**", "/api-docs/**",
-//                                "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
-//                                "/api/v1/surveys","/api/v1/results/preview"
-//                        ).permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//
-//                .oauth2Login(oauth2 -> oauth2
-//                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-//                        .successHandler(oAuth2SuccessHandler)
-//                )
-//
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
 
     @Bean
     @Order(2)
