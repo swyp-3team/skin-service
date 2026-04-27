@@ -40,13 +40,23 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = jwtTokenProvider.createAccessToken(userId);
 
-        String redirectUri = "https://layerd.co.kr/oauth2/callback";
+        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
+
+        String redirectUrl;
+
+        if (savedRequest != null) {
+            redirectUrl = savedRequest.getRedirectUrl();
+        } else {
+            redirectUrl = "https://layerd.co.kr/oauth2/callback";
+        }
+
 
 
         response.setHeader("Set-Cookie",
                 "accessToken=" + accessToken +
                 "; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=3600");
 
-        response.sendRedirect(redirectUri);
+        response.sendRedirect(redirectUrl);
     }
 }
