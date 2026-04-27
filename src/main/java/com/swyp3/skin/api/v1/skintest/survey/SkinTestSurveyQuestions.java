@@ -30,7 +30,7 @@ public final class SkinTestSurveyQuestions {
             Map.entry(4, new SkinTestSurveyQuestion(4, "기초 제품을 다 바르고 나서 코나 이마에 유분이 올라오는 편인가요?", options())),
             Map.entry(5, new SkinTestSurveyQuestion(5, "오후가 되면 피부가 번들거리나요?", options())),
 
-            Map.entry(6, new SkinTestSurveyQuestion(6, "여드름, 뾰루지 등 좁쌀 피부 트러블이 얼마나 자주 생기는 편인가요?", List.of(
+            Map.entry(6, new SkinTestSurveyQuestion(6, "여드름, 뾰루지 등 피부 트러블이 얼마나 자주 생기는 편인가요?", List.of(
                     new SkinTestSurveyOption(1, "일주일에 2~3개 이상 생겨요"),
                     new SkinTestSurveyOption(2, "일주일에 1개 정도 생겨요"),
                     new SkinTestSurveyOption(3, "한 달에 몇 개 정도 생겨요"),
