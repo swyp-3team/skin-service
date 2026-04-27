@@ -17,7 +17,8 @@ public enum RoutineErrorCode implements ErrorCode {
     PREVIEW_CACHE_TYPE_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR,"ROUTINE_500_001" ,"캐시 값이 서버 지정값과 다릅니다." ),
     PREVIEW_CACHE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "ROUTINE_500_002", "루틴 미리보기 캐시를 찾을 수 없습니다."),
     ROUTINE_UX_PROFILE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "ROUTINE_500_003", "루틴 UX 프로파일 매핑이 존재하지 않습니다."),
-    ROUTINE_COMPOSITION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "ROUTINE_500_004", "시간대별 루틴을 구성할 수 있는 추천 상품이 부족합니다.");
+    ROUTINE_DATA_INCOMPLETE(HttpStatus.INTERNAL_SERVER_ERROR, "ROUTINE_500_004", "루틴을 구성할 수 있는 추천 상품 데이터가 불안정합니다."),
+    PRODUCT_USAGE_TIME_NOT_DEFINE(HttpStatus.INTERNAL_SERVER_ERROR, "ROUTINE_500_005", "루틴을 생성할 상품의 시간대가 정의되지 않았습니다.");
 
     private final HttpStatus status;
     private final String code;

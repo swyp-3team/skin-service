@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface RoutineGroupRepository extends JpaRepository<RoutineGroup, Long> {
     List<RoutineGroup> findTop4ByUser_IdOrderByCreatedAtDesc(Long userId);
-    Page<RoutineGroup> findByUser_Id(Long userId, Pageable pageable);
+    List<RoutineGroup> findByUser_IdOrderByIdDesc(Long userId, Pageable pageable);
+    List<RoutineGroup> findByUser_IdAndIdLessThanOrderByIdDesc(Long userId, Long cursor, Pageable pageable);
     Optional<RoutineGroup> findByIdAndUser_Id(Long routineGroupId, Long userId);
 }

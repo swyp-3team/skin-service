@@ -15,12 +15,9 @@ import com.swyp3.skin.domain.routine.repository.RoutineGroupRepository;
 import com.swyp3.skin.domain.routine.repository.RoutineProductRepository;
 import com.swyp3.skin.domain.routine.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,22 +29,26 @@ public class RoutineQueryService {
     private final RoutineRepository routineRepository;
     private final RoutineProductRepository routineProductRepository;
 
-    public RoutineListResponse inquiryRoutineGroups(Long userId, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<RoutineGroup> routineGroups = routineGroupRepository.findByUser_Id(userId, pageable);
+    public RoutineListResponse inquiryRoutineGroups(Long userId, Long cursor, int size) {
+        PageRequest pageable = PageRequest.of(0, size + 1);
 
-        List<RoutineSummaryResponse> routines = new ArrayList<>();
-        for(RoutineGroup routineGroup : routineGroups.getContent()) {
-            routines.add(new RoutineSummaryResponse(routineGroup.getId(),
-                    routineGroup.getTitle(), routineGroup.getCreatedAt()));
+        List<RoutineGroup> routineGroups = (cursor == null)
+                ? routineGroupRepository.findByUser_IdOrderByIdDesc(userId, pageable)
+                : routineGroupRepository.findByUser_IdAndIdLessThanOrderByIdDesc(userId, cursor, pageable);
+
+        boolean hasNext = routineGroups.size() > size;
+        if (hasNext) {
+            routineGroups = routineGroups.subList(0, size);
         }
-        return new RoutineListResponse(
-                routines,
-                routineGroups.getNumber(),
-                routineGroups.getSize(),
-                routineGroups.getTotalElements(),
-                routineGroups.getTotalPages()
-        );
+        List<RoutineSummaryResponse> routines = routineGroups.stream()
+                .map(routineGroup -> new RoutineSummaryResponse(
+                        routineGroup.getId(),
+                        routineGroup.getTitle(),
+                        routineGroup.getCreatedAt()
+                ))
+                .toList();
+
+        return RoutineListResponse.from(routines, hasNext);
     }
 
     public RoutineDetailResponse inquiryDetailRoutineGroup(Long userId, Long routineGroupId) {

@@ -14,8 +14,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +33,7 @@ import java.util.List;
 @Tag(name = "Routine", description = "루틴 추천 및 저장 관리")
 @RequiredArgsConstructor
 @RestController
+@Validated
 @RequestMapping("/api/v1/routines")
 public class RoutineController {
 
@@ -72,16 +76,16 @@ public class RoutineController {
 
     @Operation(
             summary = "루틴 목록 조회",
-            description = "사용자가 저장한 루틴 이력을 페이지 단위로 조회"
+            description = "사용자가 저장한 루틴 이력을 커서 방식으로 조회"
     )
     @GetMapping
     public ApiResponse<RoutineListResponse> getRoutines(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(required = false) @Positive(message = "커서는 1 이상이어야 합니다.") Long cursor,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "페이지 크기는 최소 1 이상이어야 합니다.") int size
     ) {
         Long userId = userDetails.userId();
-        RoutineListResponse response = routineQueryService.inquiryRoutineGroups(userId, page, size);
+        RoutineListResponse response = routineQueryService.inquiryRoutineGroups(userId, cursor, size);
         return ApiResponse.ok(response);
     }
 
@@ -92,7 +96,7 @@ public class RoutineController {
     @GetMapping("/{routineGroupId}")
     public ApiResponse<RoutineDetailResponse> getDetailRoutine(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @PathVariable Long routineGroupId) {
+            @PathVariable @Positive(message = "루틴 ID는 1 이상이어야 합니다.") Long routineGroupId) {
         RoutineDetailResponse response = routineQueryService.inquiryDetailRoutineGroup(userDetails.userId(), routineGroupId);
         return ApiResponse.ok(response);
     }
@@ -105,7 +109,7 @@ public class RoutineController {
     public ApiResponse<Void> deleteRoutine(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "삭제할 루틴 대표 ID", example = "1")
-            @PathVariable Long routineGroupId
+            @PathVariable @Positive(message = "루틴 ID는 1 이상이어야 합니다.") Long routineGroupId
     ) {
         routineCommandService.deleteRoutine(routineGroupId, userDetails.userId());
         return ApiResponse.ok();

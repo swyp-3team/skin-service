@@ -11,6 +11,7 @@ import com.swyp3.skin.domain.routine.domain.entity.Routine;
 import com.swyp3.skin.domain.routine.domain.entity.RoutineGroup;
 import com.swyp3.skin.domain.routine.domain.entity.RoutineProduct;
 import com.swyp3.skin.domain.routine.domain.enums.RoutineStepCategory;
+import com.swyp3.skin.domain.routine.domain.enums.RoutineType;
 import com.swyp3.skin.domain.routine.dto.RoutinePreviewCacheValue;
 import com.swyp3.skin.domain.routine.exception.RoutineErrorCode;
 import com.swyp3.skin.domain.routine.exception.RoutineException;
@@ -98,8 +99,14 @@ public class RoutineCommandService {
             throw new RoutineException(RoutineErrorCode.PREVIEW_RESPONSE_NOT_FOUND);
         }
 
+        //아래 두개 검증이 굳이 필요한가 싶습니다..
         if (response.amRoutine() == null || response.pmRoutine() == null) {
             throw new RoutineException(RoutineErrorCode.PREVIEW_ROUTINE_EMPTY);
+        }
+
+        if (response.amRoutine().routineType() != RoutineType.AM
+                || response.pmRoutine().routineType() != RoutineType.PM) {
+            throw new RoutineException(RoutineErrorCode.PREVIEW_SECTION_INVALID);
         }
 
         validateSection(response.amRoutine());
@@ -108,6 +115,10 @@ public class RoutineCommandService {
 
     private void validateSection(RoutineSectionResponse section) {
         if (section.routineType() == null || section.products() == null || section.products().isEmpty()) {
+            throw new RoutineException(RoutineErrorCode.PREVIEW_SECTION_INVALID);
+        }
+
+        if (section.routineType() != RoutineType.AM && section.routineType() != RoutineType.PM) {
             throw new RoutineException(RoutineErrorCode.PREVIEW_SECTION_INVALID);
         }
 
