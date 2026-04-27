@@ -14,16 +14,20 @@ public record RoutineListResponse(
         )
         List<RoutineSummaryResponse> routines,
 
-        @Schema(description = "현재 페이지 번호", example = "0")
-        Integer page,
+        @Schema(description = "다음 데이터 존재 여부", example = "true")
+        boolean hasNext,
 
-        @Schema(description = "페이지 크기", example = "10")
-        Integer size,
-
-        @Schema(description = "전체 데이터 개수", example = "12")
-        Long totalElements,
-
-        @Schema(description = "전체 페이지 수", example = "2")
-        Integer totalPages
+        @Schema(description = "다음 조회에 사용할 커서", example = "21")
+        Long nextCursor
 ) {
+        public static RoutineListResponse from(
+                List<RoutineSummaryResponse> routines,
+                boolean hasNext
+        ) {
+                Long nextCursor = (hasNext && !routines.isEmpty())
+                        ? routines.get(routines.size() - 1).routineGroupId()
+                        : null;
+
+                return new RoutineListResponse(routines, hasNext, nextCursor);
+        }
 }
