@@ -39,7 +39,22 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+management:
+  server:
+    port: 8082   # 선택 (안 해도 됨)
 
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      show-details: always
+
+  metrics:
+    tags:
+      application: skin-service-local
 app:
   cookie:
     secure: false
