@@ -35,6 +35,8 @@ application-local.properties
 application-secret.yml
 application-secret.properties
 
+prometheus.yml
+
 ### Environment ###
 .env
 .env.*
