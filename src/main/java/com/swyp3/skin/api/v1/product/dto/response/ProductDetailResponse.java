@@ -18,6 +18,9 @@ public record ProductDetailResponse(
         @Schema(description = "브랜드명", example = "SKINLAB")
         String brand,
 
+        @Schema(description = "상품 가격", example = "12,980")
+        int price,
+
         @Schema(description = "제품 대표 이미지 URL", example = "https://cdn.example.com/product-1.png")
         String imageUrl,
 
@@ -35,6 +38,7 @@ public record ProductDetailResponse(
                 product.getId(),
                 product.getName(),
                 product.getBrand(),
+                product.getPrice(),
                 product.getImageUrl(),
                 product.getDescription(),
                 product.getCreatedAt().toLocalDate().toString(),
