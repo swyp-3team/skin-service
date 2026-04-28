@@ -70,7 +70,7 @@
 
                         <div class="col-12 col-md-4">
                             <label class="form-label fw-semibold">가격(원) <span class="text-danger">*</span></label>
-                            <input type="number" min="0" step="100" th:field="*{price}" class="form-control" placeholder="예: 22000">
+                            <input type="number" min="0" step="10" th:field="*{price}" class="form-control" placeholder="예: 22000">
                             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
                         </div>
 
