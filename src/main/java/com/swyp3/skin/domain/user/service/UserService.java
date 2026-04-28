@@ -8,7 +8,6 @@ import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.domain.user.domain.entity.UserOauth;
 import com.swyp3.skin.domain.user.domain.entity.UserProfile;
-import com.swyp3.skin.domain.user.domain.enums.UserRole;
 import com.swyp3.skin.domain.user.repository.UserOauthRepository;
 import com.swyp3.skin.domain.user.repository.UserProfileRepository;
 import com.swyp3.skin.domain.user.repository.UserRepository;
@@ -38,7 +37,7 @@ public class UserService {
                 .findByProviderAndProviderUserId(provider, userInfo.getProviderUserId())
                 .map(UserOauth::getUser)
                 .orElseGet(() -> {
-                    User user = userRepository.save(User.create(UserRole.USER));
+                    User user = userRepository.save(User.create());
 
                     userOauthRepository.save(UserOauth.create(
                             user,

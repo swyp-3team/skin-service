@@ -1,9 +1,12 @@
 package com.swyp3.skin.domain.user.domain.entity;
 
 import com.swyp3.skin.domain.user.domain.enums.UserRole;
+import com.swyp3.skin.domain.user.domain.enums.UserStatus;
 import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,11 +21,34 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus userStatus;
+
+    private LocalDateTime lastLoginAt;
+
+    private LocalDateTime deletedAt;
+
     private User(UserRole role){
         this.role = role;
+        this.userStatus = UserStatus.ACTIVE;
     }
 
-    public static User create(UserRole role) {
-        return new User(role); //정적 팩토리 메서드 사용
+    public static User create() {
+        return new User(UserRole.USER);
+    }
+
+    public void login() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void delete() {
+        this.userStatus = UserStatus.DELETED;
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void reActivate() {
+        this.userStatus = UserStatus.ACTIVE;
+        this.deletedAt = null;
     }
 }
