@@ -1,0 +1,4 @@
+ALTER TABLE users
+    ADD COLUMN user_status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    ADD COLUMN last_login_at DATETIME NULL,
+    ADD COLUMN deleted_at DATETIME NULL;
