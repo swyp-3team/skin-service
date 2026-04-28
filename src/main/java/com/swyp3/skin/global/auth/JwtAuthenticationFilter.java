@@ -1,5 +1,6 @@
 package com.swyp3.skin.global.auth;
 
+import com.swyp3.skin.domain.user.domain.enums.UserStatus;
 import com.swyp3.skin.domain.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -51,6 +52,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
 
                 userRepository.findById(userId).ifPresent(user -> {
+
+                    if(user.getUserStatus() != UserStatus.ACTIVE) {
+                        return;
+                    }
+
                     CustomUserDetails userDetails = new CustomUserDetails(
                             userId,
                             user.getRole(),
@@ -58,6 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             null,
                             null
                     );
+
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

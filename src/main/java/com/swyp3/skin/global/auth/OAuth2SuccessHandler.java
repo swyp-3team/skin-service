@@ -49,7 +49,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         }
 
 
-        boolean isAdminRedirect = redirectUrl.contains("api.layerd.co.kr/admin");
+        boolean isAdminRedirect = redirectUrl.contains("/admin");
 
         // admin페이지는 쿠키 발급 필요없음
         if (!isAdminRedirect) {
