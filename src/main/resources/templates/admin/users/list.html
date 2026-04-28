@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>사용자 관리</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+
+<body class="bg-light">
+
+<!-- 🔥 상단 헤더 (상품 페이지랑 통일) -->
+<nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand fw-bold text-primary" th:href="@{/admin}">Layerd Admin</a>
+        <ul class="navbar-nav ms-2">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/products}">상품</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/admin/users}">사용자</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container-fluid px-3 py-3">
+
+    <div class="card">
+        <div class="card-header bg-white fw-semibold">사용자 관리</div>
+
+        <div class="card-body">
+
+            <table class="table table-sm table-bordered align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>닉네임</th>
+                    <th>이메일</th>
+                    <th>로그인</th>
+                    <th>가입일</th>
+                    <th>마지막 접속</th>
+                    <th>진단수</th>
+                    <th>상태</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="u : ${users.content}">
+
+                    <td th:text="${u.userId}"></td>
+                    <td th:text="${u.nickname}"></td>
+                    <td th:text="${u.email}"></td>
+                    <td th:text="${u.provider}"></td>
+
+                    <td th:text="${#temporals.format(u.createdAt, 'yyyy-MM-dd')}"></td>
+
+                    <td th:text="${u.lastLoginAt != null
+                        ? #temporals.format(u.lastLoginAt, 'yyyy-MM-dd HH:mm')
+                        : '-'}"></td>
+
+                    <td th:text="${u.totalDiagnoses}"></td>
+
+                    <!-- 상태 -->
+                    <td>
+                        <span th:text="${u.status}"
+                              th:classappend="${u.status.name() == 'ACTIVE'}
+                              ? 'badge bg-success'
+                              : 'badge bg-danger'">
+                        </span>
+                    </td>
+
+                    <!-- 🔥 탈퇴 처리 -->
+                    <td>
+                        <form th:if="${u.status.name() == 'ACTIVE'}"
+                              th:action="@{/admin/users/{id}/delete(id=${u.userId})}"
+                              method="post"
+                              onsubmit="return confirm('정말 탈퇴 처리하시겠습니까?');">
+
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                탈퇴
+                            </button>
+                        </form>
+
+                        <span th:if="${u.status.name() != 'ACTIVE'}"
+                              class="text-secondary small">
+                            탈퇴됨
+                        </span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 페이징 -->
+            <nav>
+                <ul class="pagination justify-content-center">
+
+                    <li class="page-item" th:classappend="${users.first} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/admin/users(page=${users.number - 1})}">이전</a>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(0, users.totalPages - 1)}"
+                        th:classappend="${i == users.number} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/admin/users(page=${i})}"
+                           th:text="${i + 1}"></a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${users.last} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/admin/users(page=${users.number + 1})}">다음</a>
+                    </li>
+
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+</main>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
